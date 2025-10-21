@@ -16,6 +16,14 @@ Located in `docs/wiki/` - these contain detailed technical documentation:
 - **[S3 Integration](wiki/S3-Integration.md)** - Database infrastructure and cloud integration
 - **[SQL Examples](wiki/SQL-Examples.md)** - Database patterns and SQL query examples
 
+### 📊 Project Management
+
+Located in `docs/project-management/` - development processes and planning:
+
+- **[Project Management Guide](project-management/README.md)** - Complete development processes and roadmap
+- **[Project Templates](project-management/project-templates.md)** - GitHub Projects board templates and automation
+- **[Current Status](project-management/current-status.md)** - Live project status, metrics, and roadmap
+
 ### 🔧 Project Documentation
 
 Located in the project root:
