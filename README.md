@@ -272,10 +272,12 @@ export interface CustomMetrics {
 
 ## 📚 Documentation
 
-- **[Performance Guide](docs/performance.md)**: Deep dive into optimizations
-- **[API Reference](docs/api.md)**: Complete component documentation
-- **[Migration Guide](docs/migration.md)**: Upgrading from Node.js
-- **[Contributing](docs/contributing.md)**: Development guidelines
+- **[📖 Full Documentation](docs/)**: Complete documentation hub
+- **[🏠 Wiki Home](docs/wiki/Home.md)**: Overview and getting started
+- **[📊 Analytics Guide](docs/wiki/Analytics.md)**: Performance monitoring
+- **[🔧 API Reference](docs/wiki/API-Documentation.md)**: Technical component docs
+- **[🗄️ Database Integration](docs/wiki/S3-Integration.md)**: Database patterns
+- **[📝 SQL Examples](docs/wiki/SQL-Examples.md)**: Query patterns and examples
 
 ## 🤝 Contributing
 
@@ -414,10 +416,10 @@ describe('NewFeature', () => {
 
 ### 📚 Documentation
 
-- **[Contributing Guide](docs/contributing.md)**: Detailed development guidelines
-- **[API Reference](docs/api.md)**: Component documentation
-- **[Performance Guide](docs/performance.md)**: Optimization techniques
-- **[Migration Guide](docs/migration.md)**: Upgrading instructions
+- **[Contributing Guide](CONTRIBUTING.md)**: Detailed development guidelines
+- **[🔧 API Reference](docs/wiki/API-Documentation.md)**: Component documentation
+- **[📊 Analytics Guide](docs/wiki/Analytics.md)**: Performance monitoring
+- **[🗄️ Database Guide](docs/wiki/S3-Integration.md)**: Database integration
 
 ### 💬 Communication
 
@@ -478,4 +480,4 @@ For enterprise support, custom integrations, or commercial licensing, contact [t
 
 **Built with ❤️ for the Bun ecosystem**
 
-[📖 Documentation](docs/) • [🐛 Issues](https://github.com/oven-sh/bun-performance-arsenal/issues) • [💬 Discussions](https://github.com/oven-sh/bun-performance-arsenal/discussions) • [🏠 Homepage](https://arsenal.bun.sh)
+[📖 Documentation](docs/) • [🐛 Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues) • [💬 Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions) • [🏠 Homepage](https://brendadeeznuts1111.github.io/Arsenal-Lab/)

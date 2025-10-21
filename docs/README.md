@@ -1,101 +1,101 @@
-# 📚 Arsenal-Lab Documentation
+# Arsenal Lab Documentation
 
-Welcome to the comprehensive documentation for **Arsenal-Lab** - the FAANG-grade performance testing suite for Bun runtime v1.3+.
+Welcome to the comprehensive documentation for Arsenal Lab - a modern performance testing suite for Bun.js.
 
-## 🚀 Quick Links
+## 📚 Documentation Structure
 
-- **[🏠 Main README](../README.md)** - Project overview and setup
-- **[⚡ Performance Guide](performance.md)** - Deep dive into optimizations
-- **[🔧 API Reference](api.md)** - Complete component documentation
-- **[📋 Contributing Guide](../CONTRIBUTING.md)** - Development guidelines
-- **[🔒 Security Policy](../SECURITY.md)** - Security best practices
-- **[📜 License](../LICENSE)** - MIT License details
+This documentation is organized into several sections:
 
-## 📖 Documentation Overview
+### 📖 Wiki Pages
 
-### 🎯 Getting Started
-- [Installation Guide](../README.md#quick-start)
-- [Local Development](../CONTRIBUTING.md#local-development)
-- [Arsenal Overview](../README.md#arsenal-collection)
+Located in `docs/wiki/` - these contain detailed technical documentation:
 
-### 🧪 Testing & Performance
-- [Performance Arsenal](performance.md) - Benchmarking & optimization
-- [Testing Arsenal](../README.md#testing-arsenal) - CI/CD workflows
-- [Database Arsenal](../README.md#database-infrastructure-arsenal) - SQLite, Redis, WebSocket
+- **[Home](wiki/Home.md)** - Overview and quick start guide
+- **[Analytics](wiki/Analytics.md)** - Performance monitoring and analytics
+- **[API Documentation](wiki/API-Documentation.md)** - Complete technical API reference
+- **[S3 Integration](wiki/S3-Integration.md)** - Database infrastructure and cloud integration
+- **[SQL Examples](wiki/SQL-Examples.md)** - Database patterns and SQL query examples
 
-### 🛠️ Development
-- [API Reference](api.md) - Component documentation
-- [Build Configuration](../README.md#build-config) - Bun.build() playground
-- [Contributing Guide](../CONTRIBUTING.md) - Development workflow
+### 🔧 Project Documentation
 
-### 🔐 Security & Compliance
-- [Security Policy](../SECURITY.md) - Security best practices
-- [Code of Conduct](../CODE_OF_CONDUCT.md) - Community guidelines
-- [License](../LICENSE) - Legal information
+Located in the project root:
 
-## 📋 Arsenal Components
+- **[README.md](../README.md)** - Main project documentation with installation and usage
+- **[GUIDE.md](../GUIDE.md)** - Technical implementation guide
+- **[CONTRIBUTING.md](../CONTRIBUTING.md)** - Contribution guidelines
+- **[CHANGELOG.md](../CHANGELOG.md)** - Version history and changes
 
-| Arsenal | Description | Documentation |
-|---------|-------------|---------------|
-| **⚡ Performance** | Real-time benchmarking & metrics | [Guide](performance.md) |
-| **🔧 Process & Shell** | Socket diagnostics & memory monitoring | [Overview](../README.md#process--shell-arsenal) |
-| **🧪 Testing** | CI/CD workflows & concurrent testing | [Overview](../README.md#testing-arsenal) |
-| **🔍 Testing & Debugging** | Live testing demos & stack traces | [Overview](../README.md#testing--debugging-arsenal) |
-| **🗄️ Database & Infra** | SQLite, Redis, WebSocket demos | [Overview](../README.md#database--infrastructure-arsenal) |
-| **🔧 Build Config** | Interactive Bun.build() playground | [Overview](../README.md#build-config) |
-| **🚀 bunx Demo** | Command-line tool demonstrations | [Overview](../README.md#bunx-demo) |
+## 🚀 Getting Started
 
-## 🏗️ Architecture
+### For Users
+1. Read the [main README](../README.md) for installation instructions
+2. Check out the [Home wiki](wiki/Home.md) for an overview
+3. Explore the [Analytics](wiki/Analytics.md) section for performance monitoring
+
+### For Developers
+1. Review the [API Documentation](wiki/API-Documentation.md) for technical details
+2. Check the [Contributing Guide](../CONTRIBUTING.md) for development setup
+3. Look at [SQL Examples](wiki/SQL-Examples.md) for database patterns
+
+## 🎯 Key Features Documented
+
+### Performance Testing
+- Real-time benchmarking (Bun vs Node.js)
+- FPS monitoring and memory tracking
+- Hardware detection and optimization
+- Comparative performance analysis
+
+### Interactive Components
+- Build configuration playground
+- Database infrastructure testing
+- Process and shell operations
+- Testing framework demonstrations
+
+### Analytics & Monitoring
+- Custom performance tracking
+- Real-time metrics dashboard
+- Benchmark result analysis
+- Privacy-respecting analytics
+
+## 🏗️ Architecture Overview
 
 ```
-Arsenal-Lab/
-├── 📁 components/          # React arsenal components
-│   ├── PerformanceArsenal/
-│   ├── ProcessShellArsenal/
-│   ├── TestingArsenal/
-│   ├── TestingDebuggingArsenal/
-│   ├── DatabaseInfrastructureArsenal/
-│   └── BuildConfigurationArsenal/
-├── 📁 src/                 # Server & lab implementation
-├── 📁 docs/                # 📖 Documentation (you are here)
-├── 📁 public/              # PWA assets & vanilla demo
-├── 📁 scripts/             # Build & deployment scripts
-└── 📄 *.md                 # Root documentation
+components/
+├── PerformanceArsenal/          # Core performance benchmarks
+├── DatabaseInfrastructureArsenal/  # Database testing tools
+├── ProcessShellArsenal/         # Process management demos
+├── BuildConfigurationArsenal/   # Bun.build() playground
+├── TestingArsenal/              # Testing frameworks
+└── Layout/                      # UI components (Footer, Banner)
 ```
 
-## 🎯 Key Features
+## 📊 Live Examples
 
-### Interactive Learning
-- **Live Code Generation**: Real-time Bun.build() configuration generation
-- **Performance Monitoring**: Real-time metrics and benchmarking
-- **Educational Demos**: Interactive examples of Bun v1.3 features
+Visit the [live demo](https://brendadeeznuts1111.github.io/Arsenal-Lab/) to see all features in action, or run locally:
 
-### Production Ready
-- **TypeScript**: Full type safety throughout
-- **PWA Support**: Offline-capable progressive web app
-- **Cross-Platform**: Works on macOS, Windows, and Linux
-- **Modern Stack**: React 18, Bun runtime, modern JavaScript
+```bash
+bun install
+bun run dev
+```
 
-### Developer Experience
-- **Hot Reload**: Fast development with `--hot` flag
-- **Comprehensive Testing**: Unit tests, integration tests, performance tests
-- **Documentation**: Extensive guides and API references
+## 🤝 Contributing
 
-## 🚀 Getting Help
+We welcome contributions! Please:
 
-- **🐛 [Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)** - Bug reports and feature requests
-- **💬 [Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - General questions and community chat
-- **📖 [Documentation](https://github.com/brendadeeznuts1111/Arsenal-Lab/tree/main/docs)** - Comprehensive guides
-- **🏠 [Homepage](https://github.com/brendadeeznuts1111/Arsenal-Lab)** - Project overview
+1. Read our [Contributing Guide](../CONTRIBUTING.md)
+2. Check existing [Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)
+3. Create a [Pull Request](https://github.com/brendadeeznuts1111/Arsenal-Lab/pulls)
 
-## 📊 Project Status
+## 📄 License
 
-- **Version**: 1.3.0
-- **Bun Version**: 1.3+
-- **License**: MIT
-- **Status**: Production Ready
-- **Contributors**: Welcome! See [Contributing Guide](../CONTRIBUTING.md)
+This documentation and code is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)
+- **Documentation**: [Wiki](https://github.com/brendadeeznuts1111/Arsenal-Lab/wiki)
 
 ---
 
-**Built with ❤️ using [Bun](https://bun.sh) - The fast JavaScript runtime**
+**Last updated:** October 21, 2025
