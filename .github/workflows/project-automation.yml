@@ -1,0 +1,181 @@
+name: Project Management Automation
+
+on:
+  issues:
+    types: [opened, labeled, unlabeled, closed, reopened]
+  pull_request:
+    types: [opened, closed, ready_for_review, review_requested]
+  discussion:
+    types: [created, answered]
+
+jobs:
+  project-automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Auto-label issues
+        if: github.event_name == 'issues' && github.event.action == 'opened'
+        run: |
+          # Auto-label bug reports
+          if [[ "${{ github.event.issue.title }}" =~ (bug|fix|error|crash) ]]; then
+            gh issue edit ${{ github.event.issue.number }} --add-label "bug"
+          fi
+
+          # Auto-label enhancements
+          if [[ "${{ github.event.issue.title }}" =~ (feat|feature|add|enhancement) ]]; then
+            gh issue edit ${{ github.event.issue.number }} --add-label "enhancement"
+          fi
+
+          # Auto-label performance issues
+          if [[ "${{ github.event.issue.body }}" =~ (performance|slow|speed|memory|cpu) ]]; then
+            gh issue edit ${{ github.event.issue.number }} --add-label "performance"
+          fi
+
+          # Auto-label documentation issues
+          if [[ "${{ github.event.issue.body }}" =~ (docs|documentation|readme|guide) ]]; then
+            gh issue edit ${{ github.event.issue.number }} --add-label "documentation"
+          fi
+
+      - name: Auto-assign issues
+        if: github.event_name == 'issues' && github.event.action == 'opened'
+        run: |
+          # Auto-assign critical issues to maintainers
+          if [[ "${{ github.event.issue.labels }}" =~ "Priority: Critical" ]]; then
+            gh issue edit ${{ github.event.issue.number }} --add-assignee brendadeeznuts1111
+          fi
+
+          # Auto-assign good first issues
+          if [[ "${{ github.event.issue.labels }}" =~ "good first issue" ]]; then
+            # Could assign to community contributors
+            echo "Good first issue detected - ready for community contribution"
+          fi
+
+      - name: Update project board
+        run: |
+          # This would integrate with GitHub Projects API
+          # For now, we'll log the actions that would be taken
+          echo "Event: ${{ github.event_name }} ${{ github.event.action }}"
+
+          if [[ "${{ github.event_name }}" == "issues" ]]; then
+            echo "Issue #${{ github.event.issue.number }}: ${{ github.event.issue.title }}"
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+          fi
+
+      - name: Generate sprint report
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          # Generate weekly sprint progress report
+          echo "## Sprint Progress Report" > sprint-report.md
+          echo "" >> sprint-report.md
+          echo "### Issues Created This Week" >> sprint-report.md
+          gh issue list --state open --limit 10 --json number,title,createdAt | jq -r '.[] | "- [#\(.number)] \(.title) (\(.createdAt | strptime("%Y-%m-%dT%H:%M:%SZ") | strftime("%Y-%m-%d")))"' >> sprint-report.md
+          echo "" >> sprint-report.md
+          echo "### PRs Merged This Week" >> sprint-report.md
+          gh pr list --state merged --limit 10 --json number,title,mergedAt | jq -r '.[] | "- [#\(.number)] \(.title) (\(.mergedAt | strptime("%Y-%m-%dT%H:%M:%SZ") | strftime("%Y-%m-%d")))"' >> sprint-report.md
+
+      - name: Community engagement
+        if: github.event_name == 'discussion' && github.event.action == 'created'
+        run: |
+          echo "New discussion created: ${{ github.event.discussion.title }}"
+          # Could auto-respond with welcome message or assign to community team
+
+  metrics-report:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Generate metrics report
+        run: |
+          echo "# Arsenal Lab Metrics Report" > metrics.md
+          echo "" >> metrics.md
+          echo "## Repository Stats" >> metrics.md
+          echo "- **Stars**: $(gh repo view --json stargazersCount -q .stargazersCount)" >> metrics.md
+          echo "- **Forks**: $(gh repo view --json forkCount -q .forkCount)" >> metrics.md
+          echo "- **Issues**: $(gh issue list --state open --json number | jq length) open" >> metrics.md
+          echo "- **PRs**: $(gh pr list --state open --json number | jq length) open" >> metrics.md
+          echo "" >> metrics.md
+          echo "## Recent Activity" >> metrics.md
+          echo "### Issues Created (Last 7 days)" >> metrics.md
+          gh issue list --state open --limit 5 --json number,title,createdAt | jq -r '.[] | "- [#\(.number)] \(.title)"' >> metrics.md
+          echo "" >> metrics.md
+          echo "### PRs Merged (Last 7 days)" >> metrics.md
+          gh pr list --state merged --limit 5 --json number,title,mergedAt | jq -r '.[] | "- [#\(.number)] \(.title)"' >> metrics.md
+
+      - name: Upload metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: metrics-report
+          path: metrics.md
+
+  weekly-digest:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' && github.event.schedule == '0 9 * * 1' # Every Monday at 9 AM UTC
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Create weekly digest discussion
+        run: |
+          # Create a new discussion with weekly summary
+          title="📊 Weekly Digest - $(date +'%B %d, %Y')"
+          body="$(cat << 'EOF'
+## 📈 Weekly Arsenal Lab Digest
+
+### 🎯 Sprint Progress
+- **Completed**: X issues this week
+- **In Progress**: Y active items
+- **Velocity**: Z story points
+
+### 🌟 Highlights
+- Feature X shipped
+- Performance improvement Y
+- Community milestone Z
+
+### 📊 Metrics
+- **New Stars**: +A this week
+- **Issues Created**: B new issues
+- **PRs Merged**: C pull requests
+- **Discussions**: D active discussions
+
+### 🚧 Current Focus
+- Working on feature W
+- Investigating issue X
+- Planning for milestone Y
+
+### 🤝 Community
+- Thanks to our contributors!
+- New community discussions
+- Helpful answers and support
+
+### 🎯 Next Week
+- Sprint planning for next week
+- Focus on high-priority items
+- Community engagement goals
+
+What would you like to see next? Share your thoughts below! 💬
+EOF
+)"
+
+          # Note: This would create a discussion, but GitHub CLI doesn't support discussions yet
+          # For now, we'll just log what would be created
+          echo "Weekly digest would be created with title: $title"
