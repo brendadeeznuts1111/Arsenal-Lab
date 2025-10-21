@@ -22,8 +22,8 @@ Thank you for your interest in contributing to the bun:performance-arsenal! This
 ### Local Development
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/bun-performance-arsenal.git
-cd bun-performance-arsenal
+git clone https://github.com/brendadeeznuts1111/Arsenal-Lab.git
+cd Arsenal-Lab
 
 # Install dependencies
 bun install

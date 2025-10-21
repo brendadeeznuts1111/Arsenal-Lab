@@ -5,8 +5,8 @@
 [![React](https://img.shields.io/badge/React-18+-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/@bun/performance-arsenal?style=for-the-badge)](https://www.npmjs.com/package/@bun/performance-arsenal)
-[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/oven-sh/bun-performance-arsenal/ci.yml?style=for-the-badge)](https://github.com/oven-sh/bun-performance-arsenal/actions)
-[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/oven-sh/bun-performance-arsenal?style=for-the-badge)](https://api.securityscorecards.dev/projects/github.com/oven-sh/bun-performance-arsenal)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/brendadeeznuts1111/Arsenal-Lab/ci.yml?style=for-the-badge)](https://github.com/brendadeeznuts1111/Arsenal-Lab/actions)
+[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/brendadeeznuts1111/Arsenal-Lab?style=for-the-badge)](https://api.securityscorecards.dev/projects/github.com/brendadeeznuts1111/Arsenal-Lab)
 
 **FAANG-grade performance testing suite for Bun runtime** - Interactive playground showcasing every v1.3 enhancement across performance, databases, testing, and infrastructure.
 
@@ -14,8 +14,8 @@
 
 ```bash
 # Clone and install
-git clone https://github.com/oven-sh/bun-performance-arsenal.git
-cd bun-performance-arsenal
+git clone https://github.com/brendadeeznuts1111/Arsenal-Lab.git
+cd Arsenal-Lab
 bun install
 
 # Start the arsenal lab

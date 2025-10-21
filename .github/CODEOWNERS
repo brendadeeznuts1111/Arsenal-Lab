@@ -1,0 +1,22 @@
+# This file defines who owns what parts of the codebase
+# Learn more: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owners
+* @brendadeeznuts1111
+
+# Component ownership
+/components/PerformanceArsenal/ @brendadeeznuts1111
+/components/ProcessShellArsenal/ @brendadeeznuts1111
+/components/TestingArsenal/ @brendadeeznuts1111
+/components/TestingDebuggingArsenal/ @brendadeeznuts1111
+/components/DatabaseInfrastructureArsenal/ @brendadeeznuts1111
+/components/BuildConfigurationArsenal/ @brendadeeznuts1111
+
+# Core infrastructure
+/src/ @brendadeeznuts1111
+/package.json @brendadeeznuts1111
+/tsconfig.json @brendadeeznuts1111
+
+# Documentation
+*.md @brendadeeznuts1111
+/docs/ @brendadeeznuts1111
