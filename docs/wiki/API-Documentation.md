@@ -1,6 +1,23 @@
-# API Documentation
+# 🔧 API Documentation
 
-Complete technical reference for Arsenal Lab components and APIs.
+> Complete technical reference for Arsenal Lab components and APIs.
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-✅-blue?style=flat)]()
+[![Components](https://img.shields.io/badge/Components-20+-green?style=flat)]()
+[![Hooks](https://img.shields.io/badge/Hooks-15+-purple?style=flat)]()
+
+## 📋 Table of Contents
+
+- [Core Components](#core-components)
+  - [PerformanceArsenal](#performancearsenal)
+  - [BuildConfigurationArsenal](#buildconfigurationarsenal)
+- [Custom Hooks](#custom-hooks)
+- [UI Components](#ui-components)
+- [Utility Functions](#utility-functions)
+- [Type Definitions](#type-definitions)
+- [Advanced Usage](#advanced-usage)
+- [Migration Guide](#migration-guide)
+- [Support](#support)
 
 ## 🎯 Core Components
 
@@ -612,9 +629,21 @@ configureArsenal({
 - Footer component now requires React 18+
 - Build configuration validation is stricter
 
-## 🤝 Support
+## 📚 Related Documentation
 
-For API questions and support:
-- [GitHub Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)
-- [Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)
-- [Documentation](https://github.com/brendadeeznuts1111/Arsenal-Lab/wiki)
+| Document | Description |
+|----------|-------------|
+| **[🏠 Wiki Home](Home.md)** | Overview and getting started |
+| **[📊 Analytics Guide](Analytics.md)** | Performance monitoring and metrics |
+| **[🗄️ Database Guide](S3-Integration.md)** | Database integration patterns |
+| **[📝 SQL Examples](SQL-Examples.md)** | Query patterns and examples |
+
+## 📞 Support & Community
+
+- **[💬 Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - Community conversations
+- **[🐛 Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)** - Bug reports and feature requests
+- **[📖 Full Documentation](../README.md)** - Complete documentation hub
+
+---
+
+**Built with ❤️ for the Bun ecosystem** • **Last updated:** October 21, 2025

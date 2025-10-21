@@ -1,15 +1,30 @@
-# SQL Examples & Database Patterns
+# 📝 SQL Examples & Database Patterns
 
-Comprehensive collection of SQL examples and database operation patterns tested in Arsenal Lab.
+> Comprehensive collection of SQL examples and database operation patterns tested in Arsenal Lab.
+
+[![CRUD](https://img.shields.io/badge/CRUD-✅-green?style=flat)]()
+[![Advanced Queries](https://img.shields.io/badge/Advanced-Queries-✅-blue?style=flat)]()
+[![Performance](https://img.shields.io/badge/Performance-✅-orange?style=flat)]()
 
 ## 📋 Table of Contents
 
 - [Basic CRUD Operations](#basic-crud-operations)
+  - [Create Tables](#create-tables)
+  - [Insert Operations](#insert-operations)
+  - [Read Operations](#read-operations)
+  - [Update Operations](#update-operations)
+  - [Delete Operations](#delete-operations)
 - [Advanced Queries](#advanced-queries)
+  - [Window Functions](#window-functions)
+  - [Common Table Expressions](#common-table-expressions)
+  - [JSON Operations](#json-operations)
 - [Indexing Strategies](#indexing-strategies)
 - [Transactions](#transactions)
 - [Performance Optimization](#performance-optimization)
 - [Migration Patterns](#migration-patterns)
+- [Query Analysis & Debugging](#query-analysis--debugging)
+- [Security Best Practices](#security-best-practices)
+- [Advanced Patterns](#advanced-patterns)
 
 ## 🏗️ Basic CRUD Operations
 
@@ -624,4 +639,22 @@ BEGIN
     get_current_user_id()
   );
 END;
-```
+
+## 📚 Related Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[🏠 Wiki Home](Home.md)** | Overview and getting started |
+| **[📊 Analytics Guide](Analytics.md)** | Performance monitoring and metrics |
+| **[🔧 API Reference](API-Documentation.md)** | Technical component documentation |
+| **[🗄️ Database Guide](S3-Integration.md)** | Database integration patterns |
+
+## 📞 Support & Community
+
+- **[💬 Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - Community conversations
+- **[🐛 Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)** - Bug reports and feature requests
+- **[📖 Full Documentation](../README.md)** - Complete documentation hub
+
+---
+
+**Built with ❤️ for the Bun ecosystem** • **Last updated:** October 21, 2025

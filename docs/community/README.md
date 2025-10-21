@@ -139,6 +139,23 @@ Welcome to the Arsenal Lab community! This guide helps you navigate our discussi
 
 ---
 
+## 📚 Related Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[📖 Wiki Home](../wiki/Home.md)** | Technical documentation |
+| **[📊 Project Status](../project-management/current-status.md)** | Current development status |
+| **[📝 Discussion Templates](discussion-templates.md)** | Templates for posting |
+| **[💡 Sample Discussions](sample-discussions.md)** | Example discussion posts |
+
+## 📞 Support & Community
+
+- **[💬 Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - Community conversations
+- **[🐛 Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)** - Bug reports and feature requests
+- **[📖 Full Documentation](../README.md)** - Complete documentation hub
+
+---
+
 **Thank you for being part of the Arsenal Lab community!** 🚀
 
-*Last updated: October 21, 2025*
+**Built with ❤️ for the Bun ecosystem** • **Last updated:** October 21, 2025

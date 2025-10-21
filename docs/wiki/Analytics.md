@@ -1,6 +1,21 @@
-# Analytics & Performance Monitoring
+# 📊 Analytics & Performance Monitoring
 
-Arsenal Lab provides comprehensive analytics and performance monitoring capabilities to help you understand and optimize your Bun applications.
+> Arsenal Lab provides comprehensive analytics and performance monitoring capabilities to help you understand and optimize your Bun applications.
+
+[![Real-time](https://img.shields.io/badge/Real--time-✅-green?style=flat)]()
+[![Memory Tracking](https://img.shields.io/badge/Memory-Tracking-✅-blue?style=flat)]()
+[![Hardware Detection](https://img.shields.io/badge/Hardware-Detection-✅-purple?style=flat)]()
+
+## 📋 Table of Contents
+
+- [Real-Time Performance Metrics](#real-time-performance-metrics)
+- [Benchmark Analytics](#benchmark-analytics)
+- [Analytics Dashboard](#analytics-dashboard)
+- [Performance Thresholds](#performance-thresholds)
+- [Data Export](#data-export)
+- [Configuration](#configuration)
+- [Troubleshooting](#troubleshooting)
+- [API Reference](#api-reference)
 
 ## 📊 Real-Time Performance Metrics
 
@@ -220,3 +235,22 @@ const { fps, memoryUsage, analyticsEnabled, toggleAnalytics } = usePerformanceMo
 - `trackInteraction(event, data)` - Track user interactions
 - `exportAnalytics()` - Export analytics data
 - `clearAnalytics()` - Clear stored analytics data
+
+## 📚 Related Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[🏠 Wiki Home](Home.md)** | Overview and getting started |
+| **[🔧 API Reference](API-Documentation.md)** | Technical component documentation |
+| **[🗄️ Database Guide](S3-Integration.md)** | Database integration patterns |
+| **[📝 SQL Examples](SQL-Examples.md)** | Query patterns and examples |
+
+## 📞 Support & Community
+
+- **[💬 Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - Community conversations
+- **[🐛 Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)** - Bug reports and feature requests
+- **[📖 Full Documentation](../README.md)** - Complete documentation hub
+
+---
+
+**Built with ❤️ for the Bun ecosystem** • **Last updated:** October 21, 2025

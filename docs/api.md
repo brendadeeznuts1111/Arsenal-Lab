@@ -538,7 +538,7 @@ function BuildConfigurator() {
 
 ## 📚 Related Documentation
 
-- **[Performance Guide](performance.md)** - Deep dive into performance optimization
+- **[Analytics Guide](../wiki/Analytics.md)** - Performance monitoring and optimization
 - **[Contributing Guide](../CONTRIBUTING.md)** - Development guidelines
 - **[Main README](../README.md)** - Project overview and setup
 

@@ -1,6 +1,10 @@
-# Arsenal Lab Wiki
+# 🏠 Arsenal Lab Wiki
 
-Welcome to the **Arsenal Lab** - A comprehensive performance testing suite for Bun.js featuring interactive benchmarks, build configuration tools, and real-time analytics.
+> **Welcome to Arsenal Lab** - A comprehensive performance testing suite for Bun.js featuring interactive benchmarks, build configuration tools, and real-time analytics.
+
+[![Bun](https://img.shields.io/badge/Bun-1.3+-FBF0DF?style=flat&logo=bun)](https://bun.sh)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 ## 🎯 What is Arsenal Lab?
 
@@ -39,10 +43,23 @@ For a quick preview without installation:
 
 ## 📚 Documentation Structure
 
-- **[Analytics](Analytics.md)** - Performance monitoring and analytics
-- **[API Documentation](API-Documentation.md)** - Technical API reference
-- **[S3 Integration](S3-Integration.md)** - Cloud storage and database integration
-- **[SQL Examples](SQL-Examples.md)** - Database query examples and patterns
+### 📖 **Core Documentation**
+| Document | Description | Status |
+|----------|-------------|--------|
+| **[🏠 Home](Home.md)** | Overview and getting started guide | ✅ Complete |
+| **[📊 Analytics](Analytics.md)** | Performance monitoring and metrics | ✅ Complete |
+| **[🔧 API Documentation](API-Documentation.md)** | Complete technical API reference | ✅ Complete |
+| **[🗄️ Database Integration](S3-Integration.md)** | Database infrastructure patterns | ✅ Complete |
+| **[📝 SQL Examples](SQL-Examples.md)** | Advanced SQL queries and patterns | ✅ Complete |
+
+### 🚀 **Quick Start**
+| Action | Command | Description |
+|--------|---------|-------------|
+| **Install** | `bun install` | Install all dependencies |
+| **Develop** | `bun run dev` | Start development server |
+| **Build** | `bun run build` | Create production build |
+| **Test** | `bun test` | Run test suite |
+| **Demo** | Open `public/arsenal-lab.html` | View standalone demo |
 
 ## 🔧 Key Features
 
@@ -84,6 +101,25 @@ Visit the [live demo](https://brendadeeznuts1111.github.io/Arsenal-Lab/) to see 
 
 We welcome contributions! Please see our [Contributing Guide](../CONTRIBUTING.md) for details.
 
+## 📚 Related Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[📊 Analytics Guide](Analytics.md)** | Performance monitoring and metrics |
+| **[🔧 API Reference](API-Documentation.md)** | Technical component documentation |
+| **[🗄️ Database Guide](S3-Integration.md)** | Database integration patterns |
+| **[📝 SQL Examples](SQL-Examples.md)** | Query patterns and examples |
+
+## 📞 Support & Community
+
+- **[💬 Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - Community conversations
+- **[🐛 Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)** - Bug reports and feature requests
+- **[📖 Full Documentation](../README.md)** - Complete documentation hub
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+
+---
+
+**Built with ❤️ for the Bun ecosystem** • **Last updated:** October 21, 2025

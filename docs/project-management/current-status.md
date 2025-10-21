@@ -224,4 +224,23 @@ Arsenal Lab is a comprehensive performance testing suite for Bun.js with interac
 
 ---
 
+## 📚 Related Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[📊 Project Management Guide](README.md)** | Complete development processes |
+| **[📋 Project Templates](project-templates.md)** | Board templates and automation |
+| **[📖 Wiki Home](../../wiki/Home.md)** | Technical documentation |
+| **[🤝 Community Guide](../../community/README.md)** | Community engagement |
+
+## 📞 Support & Community
+
+- **[💬 Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - Community conversations
+- **[🐛 Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)** - Bug reports and feature requests
+- **[📖 Full Documentation](../../README.md)** - Complete documentation hub
+
+---
+
 **This project is in excellent shape with strong foundations, active development, and clear roadmap for growth!** 🚀✨
+
+**Built with ❤️ for the Bun ecosystem** • **Last updated:** October 21, 2025
