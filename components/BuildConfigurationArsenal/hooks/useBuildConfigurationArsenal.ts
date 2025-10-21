@@ -50,6 +50,18 @@ export interface BuildConfiguration {
   // Advanced Options
   bytecode: boolean;
   throw: boolean;
+
+  // Dead Code Elimination Annotations
+  ignoreDCEAnnotations: boolean;
+  emitDCEAnnotations: boolean;
+
+  // CLI-Specific Options (not in JS API)
+  production?: boolean; // Sets NODE_ENV=production and enables minification
+  watch?: boolean; // Watch mode for incremental rebuilds
+  noClearScreen?: boolean; // Don't clear terminal when rebuilding
+  reactFastRefresh?: boolean; // Enable React Fast Refresh transform
+  compile?: boolean; // Generate standalone executable
+  compileExecArgv?: string; // Prepend arguments to executable
 }
 
 export interface BuildOutput {
@@ -70,7 +82,7 @@ export interface BuildOutput {
 import { useCallback, useState } from 'react';
 
 export function useBuildConfigurationArsenal() {
-  const [tab, setTab] = useState<'core' | 'environment' | 'jsx' | 'optimization' | 'output' | 'advanced'>('core');
+  const [tab, setTab] = useState<'core' | 'environment' | 'jsx' | 'optimization' | 'output' | 'advanced' | 'cli'>('core');
   const [publicPath, setPublicPath] = useState('https://cdn.example.com/');
   const [config, setConfig] = useState<BuildConfiguration>({
     // Core Options
@@ -131,7 +143,19 @@ export function useBuildConfigurationArsenal() {
 
     // Advanced Options
     bytecode: false,
-    throw: false
+    throw: false,
+
+    // Dead Code Elimination Annotations
+    ignoreDCEAnnotations: false,
+    emitDCEAnnotations: true,
+
+    // CLI-Specific Options
+    production: false,
+    watch: false,
+    noClearScreen: false,
+    reactFastRefresh: false,
+    compile: false,
+    compileExecArgv: ''
   });
 
   const [buildOutput, setBuildOutput] = useState<BuildOutput | null>(null);
@@ -246,6 +270,38 @@ export function useBuildConfigurationArsenal() {
     setConfig(prev => ({ ...prev, throw: throw_ }));
   }, []);
 
+  const updateIgnoreDCEAnnotations = useCallback((ignoreDCEAnnotations: boolean) => {
+    setConfig(prev => ({ ...prev, ignoreDCEAnnotations }));
+  }, []);
+
+  const updateEmitDCEAnnotations = useCallback((emitDCEAnnotations: boolean) => {
+    setConfig(prev => ({ ...prev, emitDCEAnnotations }));
+  }, []);
+
+  const updateProduction = useCallback((production: boolean) => {
+    setConfig(prev => ({ ...prev, production }));
+  }, []);
+
+  const updateWatch = useCallback((watch: boolean) => {
+    setConfig(prev => ({ ...prev, watch }));
+  }, []);
+
+  const updateNoClearScreen = useCallback((noClearScreen: boolean) => {
+    setConfig(prev => ({ ...prev, noClearScreen }));
+  }, []);
+
+  const updateReactFastRefresh = useCallback((reactFastRefresh: boolean) => {
+    setConfig(prev => ({ ...prev, reactFastRefresh }));
+  }, []);
+
+  const updateCompile = useCallback((compile: boolean) => {
+    setConfig(prev => ({ ...prev, compile }));
+  }, []);
+
+  const updateCompileExecArgv = useCallback((compileExecArgv: string) => {
+    setConfig(prev => ({ ...prev, compileExecArgv }));
+  }, []);
+
   // Code generation
   const generateBuildCode = useCallback(() => {
     return `import { build } from 'bun';
@@ -287,7 +343,11 @@ const result = await build({
 
   // Advanced Options
   bytecode: ${config.bytecode},
-  throw: ${config.throw}
+  throw: ${config.throw},
+
+  // Dead Code Elimination Annotations
+  ignoreDCEAnnotations: ${config.ignoreDCEAnnotations},
+  emitDCEAnnotations: ${config.emitDCEAnnotations}
 });
 
 console.log('Build ${config.splitting ? 'with' : 'without'} code splitting');
@@ -365,6 +425,152 @@ export default App;`;
     });
   }, [config]);
 
+  // CLI command generation
+  const generateCliCommand = useCallback(() => {
+    const args: string[] = [];
+
+    // Entry points
+    args.push(...config.entrypoints);
+
+    // Output options
+    if (config.outdir !== './dist') {
+      args.push(`--outdir`, config.outdir);
+    }
+
+    if (config.root !== '.') {
+      args.push(`--root`, config.root);
+    }
+
+    // Target and format
+    if (config.target !== 'browser') {
+      args.push(`--target`, config.target);
+    }
+
+    if (config.format !== 'esm') {
+      args.push(`--format`, config.format);
+    }
+
+    // Code splitting
+    if (!config.splitting) {
+      args.push(`--no-splitting`);
+    }
+
+    // Environment
+    if (config.env === 'inline') {
+      args.push(`--env`, 'inline');
+    } else if (config.env === 'disable') {
+      args.push(`--env`, 'disable');
+    } else if (typeof config.env === 'string' && config.env !== 'inline') {
+      args.push(`--env`, config.env);
+    }
+
+    // Packages
+    if (config.packages !== 'bundle') {
+      args.push(`--packages`, config.packages);
+    }
+
+    // External packages
+    if (config.external.length > 0) {
+      args.push(`--external`, config.external.join(','));
+    }
+
+    // Conditions
+    if (config.conditions.length > 0) {
+      args.push(`--conditions`, config.conditions.join(','));
+    }
+
+    // Public path
+    if (config.publicPath && config.publicPath !== 'https://cdn.example.com/') {
+      args.push(`--public-path`, config.publicPath);
+    }
+
+    // Naming
+    if (config.naming.entry !== '[dir]/[name].[ext]') {
+      args.push(`--entry-naming`, config.naming.entry);
+    }
+    if (config.naming.chunk !== '[name]-[hash].[ext]') {
+      args.push(`--chunk-naming`, config.naming.chunk);
+    }
+    if (config.naming.asset !== '[name]-[hash].[ext]') {
+      args.push(`--asset-naming`, config.naming.asset);
+    }
+
+    // JSX
+    if (config.jsx.factory !== 'React.createElement') {
+      args.push(`--jsx-factory`, config.jsx.factory);
+    }
+    if (config.jsx.fragment !== 'React.Fragment') {
+      args.push(`--jsx-fragment`, config.jsx.fragment);
+    }
+    if (config.jsx.importSource !== 'react') {
+      args.push(`--jsx-import-source`, config.jsx.importSource);
+    }
+    if (config.jsx.runtime !== 'automatic') {
+      args.push(`--jsx-runtime`, config.jsx.runtime);
+    }
+
+    // Source maps
+    if (config.sourcemap !== 'none') {
+      args.push(`--sourcemap`, config.sourcemap);
+    }
+
+    // Minification
+    if (config.minify.whitespace || config.minify.syntax || config.minify.identifiers) {
+      if (config.minify.whitespace) args.push(`--minify-whitespace`);
+      if (config.minify.syntax) args.push(`--minify-syntax`);
+      if (config.minify.identifiers) args.push(`--minify-identifiers`);
+    }
+
+    // Banner and footer
+    if (config.banner) {
+      args.push(`--banner`, `"${config.banner}"`);
+    }
+    if (config.footer) {
+      args.push(`--footer`, `"${config.footer}"`);
+    }
+
+    // Drop
+    if (config.drop.length > 0) {
+      args.push(`--drop`, config.drop.join(','));
+    }
+
+    // Advanced options
+    if (config.bytecode) {
+      args.push(`--bytecode`);
+    }
+    if (config.throw) {
+      args.push(`--throw`);
+    }
+    if (config.ignoreDCEAnnotations) {
+      args.push(`--ignore-dce-annotations`);
+    }
+    if (!config.emitDCEAnnotations) {
+      args.push(`--no-emit-dce-annotations`);
+    }
+
+    // CLI-specific options
+    if (config.production) {
+      args.push(`--production`);
+    }
+    if (config.watch) {
+      args.push(`--watch`);
+    }
+    if (config.noClearScreen) {
+      args.push(`--no-clear-screen`);
+    }
+    if (config.reactFastRefresh) {
+      args.push(`--react-fast-refresh`);
+    }
+    if (config.compile) {
+      args.push(`--compile`);
+    }
+    if (config.compileExecArgv) {
+      args.push(`--compile-exec-argv`, config.compileExecArgv);
+    }
+
+    return `bun build ${args.join(' ')}`;
+  }, [config]);
+
   return {
     tab,
     setTab,
@@ -401,8 +607,18 @@ export default App;`;
     // Advanced updaters
     updateBytecode,
     updateThrow,
+    updateIgnoreDCEAnnotations,
+    updateEmitDCEAnnotations,
+    // CLI-specific updaters
+    updateProduction,
+    updateWatch,
+    updateNoClearScreen,
+    updateReactFastRefresh,
+    updateCompile,
+    updateCompileExecArgv,
     // Utilities
     generateBuildCode,
+    generateCliCommand,
     generateExampleInput,
     simulateBuild,
     buildOutput

@@ -58,29 +58,6 @@
     "bun": ">=1.3.0",
     "node": ">=18.0.0"
   },
-  "keywords": [
-    "bun",
-    "performance",
-    "arsenal",
-    "database",
-    "redis",
-    "websocket",
-    "sqlite",
-    "s3",
-    "bunx",
-    "benchmarking",
-    "testing",
-    "metrics",
-    "prometheus",
-    "junit",
-    "pwa",
-    "offline",
-    "concurrent",
-    "async",
-    "typescript",
-    "react",
-    "web-performance"
-  ],
   "author": {
     "name": "Bun Team",
     "email": "team@bun.sh",
@@ -120,7 +97,6 @@
     "interactive",
     "playground"
   ],
-  "homepage": "https://arsenal.bun.sh",
   "funding": {
     "type": "opencollective",
     "url": "https://opencollective.com/bun"

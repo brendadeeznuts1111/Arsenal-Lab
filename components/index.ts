@@ -18,11 +18,17 @@ export { DatabaseInfrastructureArsenal } from './DatabaseInfrastructureArsenal';
 // Build Configuration Arsenal
 export { BuildConfigurationArsenal } from './BuildConfigurationArsenal';
 
+// Layout Components
+export { Banner } from './Layout/Banner';
+export { EnhancedBanner } from './Layout/EnhancedBanner';
+export { Footer } from './Layout/Footer';
+
 // Live Demo Components
 export { LiveTestingDemo } from './TestingDebuggingArsenal/ui/LiveTestingDemo';
 
 // Re-export hooks for advanced usage
 export { useBuildConfigurationArsenal } from './BuildConfigurationArsenal/hooks/useBuildConfigurationArsenal';
+export { usePerformanceMonitor } from './Layout/hooks/usePerformanceMonitor';
 export { usePerformanceArsenal } from './PerformanceArsenal/hooks/usePerformanceArsenal';
 export { useTestingDebuggingArsenal } from './TestingDebuggingArsenal/hooks/useTestingDebuggingArsenal';
 

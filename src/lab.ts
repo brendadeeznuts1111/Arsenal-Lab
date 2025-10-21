@@ -2,6 +2,7 @@
 // Arsenal Lab - FAANG-grade performance testing suite
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Footer } from '../components/Layout/Footer';
 import { getAnalyticsTracker } from '../components/PerformanceArsenal/utils/analytics';
 import { getPerformanceMonitor } from '../components/PerformanceArsenal/utils/performanceObserver';
 import { getPrometheusMetrics } from './metrics/arsenal';
@@ -93,22 +94,138 @@ function renderLab() {
         <div id="tab-content"></div>
       </main>
 
-      <footer class="lab-footer">
-        <div class="lab-stats">
-          <span>FPS: <span id="fps">0</span></span>
-          <span>Memory: <span id="memory">0</span> MB</span>
-          <span>Analytics: <span id="analytics">${analyticsTracker.isAnalyticsEnabled() ? 'ON' : 'OFF'}</span></span>
-        </div>
-        <div class="lab-links">
-          <a href="https://github.com/oven-sh/bun" target="_blank">GitHub</a>
-          <a href="https://bun.sh/docs" target="_blank">Docs</a>
-          <a href="https://github.com/oven-sh/bun/issues" target="_blank">Issues</a>
-        </div>
-      </footer>
+      <div id="footer-container"></div>
+
+      <style>
+        /* Footer Styles */
+        .lab-footer {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          padding: 1.5rem;
+          background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
+          color: white;
+          border-top: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 0 0 1rem 1rem;
+        }
+
+        .lab-stats {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 2rem;
+        }
+
+        .lab-stats span {
+          color: white;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
+        .lab-links {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 0.75rem;
+        }
+
+        .lab-links a {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: rgba(255, 255, 255, 0.9);
+          text-decoration: none;
+          padding: 0.5rem;
+          border-radius: 0.375rem;
+          transition: all 0.2s;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
+        .lab-links a:hover {
+          color: white;
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .link-icon {
+          font-size: 1rem;
+          flex-shrink: 0;
+        }
+
+        .lab-meta {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 0.75rem;
+          opacity: 0.8;
+        }
+
+        .version {
+          color: white;
+          font-weight: 600;
+        }
+
+        .separator {
+          color: rgba(255, 255, 255, 0.5);
+        }
+
+        .powered-by a {
+          color: rgba(255, 255, 255, 0.8);
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+
+        .powered-by a:hover {
+          color: white;
+        }
+
+        .copyright {
+          color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+          .lab-links {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+          }
+
+          .lab-stats {
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: center;
+          }
+
+          .lab-meta {
+            flex-direction: column;
+            gap: 0.25rem;
+            text-align: center;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .lab-links a {
+            font-size: 0.75rem;
+            padding: 0.375rem;
+          }
+
+          .link-icon {
+            font-size: 0.875rem;
+          }
+        }
+      </style>
     </div>
   `;
 
   renderTabContent();
+
+  // Mount React Footer component
+  const footerContainer = document.getElementById('footer-container');
+  if (footerContainer) {
+    const footerRoot = ReactDOM.createRoot(footerContainer);
+    footerRoot.render(React.createElement(Footer));
+  }
+
   startStatsUpdates();
 }
 

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arsenal Lab – FAANG-grade performance testing suite</title>
+  <style>
+    /* Reset */
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:#0d1117;
+      color:#e6edf3;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    a{color:#58a6ff;text-decoration:none;}
+    a:hover{text-decoration:underline;}
+
+    /* Header */
+    .lab-header{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      padding:1rem 1.5rem;
+      background:#161b22;
+      border-bottom:1px solid #30363d;
+    }
+    .lab-title h1{font-size:1.5rem;font-weight:700;}
+    .lab-title p{font-size:.875rem;color:#8b949e;}
+    .lab-controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.5rem;
+    }
+    .lab-controls button{
+      background:#21262d;
+      border:1px solid #30363d;
+      color:#c9d1d9;
+      padding:.5rem .75rem;
+      border-radius:.375rem;
+      font-size:.875rem;
+      cursor:pointer;
+      transition:background .2s;
+    }
+    .lab-controls button:hover{background:#30363d;}
+    .lab-controls button.active{background:#238636;border-color:#238636;color:#fff;}
+
+    /* Main */
+    .lab-content{
+      flex:1;
+      padding:1.5rem;
+      max-width:1200px;
+      width:100%;
+      margin:0 auto;
+    }
+
+    /* Footer */
+    .arsenal-footer{
+      background:#161b22;
+      border-top:1px solid #30363d;
+      padding:1.5rem;
+      font-size:.875rem;
+      color:#8b949e;
+    }
+    .footer-section{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:1.5rem;
+      margin-bottom:1.5rem;
+    }
+    .footer-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
+    }
+    .footer-links a{
+      display:flex;
+      align-items:center;
+      gap:.25rem;
+    }
+    .footer-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.75rem;
+      align-items:center;
+    }
+    .shortcuts .shortcut-group span{display:block;margin-bottom:.25rem;font-weight:600;}
+    .shortcuts a{display:block;margin-bottom:.25rem;}
+
+    /* Responsive */
+    @media(max-width:600px){
+      .lab-header{flex-direction:column;align-items:flex-start;}
+      .lab-controls{width:100%;justify-content:flex-start;}
+      .footer-section{flex-direction:column;}
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="arsenal-lab">
+      <header class="lab-header">
+        <div class="lab-title">
+          <h1>🚀 Arsenal Lab</h1>
+          <p>FAANG-grade performance testing suite</p>
+        </div>
+        <div class="lab-controls">
+          <button class="active" onclick="switchTab('performance')">⚡ Performance</button>
+          <button onclick="switchTab('process')">🔧 Process & Shell</button>
+          <button onclick="switchTab('testing')">🧪 Testing</button>
+          <button onclick="switchTab('debugging')">🔍 Testing & Debugging</button>
+          <button onclick="switchTab('database')">🗄️ Database & Infra</button>
+          <button onclick="switchTab('build')">🔧 Build Config</button>
+          <button onclick="switchTab('bunx')">🚀 bunx Demo</button>
+          <button onclick="exportMetrics()">📊 Export Metrics</button>
+        </div>
+      </header>
+
+      <main class="lab-content">
+        <div id="tab-content">
+          <!-- Welcome content -->
+          <div style="text-align:center;padding:3rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">Welcome to Arsenal Lab</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;max-width:600px;margin-left:auto;margin-right:auto;">
+              Explore Bun's cutting-edge performance features through interactive demonstrations.
+              Click on any tab above to dive into the arsenals showcasing FAANG-grade optimizations.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin-bottom:2rem;">
+              <div style="background:#161b22;padding:1rem;border-radius:.5rem;border:1px solid #30363d;min-width:200px;">
+                <div style="font-size:2rem;margin-bottom:.5rem;">⚡</div>
+                <div style="font-weight:600;margin-bottom:.25rem;">Performance</div>
+                <div style="font-size:.875rem;color:#8b949e;">500× faster operations</div>
+              </div>
+              <div style="background:#161b22;padding:1rem;border-radius:.5rem;border:1px solid #30363d;min-width:200px;">
+                <div style="font-size:2rem;margin-bottom:.5rem;">🧪</div>
+                <div style="font-weight:600;margin-bottom:.25rem;">Testing</div>
+                <div style="font-size:.875rem;color:#8b949e;">Concurrent execution</div>
+              </div>
+              <div style="background:#161b22;padding:1rem;border-radius:.5rem;border:1px solid #30363d;min-width:200px;">
+                <div style="font-size:2rem;margin-bottom:.5rem;">🗄️</div>
+                <div style="font-weight:600;margin-bottom:.25rem;">Database</div>
+                <div style="font-size:.875rem;color:#8b949e;">7.9× faster queries</div>
+              </div>
+            </div>
+            <p style="color:#8b949e;font-size:.875rem;">
+              <strong>💡 Tip:</strong> For the full interactive experience, run the Bun development server with live performance monitoring.
+            </p>
+          </div>
+        </div>
+      </main>
+
+      <footer class="arsenal-footer">
+        <div class="footer-section">
+          <div class="footer-links">
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab" target="_blank" rel="noopener noreferrer"><span>🏠</span>Arsenal Lab</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/issues" target="_blank" rel="noopener noreferrer"><span>🐛</span>Issues</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/blob/main/docs/api.md" target="_blank" rel="noopener noreferrer"><span>🔧</span>API Reference</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/blob/main/docs/performance.md" target="_blank" rel="noopener noreferrer"><span>⚡</span>Performance Guide</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/blob/main/docs/migration.md" target="_blank" rel="noopener noreferrer"><span>📋</span>Migration Guide</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#contributing" target="_blank" rel="noopener noreferrer"><span>🤝</span>Contributing</a>
+          </div>
+          <div class="footer-meta">
+            <span class="version">Arsenal Lab v1.3.0</span>
+            <span class="separator">•</span>
+            <span class="copyright">© 2024 brendadeeznuts1111</span>
+          </div>
+        </div>
+        <div class="footer-section">
+          <div class="shortcuts">
+            <div class="shortcut-group">
+              <span class="shortcut-label">Quick Links</span>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#installation" target="_blank">Installation Guide</a>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#contributing" target="_blank">Contributing Guide</a>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#arsenal-collection" target="_blank">Arsenal Collection</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching functionality
+    function switchTab(tab) {
+      const tabContent = document.getElementById('tab-content');
+      const buttons = document.querySelectorAll('.lab-controls button');
+
+      // Update active button
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Update content based on tab
+      const content = {
+        performance: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">⚡ Performance Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">500× faster operations with zero-copy communication, optimized crypto, and memory management.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#f85149;margin-bottom:1rem;">🚀 Live Demo Required</h3>
+              <p style="color:#8b949e;margin-bottom:1.5rem;">This interactive demo requires the Bun runtime for real-time performance monitoring.</p>
+              <div style="background:#0d1117;padding:1rem;border-radius:.375rem;border:1px solid #30363d;">
+                <code style="color:#79c0ff;">bun run dev</code>
+                <p style="color:#8b949e;font-size:.875rem;margin-top:.5rem;">Start the development server to access full interactive features</p>
+              </div>
+            </div>
+          </div>
+        `,
+        process: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🔧 Process & Shell Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Advanced process management with streams, buffers, sockets, and timers.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#d29922;margin-bottom:1rem;">⚠️ Interactive Features</h3>
+              <p style="color:#8b949e;">Real-time process monitoring and socket diagnostics require the full Bun environment.</p>
+            </div>
+          </div>
+        `,
+        testing: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🧪 Testing Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Concurrent execution, advanced matchers, and type testing capabilities.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#79c0ff;margin-bottom:1rem;">📊 Test Results</h3>
+              <p style="color:#8b949e;">Live test execution and concurrent performance metrics available in the full application.</p>
+            </div>
+          </div>
+        `,
+        debugging: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🔍 Testing & Debugging Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Complete testing ecosystem with async traces and CI/CD integration.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#f85149;margin-bottom:1rem;">🐛 Debug Features</h3>
+              <p style="color:#8b949e;">Stack trace analysis and debugging tools require the interactive Bun environment.</p>
+            </div>
+          </div>
+        `,
+        database: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🗄️ Database & Infrastructure Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">SQLite, Redis, WebSocket, and S3 with 7.9× performance gains.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#238636;margin-bottom:1rem;">💾 Database Demo</h3>
+              <p style="color:#8b949e;">Interactive database queries and infrastructure monitoring available in the full application.</p>
+            </div>
+          </div>
+        `,
+        build: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🔧 Build Configuration Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Complete Bun bundler playground with JS API and CLI command generation.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#bb9af7;margin-bottom:1rem;">📦 Build Config</h3>
+              <p style="color:#8b949e;">Interactive bundler configuration with live code generation requires the full Bun environment.</p>
+            </div>
+          </div>
+        `,
+        bunx: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🚀 bunx Demo Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Execute npm packages without installation using Bun's package runner.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#ff9e64;margin-bottom:1rem;">⚡ bunx Commands</h3>
+              <p style="color:#8b949e;">Live package execution and command demonstrations available in the interactive environment.</p>
+            </div>
+          </div>
+        `
+      };
+
+      tabContent.innerHTML = content[tab] || '<p>Tab content coming soon...</p>';
+    }
+
+    function exportMetrics() {
+      alert('📊 Export Metrics\n\nThis feature requires the full Bun runtime with live performance monitoring.\n\nRun: bun run dev');
+    }
+
+    // Initialize with welcome content
+    switchTab('performance');
+  </script>
+</body>
+</html>

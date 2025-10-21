@@ -10,26 +10,94 @@
 
 **FAANG-grade performance testing suite for Bun runtime** - Interactive playground showcasing every v1.3 enhancement across performance, databases, testing, and infrastructure.
 
-## 🎯 Quick Start
+## 🚀 Installation
+
+### Prerequisites
+
+- **[Bun 1.3+](https://bun.sh)** - Required for all v1.3 features
+- **[Node.js 18+](https://nodejs.org/)** - For fallback compatibility testing
+- **Git** - For cloning the repository
+
+### Quick Start
 
 ```bash
-# Clone and install
+# Clone the repository
 git clone https://github.com/brendadeeznuts1111/Arsenal-Lab.git
 cd Arsenal-Lab
+
+# Install dependencies
 bun install
 
-# Start the arsenal lab
+# Start the development server
 bun run dev
 
+# Open http://localhost:3655 in your browser
+```
+
+### Build for Production
+
+```bash
 # Build for production
 bun run build
+
+# Start production server
+bun run start
 ```
+
+### Alternative Installation Methods
+
+#### Using npm/yarn (not recommended for full feature set)
+
+```bash
+# If you must use npm (limited Bun v1.3 features)
+npm install
+npm run dev
+
+# Or with yarn
+yarn install
+yarn dev
+```
+
+#### Docker Installation (coming soon)
+
+```bash
+# Docker support planned for v2.0
+docker run -p 3655:3655 brendadeeznuts1111/arsenal-lab
+```
+
+### Standalone HTML Demo
+
+For a quick preview without Bun installation:
+
+```bash
+# Open the standalone HTML version
+open public/arsenal-lab.html
+```
+
+This provides an overview of all arsenals with links to the full interactive experience.
 
 ## 📊 Live Demo
 
 🚀 **[Try the Arsenal Lab Live](https://arsenal.bun.sh)** - Interactive playground with all Bun v1.3 features!
 
-Open [http://localhost:3655](http://localhost:3655) and explore the interactive arsenals!
+**Two Ways to Experience Arsenal Lab:**
+
+### Full Interactive Experience
+```bash
+bun run dev  # Start at http://localhost:3655
+```
+- Real-time performance monitoring
+- Live code execution and benchmarking
+- Interactive configuration controls
+- Full Bun runtime features
+
+### Quick Preview (No Installation Required)
+```bash
+open public/arsenal-lab.html
+```
+- Overview of all arsenal features
+- GitHub repository navigation
+- Links to full interactive demos
 
 ## 🎪 Arsenal Collection
 
@@ -211,29 +279,169 @@ export interface CustomMetrics {
 
 ## 🤝 Contributing
 
-We welcome contributions! See our [Contributing Guide](docs/contributing.md) for details.
+We welcome contributions from developers of all skill levels! Whether you're fixing bugs, adding features, improving documentation, or helping with testing, your help is appreciated.
 
-### Development Setup
+### 📋 Ways to Contribute
+
+- 🐛 **Bug Reports**: Found a bug? [Open an issue](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues/new?template=bug-report.md)
+- 💡 **Feature Requests**: Have an idea? [Suggest a feature](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues/new?template=feature-request.md)
+- 📝 **Documentation**: Help improve docs, tutorials, or examples
+- 🧪 **Testing**: Write tests, improve test coverage, or report test failures
+- 🎨 **UI/UX**: Improve the interface, accessibility, or user experience
+- 🚀 **Performance**: Optimize code, reduce bundle sizes, improve metrics
+
+### 🚀 Development Setup
+
+#### Prerequisites
+- **Bun 1.3+** - Required for development
+- **Git** - For version control
+- **GitHub Account** - For contributing
+
+#### Quick Setup
 ```bash
-# Fork and clone
-git clone https://github.com/oven-sh/bun-performance-arsenal.git
-cd bun-performance-arsenal
+# Fork the repository on GitHub
+# Then clone your fork
+git clone https://github.com/YOUR_USERNAME/Arsenal-Lab.git
+cd Arsenal-Lab
 
 # Install dependencies
 bun install
 
-# Start development
+# Start development server
 bun run dev
 
 # Run tests
 bun run test
+
+# Run linting
+bun run lint
 ```
 
-### Code Quality
-- **ESLint**: Code linting and style enforcement
-- **Prettier**: Automatic code formatting
-- **TypeScript**: Strict type checking
-- **Concurrent Testing**: Parallel test execution
+#### Development Workflow
+
+1. **Create a feature branch**:
+   ```bash
+   git checkout -b feature/your-feature-name
+   # or
+   git checkout -b fix/issue-number-description
+   ```
+
+2. **Make your changes** and ensure:
+   - Code follows TypeScript best practices
+   - All tests pass (`bun run test`)
+   - Code is properly formatted (`bun run lint`)
+   - No TypeScript errors
+
+3. **Test your changes**:
+   ```bash
+   # Run the full test suite
+   bun run test
+
+   # Run performance benchmarks
+   bun run arsenal:ci
+
+   # Build for production
+   bun run build
+   ```
+
+4. **Commit your changes**:
+   ```bash
+   git add .
+   git commit -m "feat: add new feature description"
+   # Follow conventional commit format
+   ```
+
+5. **Push and create PR**:
+   ```bash
+   git push origin feature/your-feature-name
+   # Create PR on GitHub
+   ```
+
+### 📝 Code Quality Standards
+
+#### TypeScript & Code Style
+- **Strict TypeScript**: All code must be fully typed
+- **ESLint**: Code must pass all linting rules
+- **Prettier**: Code must be properly formatted
+- **Conventional Commits**: Use semantic commit messages
+
+#### Testing Requirements
+- **Unit Tests**: All new features must have tests
+- **Integration Tests**: Complex features need integration tests
+- **Performance Tests**: Performance-critical code needs benchmarks
+- **Test Coverage**: Maintain >80% coverage
+
+#### Documentation
+- **JSDoc**: All public APIs must be documented
+- **README Updates**: Update documentation for new features
+- **Examples**: Provide usage examples for complex features
+
+### 🧪 Testing Guidelines
+
+#### Running Tests
+```bash
+# Run all tests
+bun run test
+
+# Run specific test file
+bun run test path/to/test.ts
+
+# Run with coverage
+bun run test --coverage
+
+# Run performance tests
+bun run arsenal:ci
+```
+
+#### Writing Tests
+```typescript
+import { describe, test, expect } from 'bun:test';
+
+describe('NewFeature', () => {
+  test('should work correctly', () => {
+    const result = newFeature(input);
+    expect(result).toBe(expectedOutput);
+  });
+});
+```
+
+### 🎯 Pull Request Process
+
+1. **PR Template**: Fill out the PR template completely
+2. **Branch Protection**: All PRs require review and CI passing
+3. **Merge Strategy**: Squash and merge for clean history
+4. **Labels**: Use appropriate labels (enhancement, bug, documentation, etc.)
+
+### 📚 Documentation
+
+- **[Contributing Guide](docs/contributing.md)**: Detailed development guidelines
+- **[API Reference](docs/api.md)**: Component documentation
+- **[Performance Guide](docs/performance.md)**: Optimization techniques
+- **[Migration Guide](docs/migration.md)**: Upgrading instructions
+
+### 💬 Communication
+
+- **Issues**: For bugs, features, and general discussion
+- **Discussions**: For questions, RFCs, and community topics
+- **Discord**: Real-time chat with maintainers and contributors
+
+### 🎖️ Recognition
+
+Contributors are recognized in:
+- **README.md**: Hall of fame section
+- **GitHub Contributors**: Automatic recognition
+- **Release Notes**: Credit for significant contributions
+
+### 📞 Support
+
+Need help contributing? Reach out:
+- 📧 **Email**: Open a discussion or issue
+- 💬 **Discussions**: Community forum
+- 🐛 **Issues**: Bug reports and feature requests
+
+---
+
+**Thank you for contributing to Arsenal Lab!** 🚀
 
 ## 🏷️ GitHub Topics
 

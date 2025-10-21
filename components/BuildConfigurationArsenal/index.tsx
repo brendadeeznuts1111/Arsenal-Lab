@@ -27,7 +27,17 @@ export function BuildConfigurationArsenal() {
     updateSplitting,
     updateBytecode,
     updateThrow,
+    updateIgnoreDCEAnnotations,
+    updateEmitDCEAnnotations,
+    // CLI-specific updaters
+    updateProduction,
+    updateWatch,
+    updateNoClearScreen,
+    updateReactFastRefresh,
+    updateCompile,
+    updateCompileExecArgv,
     generateBuildCode,
+    generateCliCommand,
     simulateBuild,
     buildOutput
   } = useBuildConfigurationArsenal();
@@ -38,7 +48,8 @@ export function BuildConfigurationArsenal() {
     { id: 'jsx', label: 'JSX', icon: '⚛️', color: 'purple' },
     { id: 'optimization', label: 'Optimization', icon: '⚡', color: 'orange' },
     { id: 'output', label: 'Output', icon: '📦', color: 'red' },
-    { id: 'advanced', label: 'Advanced', icon: '🔬', color: 'gray' }
+    { id: 'advanced', label: 'Advanced', icon: '🔬', color: 'gray' },
+    { id: 'cli', label: 'CLI', icon: '💻', color: 'teal' }
   ];
 
   const loaderOptions = [
@@ -586,6 +597,42 @@ React.createElement("div", null, "Hello")`}
                   <span className="text-sm font-medium">Enable</span>
                 </label>
               </div>
+
+              <div className="flex items-center justify-between p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                <div>
+                  <h4 className="font-medium text-purple-800 dark:text-purple-200">Ignore DCE Annotations</h4>
+                  <p className="text-sm text-purple-700 dark:text-purple-300">
+                    Skip dead code elimination annotations like @__PURE__ and package.json sideEffects
+                  </p>
+                </div>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={config.ignoreDCEAnnotations}
+                    onChange={(e) => updateIgnoreDCEAnnotations(e.target.checked)}
+                    className="rounded border-purple-300"
+                  />
+                  <span className="text-sm font-medium">Ignore</span>
+                </label>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <div>
+                  <h4 className="font-medium text-green-800 dark:text-green-200">Emit DCE Annotations</h4>
+                  <p className="text-sm text-green-700 dark:text-green-300">
+                    Force emit @__PURE__ annotations even when minify.whitespace is enabled
+                  </p>
+                </div>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={config.emitDCEAnnotations}
+                    onChange={(e) => updateEmitDCEAnnotations(e.target.checked)}
+                    className="rounded border-green-300"
+                  />
+                  <span className="text-sm font-medium">Emit</span>
+                </label>
+              </div>
             </div>
 
             {/* External Packages */}
@@ -623,6 +670,134 @@ React.createElement("div", null, "Hello")`}
                 }}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
               />
+            </div>
+          </div>
+        )}
+
+        {/* CLI Configuration */}
+        {tab === 'cli' && (
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">CLI Command Generation</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Generate equivalent CLI commands for your build configuration. CLI-only options available here.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {/* Production Mode */}
+              <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <div>
+                  <h4 className="font-medium text-green-800 dark:text-green-200">Production Mode</h4>
+                  <p className="text-sm text-green-700 dark:text-green-300">
+                    Sets NODE_ENV=production and enables all minification options
+                  </p>
+                </div>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={config.production || false}
+                    onChange={(e) => updateProduction(e.target.checked)}
+                    className="rounded border-green-300"
+                  />
+                  <span className="text-sm font-medium">Enable</span>
+                </label>
+              </div>
+
+              {/* Watch Mode */}
+              <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <div>
+                  <h4 className="font-medium text-blue-800 dark:text-blue-200">Watch Mode</h4>
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                    Rebuild automatically when files change
+                  </p>
+                </div>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={config.watch || false}
+                    onChange={(e) => updateWatch(e.target.checked)}
+                    className="rounded border-blue-300"
+                  />
+                  <span className="text-sm font-medium">Enable</span>
+                </label>
+              </div>
+
+              {/* No Clear Screen */}
+              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/20 rounded-lg">
+                <div>
+                  <h4 className="font-medium text-gray-800 dark:text-gray-200">No Clear Screen</h4>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    Don't clear terminal when rebuilding in watch mode
+                  </p>
+                </div>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={config.noClearScreen || false}
+                    onChange={(e) => updateNoClearScreen(e.target.checked)}
+                    className="rounded border-gray-300"
+                  />
+                  <span className="text-sm font-medium">Disable</span>
+                </label>
+              </div>
+
+              {/* React Fast Refresh */}
+              <div className="flex items-center justify-between p-4 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg">
+                <div>
+                  <h4 className="font-medium text-cyan-800 dark:text-cyan-200">React Fast Refresh</h4>
+                  <p className="text-sm text-cyan-700 dark:text-cyan-300">
+                    Enable React Fast Refresh transform for development
+                  </p>
+                </div>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={config.reactFastRefresh || false}
+                    onChange={(e) => updateReactFastRefresh(e.target.checked)}
+                    className="rounded border-cyan-300"
+                  />
+                  <span className="text-sm font-medium">Enable</span>
+                </label>
+              </div>
+
+              {/* Compile to Executable */}
+              <div className="flex items-center justify-between p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                <div>
+                  <h4 className="font-medium text-purple-800 dark:text-purple-200">Compile to Executable</h4>
+                  <p className="text-sm text-purple-700 dark:text-purple-300">
+                    Generate standalone Bun executable containing the bundle
+                  </p>
+                </div>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={config.compile || false}
+                    onChange={(e) => updateCompile(e.target.checked)}
+                    className="rounded border-purple-300"
+                  />
+                  <span className="text-sm font-medium">Enable</span>
+                </label>
+              </div>
+
+              {/* Compile Exec Argv */}
+              {(config.compile || false) && (
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Executable Arguments
+                  </label>
+                  <input
+                    type="text"
+                    value={config.compileExecArgv || ''}
+                    onChange={(e) => updateCompileExecArgv(e.target.value)}
+                    placeholder="--max-old-space-size=4096"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white"
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Prepend arguments to the standalone executable's execArgv
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -673,6 +848,22 @@ React.createElement("div", null, "Hello")`}
           </div>
           <pre className="text-green-300 text-xs overflow-x-auto">
             {generateBuildCode()}
+          </pre>
+        </div>
+
+        {/* Generated CLI Command */}
+        <div className="bg-gray-900 rounded-lg p-4">
+          <div className="flex justify-between items-center mb-2">
+            <h4 className="font-medium text-blue-300">Generated CLI Command</h4>
+            <button
+              onClick={() => navigator.clipboard.writeText(generateCliCommand())}
+              className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded"
+            >
+              Copy Command
+            </button>
+          </div>
+          <pre className="text-blue-300 text-xs overflow-x-auto font-mono">
+            {generateCliCommand()}
           </pre>
         </div>
       </div>
