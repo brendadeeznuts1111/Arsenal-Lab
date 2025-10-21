@@ -86,6 +86,15 @@ We welcome contributions! Please:
 2. Check existing [Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)
 3. Create a [Pull Request](https://github.com/brendadeeznuts1111/Arsenal-Lab/pulls)
 
+### 📋 Community Resources
+
+Located in `docs/community/` - resources for community engagement:
+
+- **[💬 Community Guide](community/README.md)** - How to engage with the Arsenal Lab community
+- **[📝 Discussion Templates](community/discussion-templates.md)** - Templates for creating great discussions
+- **[💡 Sample Discussions](community/sample-discussions.md)** - Ready-to-use discussion ideas
+- **[🎉 Welcome Post](community/welcome-discussion.md)** - Community welcome message
+
 ## 📄 License
 
 This documentation and code is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
