@@ -1,0 +1,494 @@
+/* components/ProcessShellArsenal/styles.css */
+.process-shell-arsenal {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 20;
+  width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+}
+
+.dark .process-shell-arsenal {
+  background: rgba(17, 24, 39, 0.95);
+  border-color: rgba(55, 65, 81, 0.8);
+}
+
+.process-monitor {
+  margin: 1rem 1.5rem;
+  padding: 1rem;
+  background: rgba(249, 250, 251, 0.8);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+.dark .process-monitor {
+  background: rgba(55, 65, 81, 0.3);
+  border-color: rgba(75, 85, 99, 0.5);
+}
+
+.monitor-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: rgb(17, 24, 39);
+}
+
+.dark .monitor-header {
+  color: rgb(243, 244, 246);
+}
+
+.monitor-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stat-label {
+  width: 60px;
+  font-size: 0.75rem;
+  color: rgb(107, 114, 128);
+}
+
+.dark .stat-label {
+  color: rgb(156, 163, 175);
+}
+
+.stat-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(229, 231, 235, 0.8);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.stat-fill.memory {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.stat-fill.cpu {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+
+.stat-value {
+  width: 40px;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgb(17, 24, 39);
+}
+
+.dark .stat-value {
+  color: rgb(243, 244, 246);
+}
+
+.stat-number {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: rgb(17, 24, 39);
+}
+
+.dark .stat-number {
+  color: rgb(243, 244, 246);
+}
+
+.timeout-controls, .buffer-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.timeout-slider {
+  width: 100%;
+  height: 6px;
+  background: rgba(229, 231, 235, 0.8);
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.timeout-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #3b82f6;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.timeout-value {
+  text-align: center;
+  font-weight: 600;
+  color: #3b82f6;
+}
+
+.timeout-presets {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.preset-button {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  background: white;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.preset-button:hover {
+  background: rgba(249, 250, 251, 0.8);
+}
+
+.preset-button.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.stream-demo {
+  margin-bottom: 1.5rem;
+}
+
+.stream-flow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(249, 250, 251, 0.8);
+  border-radius: 0.75rem;
+}
+
+.stream-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stream-node span {
+  font-size: 1.5rem;
+}
+
+.stream-node label {
+  font-size: 0.75rem;
+  color: rgb(107, 114, 128);
+}
+
+.stream-arrow {
+  font-size: 1.25rem;
+  color: #3b82f6;
+}
+
+.socket-diagnostics {
+  margin-bottom: 1.5rem;
+}
+
+.diagnostics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.diagnostic-section {
+  padding: 1rem;
+  background: rgba(249, 250, 251, 0.8);
+  border-radius: 0.5rem;
+}
+
+.diagnostic-section h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(17, 24, 39);
+}
+
+.diagnostic-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  font-size: 0.75rem;
+}
+
+.diagnostic-label {
+  color: rgb(107, 114, 128);
+}
+
+.diagnostic-value {
+  font-weight: 500;
+  color: rgb(17, 24, 39);
+}
+
+.memory-improvements {
+  margin-bottom: 1.5rem;
+}
+
+.improvement-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.improvement-card {
+  padding: 1rem;
+  background: rgba(249, 250, 251, 0.8);
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.improvement-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.improvement-icon {
+  font-size: 1.25rem;
+}
+
+.improvement-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.improvement-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #10b981;
+  margin: 0.25rem 0;
+}
+
+.improvement-desc {
+  font-size: 0.75rem;
+  color: rgb(107, 114, 128);
+}
+
+.benchmark-button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.benchmark-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.benchmark-button.danger {
+  background: #ef4444;
+  color: white;
+}
+
+.benchmark-button.warning {
+  background: #f59e0b;
+  color: white;
+}
+
+.benchmark-button.primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.benchmark-button.success {
+  background: #10b981;
+  color: white;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.feature-benefits, .security-note, .performance-note, .socket-benefits {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 0.5rem;
+  border-left: 4px solid #10b981;
+}
+
+.security-note {
+  background: rgba(245, 158, 11, 0.1);
+  border-left-color: #f59e0b;
+}
+
+.performance-note {
+  background: rgba(59, 130, 246, 0.1);
+  border-left-color: #3b82f6;
+}
+
+.socket-benefits {
+  background: rgba(139, 92, 246, 0.1);
+  border-left-color: #8b5cf6;
+}
+
+/* Memory Chart Styles */
+.memory-chart {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(249, 250, 251, 0.8);
+  border-radius: 0.75rem;
+}
+
+.chart-visualization {
+  margin-top: 1rem;
+}
+
+.chart-bars {
+  display: flex;
+  justify-content: space-around;
+  align-items: end;
+  height: 120px;
+  margin-bottom: 1rem;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bar-container {
+  width: 40px;
+  background: rgba(229, 231, 235, 0.5);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+}
+
+.bar-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s ease;
+}
+
+.memory-bar {
+  background: linear-gradient(to top, #10b981, #059669);
+}
+
+.baseline-bar {
+  background: linear-gradient(to top, #6b7280, #4b5563);
+}
+
+.node-bar {
+  background: linear-gradient(to top, #ef4444, #dc2626);
+}
+
+.bar-label {
+  font-size: 0.75rem;
+  color: rgb(107, 114, 128);
+  text-align: center;
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.legend-color.memory-bar {
+  background: #10b981;
+}
+
+.legend-color.baseline-bar {
+  background: #6b7280;
+}
+
+.legend-color.node-bar {
+  background: #ef4444;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .process-shell-arsenal {
+    width: calc(100vw - 2rem);
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .diagnostics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .improvement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeout-presets {
+    flex-wrap: wrap;
+  }
+
+  .preset-button {
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 60px;
+  }
+
+  .chart-bars {
+    height: 100px;
+  }
+
+  .bar-container {
+    width: 30px;
+  }
+}

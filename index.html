@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Arsenal Lab - FAANG-grade performance testing suite for Bun runtime">
+  <meta name="theme-color" content="#3b82f6">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/icon-192.svg" sizes="any">
+  <link rel="apple-touch-icon" href="/icon-192.svg">
+
+  <title>Arsenal Lab - Performance Testing Suite</title>
+
+  <style>
+    /* Basic reset and layout */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+
+    .arsenal-lab {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lab-header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .lab-title h1 {
+      font-size: 1.875rem;
+      font-weight: bold;
+      color: #1f2937;
+    }
+
+    .lab-title p {
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+
+    .lab-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .lab-controls button {
+      padding: 0.5rem 1rem;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lab-controls button:hover {
+      background: #f9fafb;
+    }
+
+    .lab-controls button.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+
+    .lab-content {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .lab-footer {
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .lab-stats {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .lab-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .lab-links a {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+
+    .lab-links a:hover {
+      text-decoration: underline;
+    }
+
+    .update-notification {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #10b981;
+      color: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    .update-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .update-content button {
+      background: white;
+      color: #10b981;
+      border: none;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Loading state */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50vh;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .spinner {
+      width: 2rem;
+      height: 2rem;
+      border: 3px solid #e5e7eb;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .lab-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .lab-controls {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .lab-footer {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .lab-stats {
+        justify-content: center;
+      }
+
+      .lab-links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading Arsenal Lab...</p>
+    </div>
+  </div>
+
+  <!-- Load the lab script -->
+  <script type="module" src="/src/lab.ts"></script>
+</body>
+</html>

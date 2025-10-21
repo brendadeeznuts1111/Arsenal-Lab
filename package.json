@@ -1,0 +1,140 @@
+{
+  "name": "@bun/performance-arsenal",
+  "version": "1.3.0",
+  "description": "Interactive performance lab for Bun v1.3 features - Database, Redis, WebSocket, SQLite enhancements - bunx ready",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot src/server.ts",
+    "build": "bun build src/lab.ts --outdir dist --target browser && bun build src/cli.ts --outdir dist --target bun",
+    "start": "bun run dist/index.js",
+    "preview": "bun run dist/cli.js",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "test:coverage": "bun test --coverage",
+    "arsenal:lab": "bun --hot src/server.ts",
+    "arsenal:ci": "bun run src/cli/arsenal-ci.ts",
+    "arsenal:benchmark": "bun run arsenal:ci --baseline",
+    "arsenal:compare": "bun run arsenal:ci --compare",
+    "release": "./scripts/release.sh",
+    "rollback": "./scripts/rollback.sh",
+
+    "quality": "bunx tsc --noEmit && bun run lint && bun run format:check",
+    "lint": "bunx eslint src/ components/ --ext .ts,.tsx",
+    "lint:fix": "bunx eslint src/ components/ --ext .ts,.tsx --fix",
+    "format": "bunx prettier --write src/ components/ package.json",
+    "format:check": "bunx prettier --check src/ components/ package.json",
+    "typecheck": "bunx tsc --noEmit",
+    "bundle:analyze": "echo 'Bundle analysis: bun build src/lab.ts --outdir dist --target browser --analyze'",
+    "deps:check": "bunx depcheck || echo 'Install depcheck: bun add -d depcheck'",
+
+    "docs:build": "bun run build",
+    "docs:serve": "bun --hot dist/index.html",
+    "clean": "rm -rf dist/ node_modules/.cache",
+    "prepublishOnly": "bun run quality && bun run build",
+
+    "publish:dry": "bun publish --dry-run",
+    "publish:ci": "bun run quality && bun run build && bun publish",
+
+    "bunx:demo": "bun run src/utils/bunx-demo.ts"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "prettier": "^3.6.2"
+  },
+  "engines": {
+    "bun": ">=1.3.0",
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "bun",
+    "performance",
+    "arsenal",
+    "database",
+    "redis",
+    "websocket",
+    "sqlite",
+    "s3",
+    "bunx",
+    "benchmarking",
+    "testing",
+    "metrics",
+    "prometheus",
+    "junit",
+    "pwa",
+    "offline",
+    "concurrent",
+    "async",
+    "typescript",
+    "react",
+    "web-performance"
+  ],
+  "author": {
+    "name": "Bun Team",
+    "email": "team@bun.sh",
+    "url": "https://bun.sh"
+  },
+  "contributors": [
+    {
+      "name": "Bun Community",
+      "url": "https://github.com/oven-sh/bun/graphs/contributors"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oven-sh/bun-performance-arsenal.git",
+    "directory": "packages/performance-arsenal"
+  },
+  "bugs": {
+    "url": "https://github.com/oven-sh/bun-performance-arsenal/issues",
+    "email": "issues@bun.sh"
+  },
+  "homepage": "https://arsenal.bun.sh",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/bun"
+  },
+  "files": [
+    "dist",
+    "components",
+    "src",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bin": {
+    "bun-arsenal": "./dist/cli.js",
+    "bun-perf-lab": "./dist/cli.js",
+    "performance-arsenal": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "bun": "./src/lab.ts",
+      "default": "./dist/index.js"
+    },
+    "./components": {
+      "bun": "./components/index.ts",
+      "default": "./components/index.js"
+    }
+  },
+  "volta": {
+    "bun": "1.3.0"
+  }
+}

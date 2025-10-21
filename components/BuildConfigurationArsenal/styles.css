@@ -1,0 +1,39 @@
+/* Build Configuration Arsenal Styles */
+.build-config-arsenal {
+  /* Component-specific styles can be added here */
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .build-config-arsenal {
+    /* Dark mode adjustments */
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .build-config-arsenal {
+    width: 95vw !important;
+    right: 2.5vw !important;
+    left: 2.5vw !important;
+  }
+}
+
+/* Custom scrollbar for the arsenal panel */
+.build-config-arsenal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.build-config-arsenal::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.build-config-arsenal::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.build-config-arsenal::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
