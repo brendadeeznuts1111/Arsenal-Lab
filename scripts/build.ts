@@ -1,8 +1,8 @@
 #!/usr/bin/env bun
 // scripts/build.ts - Production build orchestrator for Arsenal Lab
 
-import { getBuildConfig, type staticBuildConfig } from '../build.config';
 import type { BuildOutput } from 'bun';
+import { getBuildConfig } from '../build.config';
 
 interface BuildResult {
   success: boolean;
@@ -36,6 +36,11 @@ async function build() {
       result = await buildAll();
     } else {
       result = await buildTarget(args.target);
+    }
+
+    // Copy static assets for web deployments
+    if (args.target === 'static' || args.target === 'all') {
+      await copyStaticAssets(args.target);
     }
 
     // Check for build errors
@@ -121,6 +126,88 @@ async function cleanDistDirectory() {
     console.log('✓ Clean complete\n');
   } catch (error) {
     console.warn('⚠️  Could not clean dist directory:', error);
+  }
+}
+
+/**
+ * Update HTML asset paths with built file hashes
+ */
+function updateAssetPaths(htmlContent: string): string {
+  // Find the JavaScript and CSS files in dist/static
+  const fs = require('fs');
+  const staticDir = './dist/static';
+
+  try {
+    const files = fs.readdirSync(staticDir);
+    const jsFiles = files.filter((f: string) => f.endsWith('.js') && f.startsWith('lab.'));
+    const cssFiles = files.filter((f: string) => f.endsWith('.css') && f.startsWith('lab.'));
+
+    // Use the first JS and CSS files found (should be the entry points)
+    const jsFile = jsFiles[0] || 'lab.js';
+    const cssFile = cssFiles[0] || 'lab.css';
+
+    // Replace placeholder paths with actual hashed paths
+    let updatedHtml = htmlContent.replace(
+      /<script type="module" src="static\/lab\.[a-z0-9]+\.js"><\/script>/,
+      `<script type="module" src="static/${jsFile}"></script>`
+    );
+
+    updatedHtml = updatedHtml.replace(
+      /<link rel="stylesheet" href="static\/lab\.[a-z0-9]+\.css">/,
+      `<link rel="stylesheet" href="static/${cssFile}">`
+    );
+
+    return updatedHtml;
+  } catch (error) {
+    console.warn('⚠️  Could not update asset paths, using placeholders:', error);
+    return htmlContent;
+  }
+}
+
+/**
+ * Copy static assets (HTML, images, etc.) to dist
+ */
+async function copyStaticAssets(target: string) {
+  console.log('📋 Copying static assets...');
+
+  try {
+    // Copy index.html to dist and update asset paths
+    const htmlContent = await Bun.file('index.html').text();
+    const updatedHtml = updateAssetPaths(htmlContent);
+    await Bun.write('dist/index.html', updatedHtml);
+
+    // Copy public directory if it exists
+    try {
+      const publicExists = await Bun.file('public').exists();
+      if (publicExists) {
+        await Bun.spawn(['cp', '-r', 'public/', 'dist/']).exited;
+      }
+    } catch {
+      // Public directory doesn't exist, skip
+    }
+
+    // Copy manifest files and favicons
+    const manifestFiles = [
+      'site.webmanifest',
+      'manifest.json',
+      'favicon.svg',
+      'apple-touch-icon.svg',
+      'icon-192.svg',
+      'icon-512.svg'
+    ];
+
+    for (const file of manifestFiles) {
+      try {
+        const content = await Bun.file(file).text();
+        await Bun.write(`dist/${file}`, content);
+      } catch {
+        // File doesn't exist, skip
+      }
+    }
+
+    console.log('✓ Static assets copied\n');
+  } catch (error) {
+    console.warn('⚠️  Could not copy static assets:', error);
   }
 }
 
@@ -239,4 +326,5 @@ if (import.meta.main) {
   await build();
 }
 
-export { build, buildTarget, buildAll };
+export { build, buildAll, buildTarget };
+

@@ -250,6 +250,127 @@ export class MessageFormatter {
   }
 }
 
+  /**
+   * Format health status for Telegram
+   */
+  formatHealthStatus(healthData: any): string {
+    if (this.mode === FormatMode.HTML) {
+      let html = `🏥 <b>System Health Status</b>\n\n`;
+
+      // Overall status
+      const overallStatus = healthData.services &&
+        Object.values(healthData.services).every((s: any) => s.status === 'healthy')
+        ? '🟢 All Systems Operational' : '🟡 Some Issues Detected';
+
+      html += `<b>${overallStatus}</b>\n\n`;
+      html += `━━━━━━━━━━━━━━━━━━━━\n`;
+
+      // Service status
+      if (healthData.services) {
+        Object.entries(healthData.services).forEach(([service, status]: [string, any]) => {
+          const icon = status.status === 'healthy' ? '🟢' : status.status === 'unhealthy' ? '🔴' : '🟡';
+          html += `${icon} ${this.capitalize(service)}: ${status.status}\n`;
+        });
+      }
+
+      html += `\n━━━━━━━━━━━━━━━━━━━━\n`;
+      html += `⏱️ Last Check: ${new Date(healthData.timestamp).toLocaleString()}\n`;
+      html += `⏳ Uptime: ${Math.floor(healthData.uptime / 3600)}h ${Math.floor((healthData.uptime % 3600) / 60)}m`;
+
+      return html;
+    }
+
+    // Markdown version
+    let md = `🏥 *System Health Status*\n\n`;
+
+    const overallStatus = healthData.services &&
+      Object.values(healthData.services).every((s: any) => s.status === 'healthy')
+      ? '🟢 All Systems Operational' : '🟡 Some Issues Detected';
+
+    md += `*${overallStatus}*\n\n`;
+    md += `━━━━━━━━━━━━━━━━━━━━\n`;
+
+    if (healthData.services) {
+      Object.entries(healthData.services).forEach(([service, status]: [string, any]) => {
+        const icon = status.status === 'healthy' ? '🟢' : status.status === 'unhealthy' ? '🔴' : '🟡';
+        md += `${icon} ${this.capitalize(service)}: ${status.status}\n`;
+      });
+    }
+
+    md += `\n━━━━━━━━━━━━━━━━━━━━\n`;
+    md += `⏱️ Last Check: ${new Date(healthData.timestamp).toLocaleString()}\n`;
+    md += `⏳ Uptime: ${Math.floor(healthData.uptime / 3600)}h ${Math.floor((healthData.uptime % 3600) / 60)}m`;
+
+    return md;
+  }
+
+  /**
+   * Format comprehensive system status
+   */
+  formatSystemStatus(data: { health: any; telemetry: any; diagnostics: any }): string {
+    if (this.mode === FormatMode.HTML) {
+      let html = `🔧 <b>Comprehensive System Status</b>\n\n`;
+
+      // Health summary
+      html += `🏥 <b>Health Overview:</b>\n`;
+      if (data.health.services) {
+        Object.entries(data.health.services).forEach(([service, status]: [string, any]) => {
+          const icon = status.status === 'healthy' ? '🟢' : '🔴';
+          html += `  ${icon} ${this.capitalize(service)}\n`;
+        });
+      }
+
+      // Performance metrics
+      html += `\n⚡ <b>Performance:</b>\n`;
+      html += `  • Memory: <code>${(data.health.system?.memory?.heapUsed / 1024 / 1024).toFixed(1)} MB</code>\n`;
+      html += `  • Uptime: <code>${Math.floor(data.health.uptime / 3600)}h ${Math.floor((data.health.uptime % 3600) / 60)}m</code>\n`;
+
+      // Telemetry summary
+      html += `\n📊 <b>Telemetry:</b>\n`;
+      html += `  • API Calls: <code>${data.telemetry.metrics?.apiMetrics?.total || 0}</code>\n`;
+      html += `  • Active Users: <code>${data.telemetry.system?.activeUsers || 0}</code>\n`;
+
+      html += `\n━━━━━━━━━━━━━━━━━━━━\n`;
+      html += `📈 <a href="http://localhost:3655/">View Dashboard</a>`;
+
+      return html;
+    }
+
+    // Markdown version
+    let md = `🔧 *Comprehensive System Status*\n\n`;
+
+    md += `🏥 *Health Overview:*\n`;
+    if (data.health.services) {
+      Object.entries(data.health.services).forEach(([service, status]: [string, any]) => {
+        const icon = status.status === 'healthy' ? '🟢' : '🔴';
+        md += `  ${icon} ${this.capitalize(service)}\n`;
+      });
+    }
+
+    md += `\n⚡ *Performance:*\n`;
+    md += `  • Memory: \`${(data.health.system?.memory?.heapUsed / 1024 / 1024).toFixed(1)} MB\`\n`;
+    md += `  • Uptime: \`${Math.floor(data.health.uptime / 3600)}h ${Math.floor((data.health.uptime % 3600) / 60)}m\`\n`;
+
+    md += `\n📊 *Telemetry:*\n`;
+    md += `  • API Calls: \`${data.telemetry.metrics?.apiMetrics?.total || 0}\`\n`;
+    md += `  • Active Users: \`${data.telemetry.system?.activeUsers || 0}\`\n`;
+
+    md += `\n━━━━━━━━━━━━━━━━━━━━\n`;
+    md += `📈 [View Dashboard](http://localhost:3655/)`;
+
+    return md;
+  }
+}
+
+// Convenience functions for health and status formatting
+export function formatHealthStatus(healthData: any): string {
+  return new MessageFormatter(FormatMode.Markdown).formatHealthStatus(healthData);
+}
+
+export function formatSystemStatus(data: { health: any; telemetry: any; diagnostics: any }): string {
+  return new MessageFormatter(FormatMode.Markdown).formatSystemStatus(data);
+}
+
 // Export default HTML formatter
 export const htmlFormatter = new MessageFormatter(FormatMode.HTML);
 export const markdownFormatter = new MessageFormatter(FormatMode.MarkdownV2);
