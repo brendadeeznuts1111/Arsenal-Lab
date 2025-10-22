@@ -31,12 +31,12 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install -g @octokit/rest rss-generator
+        run: npm install @octokit/core rss-generator
 
       - name: Generate RSS feeds
         run: |
           node -e "
-          const { Octokit } = require('@octokit/rest');
+          const { Octokit } = require('@octokit/core');
           const RSS = require('rss-generator');
           const fs = require('fs');
 
@@ -48,7 +48,11 @@ jobs:
 
             // Generate releases RSS
             try {
-              const releases = await octokit.repos.listReleases({ owner, repo, per_page: 10 });
+              const releases = await octokit.request('GET /repos/{owner}/{repo}/releases', {
+                owner,
+                repo,
+                per_page: 10
+              });
               const releaseFeed = new RSS({
                 title: 'Bun Performance Arsenal - Releases',
                 description: 'Latest releases and updates',
