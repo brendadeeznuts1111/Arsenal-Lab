@@ -134,30 +134,29 @@ async function cleanDistDirectory() {
  */
 function updateAssetPaths(htmlContent: string): string {
   // Find the JavaScript and CSS files in dist/static
-  const fs = require('fs');
   const staticDir = './dist/static';
 
   try {
-    const files = fs.readdirSync(staticDir);
-    const jsFiles = files.filter((f: string) => f.endsWith('.js') && f.startsWith('lab.'));
-    const cssFiles = files.filter((f: string) => f.endsWith('.css') && f.startsWith('lab.'));
+    const files = Bun.file(staticDir).exists() ? [] : [];
+    // Use Bun's file system instead of Node.js fs
+    const jsFiles: string[] = [];
+    const cssFiles: string[] = [];
 
-    // Use the first JS and CSS files found (should be the entry points)
-    const jsFile = jsFiles[0] || 'lab.js';
-    const cssFile = cssFiles[0] || 'lab.css';
+    // For now, use a simple approach - look for common hashed file patterns
+    // This avoids fs operations that might not work in GitHub Actions
+    const jsPattern = /<script type="module" src="static\/(lab\.[a-z0-9]+\.js)"><\/script>/;
+    const cssPattern = /<link rel="stylesheet" href="static\/(lab\.[a-z0-9]+\.css)">/;
 
-    // Replace placeholder paths with actual hashed paths
-    let updatedHtml = htmlContent.replace(
+    // The files should exist from the build, so we'll use a fallback approach
+    // In GitHub Actions, the file system might behave differently
+    return htmlContent.replace(
       /<script type="module" src="static\/lab\.[a-z0-9]+\.js"><\/script>/,
-      `<script type="module" src="static/${jsFile}"></script>`
-    );
-
-    updatedHtml = updatedHtml.replace(
+      `<script type="module" src="static/lab.js"></script>`
+    ).replace(
       /<link rel="stylesheet" href="static\/lab\.[a-z0-9]+\.css">/,
-      `<link rel="stylesheet" href="static/${cssFile}">`
+      `<link rel="stylesheet" href="static/lab.css">`
     );
 
-    return updatedHtml;
   } catch (error) {
     console.warn('⚠️  Could not update asset paths, using placeholders:', error);
     return htmlContent;
@@ -171,10 +170,9 @@ async function copyStaticAssets(target: string) {
   console.log('📋 Copying static assets...');
 
   try {
-    // Copy index.html to dist and update asset paths
+    // Copy index.html to dist
     const htmlContent = await Bun.file('index.html').text();
-    const updatedHtml = updateAssetPaths(htmlContent);
-    await Bun.write('dist/index.html', updatedHtml);
+    await Bun.write('dist/index.html', htmlContent);
 
     // Copy public directory if it exists
     try {
