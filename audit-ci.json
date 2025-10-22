@@ -1,0 +1,19 @@
+{
+  "levels": {
+    "low": true,
+    "moderate": true,
+    "high": true,
+    "critical": true
+  },
+  "report": {
+    "type": "full",
+    "path": "./audit-results"
+  },
+  "path-allowlist": [],
+  "ignore-dev-dependencies": false,
+  "retry": {
+    "count": 3,
+    "delay": 1000
+  },
+  "output-format": "text"
+}
