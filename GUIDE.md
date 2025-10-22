@@ -1261,6 +1261,246 @@ bun run arsenal:ci --security-audit
 
 ---
 
+## 🧪 Testing with Bun
+
+The Performance Arsenal project uses Bun's native test runner with React Testing Library for comprehensive test coverage.
+
+### Quick Start
+
+```bash
+# Run all tests
+bun test
+
+# Watch mode (recommended during development)
+bun test --watch
+
+# Run specific test file
+bun test components/SecurityArsenal/hooks/useSecurityArsenal.test.ts
+
+# With coverage
+bun test --coverage
+
+# Run only failing tests
+bun test --only
+```
+
+### Test Configuration
+
+Tests are configured in `bunfig.toml`:
+
+```toml
+[test]
+root = "./"                      # Test discovery root
+preload = ["./test/setup.ts"]    # Load happy-dom before tests
+coverage = true                   # Enable coverage by default
+coverageThreshold = 80            # Minimum 80% coverage
+coverageSkipTestFiles = true      # Don't include test files in coverage
+timeout = 5000                    # 5 second default timeout per test
+```
+
+### Writing Tests
+
+**Basic Test Structure:**
+
+```typescript
+import { describe, test, expect, beforeEach, afterEach } from 'bun:test';
+
+describe('Feature Name', () => {
+  beforeEach(() => {
+    // Setup before each test
+  });
+
+  afterEach(() => {
+    // Cleanup after each test
+  });
+
+  test('should do something', () => {
+    expect(2 + 2).toBe(4);
+  });
+});
+```
+
+**Testing React Hooks:**
+
+```typescript
+import { renderHook, waitFor } from '@testing-library/react';
+import { act } from 'react';
+
+test('should update state', async () => {
+  const { result } = renderHook(() => useMyHook());
+
+  await act(async () => {
+    result.current.updateValue('new value');
+  });
+
+  expect(result.current.value).toBe('new value');
+});
+```
+
+**Mocking with Bun:**
+
+```typescript
+import { mock } from 'bun:test';
+
+test('should call mock function', () => {
+  const mockFn = mock((x: number) => x * 2);
+
+  const result = mockFn(5);
+
+  expect(result).toBe(10);
+  expect(mockFn).toHaveBeenCalledTimes(1);
+  expect(mockFn).toHaveBeenCalledWith(5);
+});
+```
+
+### Test Examples
+
+See comprehensive examples in `test/examples/`:
+- **`bun-testing-best-practices.test.ts`** - Core Bun testing patterns
+- **`react-hooks-testing.test.ts`** - React hooks testing guide
+- **`bun-v1.3-features.test.ts`** - Bun v1.3 new features showcase
+
+### Best Practices
+
+1. ✅ **Use Testing Library's `renderHook`** - Don't write custom implementations
+2. ✅ **Wrap state updates in `act()`** - Ensures React processes updates
+3. ✅ **Use `waitFor()` for async** - Never use custom setTimeout loops
+4. ✅ **Mock external dependencies** - Keep tests fast and isolated
+5. ✅ **Clean up in `afterEach`** - Use `mock.restore()` or reset mocks
+6. ✅ **Test behavior, not implementation** - Avoid testing internal details
+7. ✅ **One assertion per test when possible** - Makes failures easier to debug
+8. ✅ **Use descriptive test names** - Explain what is being tested
+
+### Common Matchers
+
+```typescript
+// Equality
+expect(value).toBe(4);              // Strict equality (===)
+expect(obj).toEqual({ a: 1 });      // Deep equality
+expect(obj).toMatchObject({ a: 1 }); // Partial match
+
+// Truthiness
+expect(value).toBeTruthy();
+expect(value).toBeFalsy();
+expect(value).toBeNull();
+expect(value).toBeUndefined();
+
+// Numbers
+expect(value).toBeGreaterThan(3);
+expect(value).toBeLessThan(10);
+expect(0.1 + 0.2).toBeCloseTo(0.3);
+
+// Strings & Arrays
+expect(str).toContain('substring');
+expect(str).toMatch(/regex/);
+expect(arr).toHaveLength(3);
+
+// Functions
+expect(fn).toThrow();
+expect(fn).toThrow('error message');
+expect(mockFn).toHaveBeenCalled();
+expect(mockFn).toHaveBeenCalledWith(arg1, arg2);
+```
+
+### Troubleshooting Tests
+
+**Issue: Tests fail with DOM errors**
+- ✅ Ensure `test/setup.ts` loads happy-dom
+- ✅ Check `bunfig.toml` has `preload = ["./test/setup.ts"]`
+- ✅ Don't mock DOM methods before `renderHook()`
+
+**Issue: State updates not reflected**
+- ✅ Wrap updates in `act()` from React
+- ✅ Use `await act(async () => { ... })` for async updates
+- ✅ Use `waitFor()` for async assertions
+
+**Issue: Mocks not working**
+- ✅ Call `mockFn.mockClear()` in `beforeEach`
+- ✅ Use `mock.restore()` to restore originals
+- ✅ Mock globals after component setup, not before
+
+### CI/CD Integration
+
+```bash
+# Run all tests with coverage in CI
+bun test --coverage
+
+# Generate JUnit XML for CI dashboards
+bun test --reporter=junit --reporter-outfile=coverage/junit.xml
+
+# Run with specific seed for reproducibility
+bun test --randomize --seed=12345
+```
+
+### Bun v1.3 New Features
+
+**Test Organization:**
+```bash
+# Randomize test order to find dependencies
+bun test --randomize
+
+# Reproduce specific test order
+bun test --seed=12345
+
+# Run specific tests sequentially
+test.serial('sequential test', () => { ... });
+```
+
+**Advanced Testing:**
+```typescript
+// Type testing
+expectTypeOf<User>().toHaveProperty('name');
+expectTypeOf<Promise<number>>().resolves.toBeNumber();
+
+// Expected failures (TDD, known bugs)
+test.failing('known bug', () => {
+  expect(buggyFunction()).toBe('fixed');
+});
+
+// Chain qualifiers
+test.failing.each([1, 2, 3])('test %i', (i) => { ... });
+
+// New return matchers
+expect(mockFn).toHaveReturnedWith(42);
+expect(mockFn).toHaveLastReturnedWith(42);
+expect(mockFn).toHaveNthReturnedWith(2, 42);
+
+// Clear all mocks
+mock.clearAllMocks();
+```
+
+**Inline Snapshots:**
+```typescript
+expect(data).toMatchInlineSnapshot(`
+  {
+    "name": "Alice",
+    "age": 30,
+  }
+`);
+```
+
+**Concurrent Test Limitations:**
+- ❌ `expect.assertions()` not supported
+- ❌ `toMatchSnapshot()` not supported
+- ✅ `toMatchInlineSnapshot()` IS supported
+- ✅ Use `test.serial()` for sequential tests
+
+**VS Code Integration:**
+- Install "Bun for VS Code" extension
+- Tests appear in Test Explorer
+- Run/debug individual tests from UI
+
+### Resources
+
+- **Official Docs**: [bun.com/docs/cli/test](https://bun.com/docs/cli/test)
+- **Test API**: [bun.com/docs/test/writing](https://bun.com/docs/test/writing)
+- **Mocking Guide**: [bun.com/docs/test/mocks](https://bun.com/docs/test/mocks)
+- **Bun v1.3 Improvements**: [bun.com/blog/bun-v1.3#testing-and-debugging-improvements](https://bun.com/blog/bun-v1.3#testing-and-debugging-improvements)
+- **React Testing Library**: [testing-library.com/docs/react-testing-library](https://testing-library.com/docs/react-testing-library/intro)
+- **happy-dom**: [github.com/capricorn86/happy-dom](https://github.com/capricorn86/happy-dom)
+
+---
+
 **🎯 Ready to begin? Choose your path above and start your Arsenal Lab journey today!**
 
 **Questions?** Join our [GitHub Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions) or check the [Troubleshooting Guide](../wiki-repo/Troubleshooting.md).

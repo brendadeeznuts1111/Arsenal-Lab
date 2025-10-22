@@ -30,7 +30,7 @@
 - **500× zero-copy** postMessage operations
 - **28% memory reduction** in real applications
 
-**FAANG-grade performance testing suite for Bun runtime** - Interactive playground showcasing every v1.3 enhancement across performance, databases, testing, and infrastructure.
+**A+ Grade Enterprise Solution - FAANG-grade performance testing suite for Bun runtime v1.4+** - Interactive playground showcasing every enhancement across performance, databases, testing, infrastructure, and package management.
 
 ## 💬 **Join Our Community!**
 
@@ -111,7 +111,7 @@ This provides an overview of all arsenals with links to the full interactive exp
 
 ## 📊 Live Demo
 
-🚀 **[Try the Arsenal Lab Live](https://arsenal.bun.com)** - Interactive playground with all Bun v1.3 features!
+🚀 **[Try the Arsenal Lab Live](https://brendadeeznuts1111.github.io/Arsenal-Lab/)** - Interactive playground with all Bun v1.4+ features!
 
 **Two Ways to Experience Arsenal Lab:**
 

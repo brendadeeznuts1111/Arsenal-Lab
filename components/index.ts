@@ -33,8 +33,8 @@ export { LiveTestingDemo } from './TestingDebuggingArsenal/ui/LiveTestingDemo';
 
 // Re-export hooks for advanced usage
 export { useBuildConfigurationArsenal } from './BuildConfigurationArsenal/hooks/useBuildConfigurationArsenal';
-export { usePackageManagementArsenal } from './PackageManagementArsenal';
 export { usePerformanceMonitor } from './Layout/hooks/usePerformanceMonitor';
+export { usePackageManagementArsenal } from './PackageManagementArsenal';
 export { usePerformanceArsenal } from './PerformanceArsenal/hooks/usePerformanceArsenal';
 export { useTestingDebuggingArsenal } from './TestingDebuggingArsenal/hooks/useTestingDebuggingArsenal';
 

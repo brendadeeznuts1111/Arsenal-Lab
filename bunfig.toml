@@ -12,7 +12,15 @@ coverageThreshold = 80  # Realistic coverage goal
 coverageSkipTestFiles = true  # Don't include test files in coverage
 
 # Test reliability - randomize with fixed seed for reproducibility in CI
+# Bun v1.3: Use --randomize flag to find test dependencies
+# Use --seed=<value> to reproduce specific test order
 randomize = false  # Set to true in CI with --seed flag for catching order-dependent bugs
 
 # Performance
 timeout = 5000  # Default timeout per test in milliseconds
+
+# Bun v1.3: Concurrent test configuration
+# Note: concurrent tests have limitations:
+# - expect.assertions() and expect.hasAssertions() not supported
+# - toMatchSnapshot() not supported (use toMatchInlineSnapshot())
+# - beforeAll/afterAll hooks run sequentially

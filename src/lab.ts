@@ -7,7 +7,7 @@ import { getPerformanceMonitor } from '../components/PerformanceArsenal/utils/pe
 import { getPrometheusMetrics } from './metrics/arsenal';
 
 // Lab state
-type TabType = 'performance' | 'process' | 'testing' | 'debugging' | 'database' | 'build' | 'bunx' | 'security';
+type TabType = 'performance' | 'process' | 'testing' | 'debugging' | 'database' | 'build' | 'bunx' | 'security' | 'package';
 let currentTab: TabType = 'performance';
 let performanceMonitor = getPerformanceMonitor();
 
@@ -82,6 +82,9 @@ function renderLab() {
           </button>
           <button onclick="switchTab('security')" class="${currentTab === 'security' ? 'active' : ''}">
             🔒 Security
+          </button>
+          <button onclick="switchTab('package')" class="${currentTab === 'package' ? 'active' : ''}">
+            📦 Package Mgmt
           </button>
           <button onclick="switchTab('bunx')" class="${currentTab === 'bunx' ? 'active' : ''}">
             🚀 bunx Demo
@@ -282,6 +285,12 @@ function renderTabContent() {
       const root = ReactDOM.createRoot(content);
       root.render(React.createElement(SecurityArsenal));
     });
+  } else if (currentTab === 'package') {
+    // Mount React Package Management Arsenal
+    import('../components/PackageManagementArsenal').then(({ PackageManagementArsenal }) => {
+      const root = ReactDOM.createRoot(content);
+      root.render(React.createElement(PackageManagementArsenal));
+    });
   } else if (currentTab === 'bunx') {
     // Mount React Bunx Demo
     import('../components/BunxDemo').then(({ BunxDemo }) => {
@@ -340,7 +349,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
       (window as any).switchTab = switchTab;
       (window as any).exportMetrics = exportMetrics;
 
-      console.log('🎯 Arsenal Lab ready! Use bun run arsenal:ci for automated testing.');
+      console.log('🎯 Arsenal Lab v1.4.0 ready! Use bun run arsenal:ci for automated testing.');
     });
   } else {
     // DOM already loaded
@@ -350,7 +359,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
     (window as any).switchTab = switchTab;
     (window as any).exportMetrics = exportMetrics;
 
-    console.log('🎯 Arsenal Lab ready! Use bun run arsenal:ci for automated testing.');
+    console.log('🎯 Arsenal Lab v1.4.0 ready! Use bun run arsenal:ci for automated testing.');
   }
 
   // Handle online/offline status (only in browser)
@@ -369,6 +378,6 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   });
 } else {
   // Non-browser environment (e.g., Bun CLI)
-  console.log('🧪 Arsenal Lab - Browser environment required for interactive features');
+  console.log('🧪 Arsenal Lab v1.4.0 - Browser environment required for interactive features');
   console.log('Run: bun run arsenal:ci for automated testing');
 }

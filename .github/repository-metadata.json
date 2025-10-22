@@ -2,7 +2,7 @@
   "name": "Arsenal-Lab",
   "version": "1.4.0",
   "description": "🏆 A+ Grade Production-Ready Enterprise Solution - FAANG-grade performance testing suite for Bun runtime v1.4+ - Interactive playground showcasing every enhancement across performance, databases, testing, infrastructure, and package management. Complete Bun.build() API coverage with live code generation. Full Bun PM command suite including outdated, update, info, audit, install with catalog dependencies, and interactive UI components. Join our active community for discussions, benchmarks, and contributions!",
-  "homepage": "https://github.com/brendadeeznuts1111/Arsenal-Lab",
+  "homepage": "https://brendadeeznuts1111.github.io/Arsenal-Lab/",
   "topics": [
     "bun",
     "bun-runtime",
