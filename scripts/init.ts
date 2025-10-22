@@ -1,7 +1,6 @@
 #!/usr/bin/env bun
 import { $ } from "bun";
-import { writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { join } from "path";
+import { mkdirSync, writeFileSync } from "node:fs";
 
 interface InitOptions {
   name: string;

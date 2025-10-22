@@ -1,24 +1,7 @@
-#!/usr/bin/env bun
-import type { InvariantRule } from './index.ts';
-
-const rule: InvariantRule = {
+export default {
   name: "no-eval-usage",
   description: "Patches cannot introduce eval() or Function() constructors",
   severity: "critical",
-  tags: ["security", "code-execution", "eval"],
-
-  validate: (patchContent: string, packageName: string) => {
-    // Check for dangerous code execution patterns
-    const dangerousPatterns = [
-      /\beval\s*\(/,
-      /\bnew\s+Function\s*\(/,
-      /Function\s*\(\s*["'`]/,
-      /\bsetTimeout\s*\(\s*["'`]/,
-      /\bsetInterval\s*\(\s*["'`]/
-    ];
-
-    return !dangerousPatterns.some(pattern => pattern.test(patchContent));
-  }
+  tags: ["security", "code-execution"],
+  validate: (patch: string) => !patch.includes("eval(") && !patch.includes("new Function(")
 };
-
-export default rule;

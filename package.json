@@ -11,13 +11,13 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "postinstall": "bun scripts/invariant-manager.ts",
+    "postinstall": "bun run invariant:validate",
     "patch:audit": "bun scripts/validate-patch.ts --audit-all",
     "patch:sync": "bun scripts/auto-patch-sync.ts",
     "patch:create": "bun scripts/create-patch.ts",
     "patch:why": "bun scripts/patch-why.ts",
-    "invariant:validate": "bun scripts/invariant-manager.ts",
-    "tension:check": "bun scripts/monitor-amber-edges.ts",
+    "invariant:validate": "bun -e 'const v=require(\"./gate.js\");v.validateAll()'",
+    "tension:check": "bun -e 'require(\"./gate.js\").tensionCheck()'",
     "canary:ctl": "bun scripts/canary-ctl.ts",
     "precommit": "bun .husky/pre-commit",
     "sbom:generate": "bun scripts/sbom-generator.ts patches/",
@@ -96,7 +96,11 @@
     "backend:start": "cd backend && bun run start",
     "backend:deploy": "cd backend && bun run deploy",
     "fullstack:dev": "concurrently \"bun run dev\" \"bun run backend:dev\"",
-    "fullstack:build": "bun run build && bun run backend:build"
+    "fullstack:build": "bun run build && bun run backend:build",
+    "patch:ctl": "bun -e 'require(\"./gate.js\").canaryCtl(Bun.argv.slice(2))'",
+    "gate:sign": "bun -e 'require(\"./gate.js\").sign()'",
+    "gate:verify": "bun -e 'require(\"./gate.js\").verify()'",
+    "gate:sarif": "bun -e 'require(\"./gate.js\").sarif()'"
   },
   "patchedDependencies": {
     "react@18.2.0": "patches/react@18.2.0.patch",
@@ -120,7 +124,7 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/react-hooks": "^8.0.1",
-    "@types/bun": "^1.0.0",
+    "@types/bun": "latest",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@typescript-eslint/eslint-plugin": "^8.46.2",

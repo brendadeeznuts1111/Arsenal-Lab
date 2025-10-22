@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "postinstall": "bun run invariant:validate",
+    "invariant:validate": "bun scripts/invariant-manager.ts --validate-all",
+    "tension:check": "bun scripts/monitor-amber-edges.ts --all",
+    "patch:ctl": "bun scripts/canary-ctl.ts",
+    "patch:sign": "bun scripts/cosign-wrapper.ts sign",
+    "patch:verify": "bun scripts/cosign-wrapper.ts verify",
+    "gate:init": "bun scripts/init.ts",
+    "gate:sarif": "bun scripts/sarif-reporter.ts",
+    "sbom:generate": "bun scripts/sbom-generator.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

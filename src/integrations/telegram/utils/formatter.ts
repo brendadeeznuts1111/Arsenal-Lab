@@ -91,26 +91,30 @@ export function formatHelp(): string {
 **📊 Benchmarks**
 /benchmark [type] - Run performance benchmarks
   • crypto - Cryptography benchmarks
-  • memory - Memory optimization tests
-  • postmessage - postMessage performance
+  • http - HTTP request benchmarks
+  • fileio - File I/O benchmarks
   • all - Run all benchmarks
 
 **⚖️ Comparisons**
 /compare <runtime1> <runtime2> - Compare runtimes
   Example: /compare bun node
 
-**📈 Statistics**
+**📈 Statistics & GitHub**
 /stats - Bot usage statistics
-/latest - Latest Arsenal Lab release
+/metrics - GitHub repository metrics
+/deploy - GitHub Pages deployment status
 
-**ℹ️ Information**
+**📖 Community & Docs**
+/wiki <query> - Search wiki pages
+/discuss - Latest GitHub Discussions
 /help - Show this help message
 /start - Welcome message
 
 ━━━━━━━━━━━━━━━━━━━━
 
-💬 Join the community: https://t.me/arsenallab
-📖 Documentation: https://github.com/brendadeeznuts1111/Arsenal-Lab
+💬 Join: https://t.me/arsenallab
+📢 Channel: https://t.me/arsenallab_channel
+🌐 Live Site: https://brendadeeznuts1111.github.io/Arsenal-Lab/
   `.trim();
 }
 

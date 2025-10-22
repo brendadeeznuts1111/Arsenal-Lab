@@ -6,8 +6,7 @@
  * Idempotent – safe to re-run.
  */
 import { $ } from "bun";
-import { existsSync, writeFileSync, mkdirSync } from "fs";
-import { join } from "path";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 
 const LOGO = `
 🛡️  Bun System Gate v5 – FAANG-Ready in 15 s

@@ -1,0 +1,10 @@
+
+rules:
+  - name: crypto_backdoor
+    condition: patch_content.includes('rapidhash')
+    severity: BLOCK
+    actions: [sarif, slack, github:annotate]
+  - name: large-patch
+    condition: patch_size>5000
+    severity: AMBER
+    actions: [slack, github:annotate]

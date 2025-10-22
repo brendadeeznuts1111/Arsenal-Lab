@@ -1,12 +1,10 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
-metadata:
-  name: patches.gate.bun.sh
-  labels:
-    app.kubernetes.io/name: bun-system-gate
-    app.kubernetes.io/version: "3.0.0"
+metadata: { name: patches.gate.bun.sh }
 spec:
   group: gate.bun.sh
+  names: { kind: Patch, plural: patches }
+  scope: Namespaced
   versions:
   - name: v1
     served: true
@@ -18,147 +16,7 @@ spec:
           spec:
             type: object
             properties:
-              package:
-                type: string
-                description: "The npm package name"
-              version:
-                type: string
-                description: "The package version to patch"
-              patchRef:
-                type: string
-                description: "Reference to the patch file (configmap, git ref, or URL)"
-              stage:
-                type: string
-                enum: ["canary", "stable"]
-                default: "canary"
-                description: "Deployment stage for the patch"
-              rollout:
-                type: integer
-                minimum: 0
-                maximum: 100
-                default: 5
-                description: "Percentage of pods to rollout to (for canary)"
-              selectors:
-                type: object
-                description: "Label selectors for target deployments"
-                properties:
-                  matchLabels:
-                    type: object
-                    additionalProperties:
-                      type: string
-                  matchExpressions:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        key:
-                          type: string
-                        operator:
-                          type: string
-                          enum: ["In", "NotIn", "Exists", "DoesNotExist"]
-                        values:
-                          type: array
-                          items:
-                            type: string
-              validation:
-                type: object
-                description: "Validation settings"
-                properties:
-                  enabled:
-                    type: boolean
-                    default: true
-                  timeout:
-                    type: string
-                    default: "300s"
-                  retries:
-                    type: integer
-                    default: 3
-              monitoring:
-                type: object
-                description: "Monitoring and alerting settings"
-                properties:
-                  enabled:
-                    type: boolean
-                    default: true
-                  errorThreshold:
-                    type: number
-                    description: "Error rate threshold for rollback"
-                    default: 5.0
-                  latencyThreshold:
-                    type: string
-                    description: "Latency threshold for rollback"
-                    default: "500ms"
-            required:
-            - package
-            - patchRef
-          status:
-            type: object
-            properties:
-              phase:
-                type: string
-                enum: ["Pending", "Validating", "Applying", "Applied", "Failed", "RollingBack"]
-              observedGeneration:
-                type: integer
-              lastUpdateTime:
-                type: string
-                format: date-time
-              conditions:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    type:
-                      type: string
-                    status:
-                      type: string
-                      enum: ["True", "False", "Unknown"]
-                    lastTransitionTime:
-                      type: string
-                      format: date-time
-                    reason:
-                      type: string
-                    message:
-                      type: string
-              appliedTo:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    kind:
-                      type: string
-                    name:
-                      type: string
-                    namespace:
-                      type: string
-                    rolloutPercentage:
-                      type: integer
-              validationResult:
-                type: object
-                properties:
-                  passed:
-                    type: boolean
-                  violations:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        rule:
-                          type: string
-                        severity:
-                          type: string
-                        message:
-                          type: string
-                  signed:
-                    type: boolean
-                  signatureVerified:
-                    type: boolean
-  scope: Namespaced
-  names:
-    plural: patches
-    singular: patch
-    kind: Patch
-    shortNames:
-    - pt
-    categories:
-    - all
-    - bun-gate
+              package: { type: string }
+              patchRef: { type: string }
+              stage: { enum: [stable, canary] }
+              rollout: { type: integer, minimum: 0, maximum: 100 }}

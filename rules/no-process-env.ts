@@ -1,35 +1,12 @@
-#!/usr/bin/env bun
-import type { InvariantRule } from './index.ts';
-
-const rule: InvariantRule = {
+export default {
   name: "no-process-env",
   description: "Patches cannot introduce new process.env access",
   severity: "high",
   tags: ["security", "environment"],
-
-  validate: (patchContent: string, packageName: string) => {
-    // Check for process.env usage in patch content
-    const processEnvRegex = /\bprocess\.env\.[A-Z_][A-Z0-9_]*/g;
-    const matches = patchContent.match(processEnvRegex);
-
+  validate: (patch: string, pkg: string) => {
+    const matches = patch.match(/process.env.[A-Z_]/g);
     if (!matches) return true;
-
-    // Allow process.env usage in test files or config files
-    const allowedPatterns = [
-      /\.test\./,
-      /\.spec\./,
-      /config\./,
-      /env\./,
-      /environment\./
-    ];
-
-    const isAllowedFile = allowedPatterns.some(pattern =>
-      packageName.toLowerCase().match(pattern)
-    );
-
-    // If it's an allowed file, permit process.env usage
-    return isAllowedFile;
+    const allowed = ["test", "spec", "config", "env"].some(p => pkg.includes(p));
+    return allowed;
   }
 };
-
-export default rule;

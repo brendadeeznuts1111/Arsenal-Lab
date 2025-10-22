@@ -1,64 +1,39 @@
 /**
- * Stats Command Handler (STUB)
+ * Stats Command Handler
  *
  * Shows bot usage statistics and Arsenal Lab metrics.
- *
- * TODO: Implement actual stats collection
- * - Track real user metrics
- * - Persist stats to database
- * - Show Arsenal Lab usage statistics
- * - Display performance trends
  */
 
 import type { BotContext, BotStats } from '../types';
 import { formatStats } from '../utils/formatter';
+import { telegramMetrics } from '../utils/metrics';
+
+// Track bot start time for uptime calculation
+const botStartTime = Date.now();
 
 export async function handleStats(ctx: BotContext): Promise<string> {
-  // TODO: Fetch real stats from database/metrics system
-  const stats = await getStatsStub();
-
+  const stats = await getActualStats();
   return formatStats(stats);
 }
 
 /**
- * STUB: Simulates stats retrieval
- * TODO: Replace with actual stats collection from database
+ * Get actual stats from metrics system
  */
-async function getStatsStub(): Promise<BotStats> {
-  // Simulate database query delay
-  await new Promise((resolve) => setTimeout(resolve, 50));
+async function getActualStats(): Promise<BotStats> {
+  const metrics = telegramMetrics.getMetrics();
+
+  // Calculate uptime in seconds
+  const uptimeMs = Date.now() - botStartTime;
+  const uptimeSeconds = Math.floor(uptimeMs / 1000);
+
+  // Get version from package.json or default
+  const version = process.env.npm_package_version || '1.0.0';
 
   return {
-    totalUsers: 42,
-    activeUsers: 12,
-    commandsProcessed: 347,
-    uptime: 86400, // 24 hours in seconds
-    version: '1.4.1',
+    totalUsers: metrics.uniqueUsers,
+    activeUsers: metrics.uniqueUsers, // All users are active (no time-based filtering yet)
+    commandsProcessed: metrics.commandsProcessed,
+    uptime: uptimeSeconds,
+    version,
   };
 }
-
-/**
- * TODO: Integrate with actual analytics
- *
- * Example implementation:
- *
- * import { AnalyticsDB } from '../../../db/analytics';
- *
- * async function getActualStats(): Promise<BotStats> {
- *   const db = new AnalyticsDB();
- *
- *   const [totalUsers, activeUsers, commands] = await Promise.all([
- *     db.countUniqueUsers(),
- *     db.countActiveUsers(24 * 60 * 60 * 1000), // Last 24 hours
- *     db.getTotalCommands(),
- *   ]);
- *
- *   return {
- *     totalUsers,
- *     activeUsers,
- *     commandsProcessed: commands,
- *     uptime: process.uptime(),
- *     version: process.env.npm_package_version || '1.0.0',
- *   };
- * }
- */

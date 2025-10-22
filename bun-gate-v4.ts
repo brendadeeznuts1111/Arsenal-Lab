@@ -5,7 +5,7 @@
 //  Result: fully-working governance (v1+v2+v3) + SARIF + cosign + CRD
 // ------------------------------------------------------------------
 import { $ } from "bun";
-import { existsSync, writeFileSync, mkdirSync, readFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 
 const GATE_VERSION = "4.0.0";
 

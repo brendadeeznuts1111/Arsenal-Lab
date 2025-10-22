@@ -1,6 +1,4 @@
 #!/usr/bin/env bun
-import { $ } from "bun";
-import { watchFile, unwatchFile } from "node:fs";
 
 // Kubernetes client types (simplified for demo)
 interface KubeObject {

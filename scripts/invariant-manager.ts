@@ -7,7 +7,6 @@ type Severity = "low" | "high" | "critical";
 interface InvariantViolation { invariant: string; description: string; severity: Severity }
 interface ValidationResult { package: string; isValid: boolean; violations: InvariantViolation[] }
 
-// Load enabled invariants from configuration
 async function loadEnabledInvariants() {
   try {
     const config = parse(readFileSync("config/invariant-definitions.yml", "utf-8"));
@@ -25,7 +24,7 @@ async function validatePatch(pkg: string, patchFile: string): Promise<Validation
       isValid: false,
       violations: [{
         invariant: "patch-file-exists",
-        description: `Patch file ${patchFile} does not exist`,
+        description: "Patch file does not exist: " + patchFile,
         severity: "critical"
       }]
     };
@@ -37,10 +36,9 @@ async function validatePatch(pkg: string, patchFile: string): Promise<Validation
 
   for (const inv of enabledInvariants) {
     try {
-      // Check if rule exists in pluggable system
       const ruleImpl = rules.get(inv.rule);
       if (!ruleImpl) {
-        console.warn(`Rule ${inv.rule} not found in rules/ directory`);
+        console.warn("Rule " + inv.rule + " not found in rules/ directory");
         continue;
       }
 
@@ -55,7 +53,7 @@ async function validatePatch(pkg: string, patchFile: string): Promise<Validation
     } catch (error) {
       violations.push({
         invariant: "validation-error",
-        description: `Failed to validate invariant ${inv.name}: ${error.message}`,
+        description: "Failed to validate invariant " + inv.name + ": " + error.message,
         severity: "high"
       });
     }
@@ -80,47 +78,34 @@ async function run() {
 
   const results = await Promise.all(
     patched.map(async (p) => {
-      const [name, version] = p.split("@");
-      const file = `patches/${name}@${version}.patch`;
-      console.log(`🔍 Validating ${p}...`);
+      const file = "patches/" + p.replace("@", "+") + ".patch";
+      console.log("🔍 Validating " + p + "...");
       return validatePatch(p, file);
     })
   );
 
   const critical = results.filter((r) => r.violations.some((v) => v.severity === "critical"));
-  const high = results.filter((r) => r.violations.some((v) => v.severity === "high"));
   const valid = results.filter((r) => r.isValid);
 
-  console.log(`\n📊 Validation Results:`);
-  console.log(`✅ Valid patches: ${valid.length}`);
-  console.log(`⚠️  High severity violations: ${high.length}`);
-  console.log(`🚨 Critical violations: ${critical.length}`);
+  console.log("\n📊 Validation Results:");
+  console.log("✅ Valid patches: " + valid.length);
+  console.log("🚨 Critical violations: " + critical.length);
 
   if (critical.length > 0) {
     console.error("\n🚨 CRITICAL INVARIANT VIOLATIONS:");
     critical.forEach(result => {
-      console.error(`\n📦 ${result.package}:`);
+      console.error("\n📦 " + result.package + ":");
       result.violations.forEach(v => {
-        console.error(`   ${v.severity.toUpperCase()}: ${v.description}`);
+        console.error("   " + v.severity.toUpperCase() + ": " + v.description);
       });
     });
     process.exit(1);
   }
 
-  if (high.length > 0) {
-    console.warn("\n⚠️  HIGH SEVERITY VIOLATIONS (non-blocking):");
-    high.forEach(result => {
-      console.warn(`\n📦 ${result.package}:`);
-      result.violations.forEach(v => {
-        console.warn(`   ${v.severity.toUpperCase()}: ${v.description}`);
-      });
-    });
-  }
-
   if (valid.length === results.length) {
     console.log("\n✅ All patch invariants passed!");
   } else {
-    console.log(`\n✅ ${valid.length}/${results.length} patches passed validation`);
+    console.log("\n✅ " + valid.length + "/" + results.length + " patches passed validation");
   }
 }
 

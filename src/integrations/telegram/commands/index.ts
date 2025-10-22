@@ -8,12 +8,20 @@ export { handleBenchmark } from './benchmark';
 export { handleCompare } from './compare';
 export { handleStats } from './stats';
 export { handleHelp } from './help';
+export { handleMetrics } from './metrics';
+export { handleWiki } from './wiki';
+export { handleDiscuss } from './discuss';
+export { handleDeploy } from './deploy';
 
 import type { CommandHandler } from '../types';
 import { handleBenchmark } from './benchmark';
 import { handleCompare } from './compare';
 import { handleStats } from './stats';
 import { handleHelp } from './help';
+import { handleMetrics } from './metrics';
+import { handleWiki } from './wiki';
+import { handleDiscuss } from './discuss';
+import { handleDeploy } from './deploy';
 
 /**
  * Command registry
@@ -24,6 +32,10 @@ export const commands: Record<string, CommandHandler> = {
   stats: handleStats,
   help: handleHelp,
   start: handleHelp, // /start shows help
+  metrics: handleMetrics,
+  wiki: handleWiki,
+  discuss: handleDiscuss,
+  deploy: handleDeploy,
 };
 
 /**

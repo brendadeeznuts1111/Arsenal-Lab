@@ -1,102 +1,129 @@
 /**
- * Benchmark Command Handler (STUB)
+ * Benchmark Command Handler
  *
- * Runs performance benchmarks and returns results.
- *
- * TODO: Implement actual benchmark execution
- * - Integrate with Arsenal Lab benchmark suite
- * - Support different benchmark types (crypto, memory, postmessage)
- * - Return real performance metrics
- * - Add result caching to reduce server load
+ * Runs server-side performance benchmarks and returns results.
  */
 
 import type { BotContext, BenchmarkResult } from '../types';
 import { formatBenchmarkResult, formatBenchmarkResults } from '../utils/formatter';
+import {
+  runCryptoBenchmark,
+  runHTTPBenchmark,
+  runFileReadBenchmark,
+  runFileWriteBenchmark,
+  runAllCryptoBenchmarks,
+  runAllHTTPBenchmarks,
+  runAllFileIOBenchmarks,
+} from '../benchmarks';
 
 export async function handleBenchmark(ctx: BotContext): Promise<string> {
   const benchmarkType = ctx.args[0] || 'all';
 
-  // TODO: Validate benchmark type
-  const validTypes = ['crypto', 'memory', 'postmessage', 'all'];
+  // Validate benchmark type
+  const validTypes = ['crypto', 'http', 'fileio', 'all'];
   if (!validTypes.includes(benchmarkType)) {
     return `❌ Invalid benchmark type. Valid types: ${validTypes.join(', ')}`;
   }
 
-  // TODO: Run actual benchmarks
-  // For now, return stub data
-  const results = await runBenchmarkStub(benchmarkType);
+  try {
+    // Run actual benchmarks
+    const results = await runActualBenchmarks(benchmarkType);
 
-  if (benchmarkType === 'all') {
-    return formatBenchmarkResults(results);
-  } else {
-    return formatBenchmarkResult(results[0]);
+    if (benchmarkType === 'all') {
+      return formatBenchmarkResults(results);
+    } else {
+      return formatBenchmarkResult(results[0]);
+    }
+  } catch (error) {
+    return `❌ Benchmark failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
   }
 }
 
 /**
- * STUB: Simulates benchmark execution
- * TODO: Replace with actual Arsenal Lab benchmark integration
+ * Run actual server-side benchmarks
  */
-async function runBenchmarkStub(type: string): Promise<BenchmarkResult[]> {
-  // Simulate processing delay
-  await new Promise((resolve) => setTimeout(resolve, 100));
+async function runActualBenchmarks(type: string): Promise<BenchmarkResult[]> {
+  switch (type) {
+    case 'crypto': {
+      const cryptoResult = await runCryptoBenchmark();
+      return [{
+        type: 'crypto',
+        bunTime: cryptoResult.bunTime,
+        nodeTime: cryptoResult.nodeTime,
+        speedup: cryptoResult.speedup,
+        memoryUsage: process.memoryUsage().heapUsed,
+      }];
+    }
 
-  const stubResults: Record<string, BenchmarkResult> = {
-    crypto: {
-      type: 'crypto',
-      bunTime: 2.3,
-      nodeTime: 11.2,
-      speedup: 4.87,
-      memoryUsage: 34 * 1024 * 1024,
-    },
-    memory: {
-      type: 'memory',
-      bunTime: 1.8,
-      nodeTime: 9.5,
-      speedup: 5.28,
-      memoryUsage: 28 * 1024 * 1024,
-    },
-    postmessage: {
-      type: 'postmessage',
-      bunTime: 0.5,
-      nodeTime: 250.0,
-      speedup: 500.0,
-      memoryUsage: 12 * 1024 * 1024,
-    },
-  };
+    case 'http': {
+      const httpResult = await runHTTPBenchmark();
+      return [{
+        type: 'http',
+        bunTime: httpResult.bunTime,
+        nodeTime: undefined,
+        speedup: undefined,
+        memoryUsage: process.memoryUsage().heapUsed,
+      }];
+    }
 
-  if (type === 'all') {
-    return Object.values(stubResults);
+    case 'fileio': {
+      const fileResult = await runFileReadBenchmark();
+      return [{
+        type: 'fileio',
+        bunTime: fileResult.bunTime,
+        nodeTime: undefined,
+        speedup: undefined,
+        memoryUsage: process.memoryUsage().heapUsed,
+      }];
+    }
+
+    case 'all': {
+      // Run all benchmarks in parallel
+      const [cryptoResults, httpResults, fileIOResults] = await Promise.all([
+        runAllCryptoBenchmarks(),
+        runAllHTTPBenchmarks(),
+        runAllFileIOBenchmarks(),
+      ]);
+
+      const results: BenchmarkResult[] = [];
+
+      // Add crypto benchmarks
+      if (cryptoResults.sha256) {
+        results.push({
+          type: 'crypto-sha256',
+          bunTime: cryptoResults.sha256.bunTime,
+          nodeTime: cryptoResults.sha256.nodeTime,
+          speedup: cryptoResults.sha256.speedup,
+          memoryUsage: process.memoryUsage().heapUsed,
+        });
+      }
+
+      // Add HTTP benchmarks
+      if (httpResults.remote) {
+        results.push({
+          type: 'http-remote',
+          bunTime: httpResults.remote.bunTime,
+          nodeTime: undefined,
+          speedup: undefined,
+          memoryUsage: process.memoryUsage().heapUsed,
+        });
+      }
+
+      // Add file I/O benchmarks
+      if (fileIOResults.read) {
+        results.push({
+          type: 'fileio-read',
+          bunTime: fileIOResults.read.bunTime,
+          nodeTime: undefined,
+          speedup: undefined,
+          memoryUsage: process.memoryUsage().heapUsed,
+        });
+      }
+
+      return results;
+    }
+
+    default:
+      throw new Error(`Unknown benchmark type: ${type}`);
   }
-
-  return [stubResults[type] || stubResults.crypto];
 }
-
-/**
- * TODO: Integrate with actual benchmarks
- *
- * Example implementation:
- *
- * import { runCryptoBenchmark } from '../../../bench/crypto';
- * import { runMemoryBenchmark } from '../../../bench/memory';
- * import { runPostMessageBenchmark } from '../../../bench/postmessage';
- *
- * async function runActualBenchmark(type: string): Promise<BenchmarkResult[]> {
- *   switch (type) {
- *     case 'crypto':
- *       return [await runCryptoBenchmark()];
- *     case 'memory':
- *       return [await runMemoryBenchmark()];
- *     case 'postmessage':
- *       return [await runPostMessageBenchmark()];
- *     case 'all':
- *       return await Promise.all([
- *         runCryptoBenchmark(),
- *         runMemoryBenchmark(),
- *         runPostMessageBenchmark(),
- *       ]);
- *     default:
- *       throw new Error(`Unknown benchmark type: ${type}`);
- *   }
- * }
- */
