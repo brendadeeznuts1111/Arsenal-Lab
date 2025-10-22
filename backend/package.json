@@ -11,7 +11,12 @@
     "setup:aws": "bun run cloud/aws-setup.ts",
     "build": "bun build server.ts --outdir ./dist --target node",
     "test": "bun test",
-    "lint": "bunx eslint . --ext .ts"
+    "lint": "bunx eslint . --ext .ts",
+    "deploy": "bash scripts/production-deploy.sh",
+    "health": "curl -s http://localhost:3001/health | jq .",
+    "logs": "tail -f production.log",
+    "backup": "bash scripts/backup.sh",
+    "rollback": "bash scripts/rollback.sh"
   },
   "dependencies": {
     "hono": "^3.12.0"
