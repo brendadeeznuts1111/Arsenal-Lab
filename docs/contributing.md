@@ -70,7 +70,7 @@ For complete contributing guidelines, please see our **[main Contributing Guide]
 
 - **[Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)** - Bug reports and feature requests
 - **[Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - General questions
-- **[Discord](https://bun.sh/discord)** - Bun community support
+- **[Discord](https://bun.com/docs/discord)** - Bun community support
 
 ## 📋 Checklist for Contributors
 
@@ -94,4 +94,4 @@ Thank you for helping make **Arsenal-Lab** better! 🚀
 
 ---
 
-**Built with ❤️ using [Bun](https://bun.sh) - The fast JavaScript runtime**
+**Built with ❤️ using [Bun](https://bun.com/docs) - The fast JavaScript runtime**

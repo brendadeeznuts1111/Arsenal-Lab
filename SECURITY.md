@@ -40,9 +40,9 @@ We actively maintain security updates for the following versions:
 If you discover a security vulnerability, please report it to us immediately:
 
 **Primary Contact:**
-- **Email**: security@bun.sh
+- **Email**: security@bun.com
 - **Response Time**: Within 48 hours
-- **PGP Key**: Available at [security.bun.sh/pgp](https://security.bun.sh/pgp)
+- **PGP Key**: Available at [security.bun.com/pgp](https://security.bun.com/pgp)
 
 **Alternative Contacts:**
 - **GitHub Security Advisory**: Private vulnerability reporting
@@ -175,14 +175,14 @@ The following activities are strictly prohibited:
 ## 📞 Contact Information
 
 ### Security Team
-- **Primary**: security@bun.sh
+- **Primary**: security@bun.com
 - **Backup**: security@oven.sh
-- **PGP Fingerprint**: Available on security.bun.sh
+- **PGP Fingerprint**: Available on security.bun.com
 
 ### General Inquiries
 - **Issues**: [GitHub Issues](https://github.com/oven-sh/bun-performance-arsenal/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/oven-sh/bun-performance-arsenal/discussions)
-- **Discord**: [Bun Community](https://bun.sh/discord)
+- **Discord**: [Bun Community](https://bun.com/docs/discord)
 
 ## 📜 Security Hall of Fame
 
@@ -204,7 +204,7 @@ We acknowledge and thank security researchers who help make Bun and its ecosyste
 ### Security Documentation
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [Node.js Security Best Practices](https://nodejs.org/en/docs/guides/security/)
-- [Bun Security Guidelines](https://bun.sh/docs/security)
+- [Bun Security Guidelines](https://bun.com/docs/security)
 
 ### Related Policies
 - [Code of Conduct](CODE_OF_CONDUCT.md)

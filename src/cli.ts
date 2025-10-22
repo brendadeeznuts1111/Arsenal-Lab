@@ -23,7 +23,7 @@ console.log(`
   bunx @bun/performance-arsenal --ci      # Run CI benchmarks
   bunx @bun/performance-arsenal --help    # Show this help
 
-📚 Docs: https://bun.sh/docs/performance-arsenal
+📚 Docs: https://bun.com/docs/performance-arsenal
 `);
 
 if (command === '--help' || command === '-h') {

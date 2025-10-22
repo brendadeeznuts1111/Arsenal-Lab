@@ -311,4 +311,4 @@ console.profileEnd('expensive-operation');
 
 ---
 
-**Built with ❤️ using [Bun](https://bun.sh) - The fast JavaScript runtime**
+**Built with ❤️ using [Bun](https://bun.com/docs) - The fast JavaScript runtime**

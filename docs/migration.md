@@ -347,9 +347,9 @@ const config = {
 ## 🆘 Getting Help
 
 ### Resources
-- **[Bun Documentation](https://bun.sh/docs)** - Official guides
+- **[Bun Documentation](https://bun.com/docs)** - Official guides
 - **[Arsenal-Lab](https://github.com/brendadeeznuts1111/Arsenal-Lab)** - Performance testing
-- **[Bun Discord](https://bun.sh/discord)** - Community support
+- **[Bun Discord](https://bun.com/docs/discord)** - Community support
 - **[GitHub Issues](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)** - Report migration issues
 
 ### Common Migration Issues
@@ -395,4 +395,4 @@ Congratulations! You've successfully migrated from Node.js to Bun. Your applicat
 
 ---
 
-**Built with ❤️ using [Bun](https://bun.sh) - The fast JavaScript runtime**
+**Built with ❤️ using [Bun](https://bun.com/docs) - The fast JavaScript runtime**

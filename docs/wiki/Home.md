@@ -2,7 +2,7 @@
 
 > **Welcome to Arsenal Lab** - A comprehensive performance testing suite for Bun.js featuring interactive benchmarks, build configuration tools, and real-time analytics.
 
-[![Bun](https://img.shields.io/badge/Bun-1.3+-FBF0DF?style=flat&logo=bun)](https://bun.sh)
+[![Bun](https://img.shields.io/badge/Bun-1.3+-FBF0DF?style=flat&logo=bun)](https://bun.com/docs)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](https://opensource.org/licenses/MIT)
 

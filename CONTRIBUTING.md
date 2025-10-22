@@ -281,7 +281,7 @@ Contributors are recognized through:
 ## 🔒 Security Considerations
 
 ### Reporting Security Issues
-- **Email**: security@bun.sh (preferred)
+- **Email**: security@bun.com (preferred)
 - **GitHub**: Private security advisory
 - **Response**: Within 48 hours
 - **Disclosure**: Coordinated public release

@@ -151,7 +151,7 @@ This project uses [Semantic Versioning](https://semver.org/):
 2. **Testing**: Comprehensive test suite execution with performance benchmarks
 3. **Code Review**: Pull request review with automated CI checks
 4. **Release**: Automated semantic versioning and changelog generation
-5. **Documentation**: Updated documentation deployed to arsenal.bun.sh
+5. **Documentation**: Updated documentation deployed to arsenal.bun.com
 
 ## Performance Baselines
 

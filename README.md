@@ -4,7 +4,7 @@
 [![Review Status](https://img.shields.io/badge/Review-Complete-October%202025-blue.svg)](COMPREHENSIVE_REVIEW.md)
 [![Production Ready](https://img.shields.io/badge/Production-Ready-success.svg)](DEPLOYMENT.md)
 
-[![Bun](https://img.shields.io/badge/Bun-1.3+-FBF0DF?style=for-the-badge&logo=bun)](https://bun.com)
+[![Bun](https://img.shields.io/badge/Bun-1.3+-FBF0DF?style=for-the-badge&logo=bun)](https://bun.com/docs)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
@@ -47,7 +47,7 @@
 
 ### Prerequisites
 
-- **[Bun 1.3+](https://bun.sh)** - Required for all v1.3 features
+- **[Bun 1.3+](https://bun.com/docs)** - Required for all v1.3 features
 - **[Node.js 18+](https://nodejs.org/)** - For fallback compatibility testing
 - **Git** - For cloning the repository
 
@@ -111,7 +111,7 @@ This provides an overview of all arsenals with links to the full interactive exp
 
 ## 📊 Live Demo
 
-🚀 **[Try the Arsenal Lab Live](https://arsenal.bun.sh)** - Interactive playground with all Bun v1.3 features!
+🚀 **[Try the Arsenal Lab Live](https://arsenal.bun.com)** - Interactive playground with all Bun v1.3 features!
 
 **Two Ways to Experience Arsenal Lab:**
 
@@ -531,7 +531,7 @@ This project is funded through:
 - Community contributions
 
 ### 🏢 Enterprise Support
-For enterprise support, custom integrations, or commercial licensing, contact [team@bun.sh](mailto:team@bun.sh).
+For enterprise support, custom integrations, or commercial licensing, contact [team@bun.com](mailto:team@bun.com).
 
 ## 📄 License
 
