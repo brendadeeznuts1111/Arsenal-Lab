@@ -1,0 +1,13 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`Snapshot Testing should match snapshot 1`] = `
+{
+  "features": [
+    "benchmarks",
+    "security",
+    "testing",
+  ],
+  "name": "Performance Arsenal",
+  "version": "1.4.0",
+}
+`;

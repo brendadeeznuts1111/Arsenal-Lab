@@ -18,6 +18,9 @@ export { DatabaseInfrastructureArsenal } from './DatabaseInfrastructureArsenal';
 // Build Configuration Arsenal
 export { BuildConfigurationArsenal } from './BuildConfigurationArsenal';
 
+// Package Management Arsenal
+export { PackageManagementArsenal } from './PackageManagementArsenal';
+
 // Layout Components
 export { Banner } from './Layout/Banner';
 export { EnhancedBanner } from './Layout/EnhancedBanner';
@@ -30,6 +33,7 @@ export { LiveTestingDemo } from './TestingDebuggingArsenal/ui/LiveTestingDemo';
 
 // Re-export hooks for advanced usage
 export { useBuildConfigurationArsenal } from './BuildConfigurationArsenal/hooks/useBuildConfigurationArsenal';
+export { usePackageManagementArsenal } from './PackageManagementArsenal';
 export { usePerformanceMonitor } from './Layout/hooks/usePerformanceMonitor';
 export { usePerformanceArsenal } from './PerformanceArsenal/hooks/usePerformanceArsenal';
 export { useTestingDebuggingArsenal } from './TestingDebuggingArsenal/hooks/useTestingDebuggingArsenal';

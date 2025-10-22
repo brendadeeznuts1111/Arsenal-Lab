@@ -1,0 +1,262 @@
+// components/PackageManagementArsenal.tsx
+import React, { useState, useMemo } from 'react';
+import clsx from 'clsx';
+
+/* ------------------------------------------------------------------ */
+/*  HOOK                                                              */
+/* ------------------------------------------------------------------ */
+export function usePackageManagementArsenal() {
+  const [tab, setTab] = useState<'info' | 'outdated' | 'audit' | 'analyze'>('info');
+  const [packageName, setPackageName] = useState('react');
+  const [severity, setSeverity] = useState<'low' | 'moderate' | 'high' | 'critical'>('high');
+  const [workspaceMode, setWorkspaceMode] = useState(false);
+  return { tab, setTab, packageName, setPackageName, severity, setSeverity, workspaceMode, setWorkspaceMode };
+}
+
+/* ------------------------------------------------------------------ */
+/*  CODE SNIPPETS                                                     */
+/* ------------------------------------------------------------------ */
+const infoSnippet = (pkg: string) => `bun info ${pkg}`;
+const outdatedSnippet = (recursive: boolean) => `bun update -i${recursive ? ' --recursive' : ''}`;
+const auditSnippet = (sev: string, json: boolean) => `bun audit${sev !== 'all' ? ` --severity=${sev}` : ''}${json ? ' --json > report.json' : ''}`;
+const analyzeSnippet = () => `bun install --analyze`;
+
+/* ------------------------------------------------------------------ */
+/*  MOCK DATA                                                         */
+/* ------------------------------------------------------------------ */
+const mockInfo = {
+  name: 'react',
+  version: '19.2.0',
+  license: 'MIT',
+  deps: 0,
+  versions: 2536,
+  description: 'React is a JavaScript library for building user interfaces.',
+  homepage: 'https://react.dev/',
+  keywords: ['react'],
+  dist: {
+    tarball: 'https://registry.npmjs.org/react/-/react-19.2.0.tgz',
+    shasum: 'd33dd1721698f4376ae57a54098cb47fc75d93a5',
+    integrity: 'sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ==',
+    unpackedSize: '171.60 KB',
+  },
+  distTags: {
+    latest: '19.2.0',
+    beta: '19.0.0-beta-26f2496093-20240514',
+    rc: '19.0.0-rc.1',
+    next: '19.3.0-canary-4fdf7cf2-20251003',
+    canary: '19.3.0-canary-4fdf7cf2-20251003',
+    experimental: '0.0.0-experimental-4fdf7cf2-20251003',
+  },
+  maintainers: ['fb <opensource+fb.com>', 'react-bot <react-core>'],
+  published: '2025-10-01T21:38:32.757Z',
+};
+
+const mockOutdated = [
+  { package: '@types/node', current: '20.0.0', wanted: '20.2.0', latest: '22.0.0', type: 'dev', workspace: true },
+  { package: 'typescript', current: '5.0.0', wanted: '5.6.0', latest: '5.7.0', type: 'dev', workspace: false },
+  { package: 'react', current: '18.3.1', wanted: '18.3.1', latest: '19.2.0', type: 'prod', workspace: false },
+];
+
+const mockAudit = [
+  { package: 'lodash', severity: 'high', vulnerability: 'Prototype Pollution', patched: '>=4.17.21', workspace: true },
+  { package: 'axios', severity: 'moderate', vulnerability: 'Server-Side Request Forgery', patched: '>=1.7.0', workspace: false },
+  { package: 'express', severity: 'low', vulnerability: 'Open Redirect', patched: '>=4.19.0', workspace: false },
+];
+
+const severityColors: Record<string, string> = {
+  low: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300',
+  moderate: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
+  high: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  critical: 'bg-red-200 text-red-800 dark:bg-red-800/40 dark:text-red-200',
+};
+
+/* ------------------------------------------------------------------ */
+/*  COMPONENT                                                          */
+/* ------------------------------------------------------------------ */
+export function PackageManagementArsenal() {
+  const { tab, setTab, packageName, setPackageName, severity, setSeverity, workspaceMode, setWorkspaceMode } = usePackageManagementArsenal();
+
+  const tabs = [
+    { id: 'info', label: 'Info', color: 'blue', icon: '📦' },
+    { id: 'outdated', label: 'Outdated', color: 'orange', icon: '🔄' },
+    { id: 'audit', label: 'Audit', color: 'red', icon: '🛡️' },
+    { id: 'analyze', label: 'Analyze', color: 'green', icon: '🔍' },
+  ];
+
+  /* -------------------------------- info ------------------------------- */
+  const InfoPanel = () => (
+    <Section title="Package Info" desc="View metadata, versions, and dist-tags">
+      <div className="flex gap-2">
+        <input
+          value={packageName}
+          onChange={e => setPackageName(e.target.value)}
+          placeholder="package name"
+          className="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+        />
+        <CopyButton text={infoSnippet(packageName)} />
+      </div>
+      <CodeBlock code={infoSnippet(packageName)} />
+      <InfoTable data={mockInfo} />
+    </Section>
+  );
+
+  /* -------------------------------- outdated --------------------------- */
+  const OutdatedPanel = () => (
+    <Section title="Update Interactive" desc="Catalog-aware outdated + update">
+      <div className="flex items-center gap-2 mb-2">
+        <LabelCheck label="Recursive (workspaces)" checked={workspaceMode} onChange={e => setWorkspaceMode(e.target.checked)} />
+        <CopyButton text={outdatedSnippet(workspaceMode)} />
+      </div>
+      <CodeBlock code={outdatedSnippet(workspaceMode)} />
+      <OutdatedTable data={mockOutdated} />
+    </Section>
+  );
+
+  /* -------------------------------- audit ------------------------------ */
+  const AuditPanel = () => (
+    <Section title="Security Audit" desc="Scan for known vulnerabilities">
+      <div className="flex gap-2 mb-2">
+        <select
+          value={severity}
+          onChange={e => setSeverity(e.target.value as any)}
+          className="px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+        >
+          <option value="all">All</option>
+          <option value="low">Low</option>
+          <option value="moderate">Moderate</option>
+          <option value="high">High</option>
+          <option value="critical">Critical</option>
+        </select>
+        <CopyButton text={auditSnippet(severity, false)} />
+        <CopyButton text={auditSnippet(severity, true)} label="JSON" />
+      </div>
+      <CodeBlock code={auditSnippet(severity, false)} />
+      <AuditTable data={mockAudit} filter={severity} />
+    </Section>
+  );
+
+  /* -------------------------------- analyze ---------------------------- */
+  const AnalyzePanel = () => (
+    <Section title="Install Analysis" desc="Auto-detect missing dependencies">
+      <CopyButton text={analyzeSnippet()} />
+      <CodeBlock code={analyzeSnippet()} />
+      <AnalyzeReport />
+    </Section>
+  );
+
+  return (
+    <div className="fixed bottom-4 right-4 z-30 w-[500px] max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-5">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <span className="w-9 h-9 grid place-content-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold">📦</span>
+          <div>
+            <h2 className="font-bold text-gray-900 dark:text-white">Package Management</h2>
+            <p className="text-xs text-gray-500">v1.3 Arsenal</p>
+          </div>
+        </div>
+        <div className="px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-[10px] font-medium">Catalog Ready</div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {tabs.map(t => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id as any)}
+            className={clsx(
+              'px-2.5 py-1 rounded-md text-[11px] border transition',
+              tab === t.id ? `bg-${t.color}-600 text-white border-${t.color}-600 shadow` : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700'
+            )}
+          >
+            {t.icon} {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Panels */}
+      {tab === 'info' && <InfoPanel />}
+      {tab === 'outdated' && <OutdatedPanel />}
+      {tab === 'audit' && <AuditPanel />}
+      {tab === 'analyze' && <AnalyzePanel />}
+
+      {/* Footer */}
+      <footer className="mt-5 pt-3 border-t border-gray-200 dark:border-gray-700 grid grid-cols-2 gap-2 text-[10px]">
+        <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>Catalog dependencies</span></div>
+        <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>Workspace support</span></div>
+        <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>npm audit DB</span></div>
+        <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>Auto-detect imports</span></div>
+      </footer>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  SMALL COMPOSABLES                                                  */
+/* ------------------------------------------------------------------ */
+const Section = ({ title, desc, children }: any) => (
+  <div className="space-y-2 mb-4">{/* title */}<div><h3 className="font-semibold text-gray-900 dark:text-white text-sm">{title}</h3><p className="text-xs text-gray-500">{desc}</p></div>{/* body */}{children}</div>
+);
+
+const CodeBlock = ({ code }: { code: string }) => (
+  <div className="relative"><pre className="bg-gray-900 text-gray-100 text-[11px] p-3 rounded-lg overflow-x-auto">{code}</pre><CopyButton text={code} /></div>
+);
+
+const CopyButton = ({ text, label = 'Copy' }: { text: string; label?: string }) => (
+  <button onClick={() => navigator.clipboard.writeText(text)} className="absolute top-2 right-2 px-2 py-0.5 text-[10px] bg-gray-700 hover:bg-gray-600 text-white rounded">{label}</button>
+);
+
+const LabelCheck = ({ label, ...rest }: any) => (
+  <label className="flex items-center gap-1.5 text-xs"><input {...rest} className="rounded border-gray-300" /><span>{label}</span></label>
+);
+
+/* ------------------------------------------------------------------ */
+/*  TABLES                                                             */
+/* ------------------------------------------------------------------ */
+const InfoTable = ({ data }: any) => (
+  <div className="space-y-1 text-xs">
+    <div className="flex justify-between"><span className="text-gray-500">Version</span><span className="font-mono">{data.version}</span></div>
+    <div className="flex justify-between"><span className="text-gray-500">License</span><span>{data.license}</span></div>
+    <div className="flex justify-between"><span className="text-gray-500">Dependencies</span><span>{data.deps}</span></div>
+    <div className="flex justify-between"><span className="text-gray-500">Unpacked</span><span>{data.dist.unpackedSize}</span></div>
+    <div className="flex justify-between"><span className="text-gray-500">Published</span><span>{new Date(data.published).toLocaleDateString()}</span></div>
+    <div className="mt-2"><div className="text-gray-500 mb-1">Dist-tags</div>{Object.entries(data.distTags).map(([k, v]) => (<div key={k} className="flex justify-between text-xs"><span className="text-gray-400">{k}</span><span className="font-mono">{v}</span></div>))}</div>
+  </div>
+);
+
+const OutdatedTable = ({ data }: any) => (
+  <div className="space-y-1">
+    {data.map((r: any) => (
+      <div key={r.package} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800/50 rounded">
+        <div className="font-mono text-xs">{r.package}<span className="text-gray-400 ml-1">({r.type})</span></div>
+        <div className="text-right text-xs">
+          <div><span className="text-red-500">{r.current}</span> → <span className="text-green-500">{r.latest}</span></div>
+          <div className="text-gray-400">wanted: {r.wanted}</div>
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+const AuditTable = ({ data, filter }: any) => (
+  <div className="space-y-1">
+    {(filter === 'all' ? data : data.filter((r: any) => r.severity === filter)).map((r: any) => (
+      <div key={r.package} className="p-2 rounded bg-gray-50 dark:bg-gray-800/50">
+        <div className="flex items-center justify-between">
+          <div className="font-mono text-xs">{r.package}</div>
+          <span className={`px-1.5 py-0.5 text-[10px] rounded ${severityColors[r.severity]}`}>{r.severity}</span>
+        </div>
+        <div className="text-xs text-gray-600 mt-1">{r.vulnerability}</div>
+        <div className="text-xs text-green-600">Patched: {r.patched}</div>
+      </div>
+    ))}
+  </div>
+);
+
+const AnalyzeReport = () => (
+  <div className="p-2 bg-gray-50 dark:bg-gray-800/50 rounded text-xs">
+    <div className="flex items-center justify-between mb-1"><span>Missing dependencies detected:</span><span className="font-mono text-green-600">3 packages</span></div>
+    <div className="space-y-1 font-mono text-[10px]"><div>lodash (imported in src/utils.ts)</div><div>axios (imported in src/api.ts)</div><div>express (imported in src/server.ts)</div></div>
+    <div className="mt-2 text-green-600">✅ Auto-installed via --analyze</div>
+  </div>
+);

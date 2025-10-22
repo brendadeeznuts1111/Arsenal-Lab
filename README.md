@@ -174,6 +174,15 @@ open public/arsenal-lab.html
 - **WebSocket**: RFC 6455 compliance, permessage-deflate compression
 - **S3 Client**: ListObjectsV2, storage classes, virtual-hosted URLs
 
+### 📦 Package Management Arsenal
+**Complete Bun PM command suite** - Catalog dependencies, vulnerability scanning, and automated installation.
+
+- **Catalog Dependencies**: Full support for root package.json catalog definitions
+- **Security Audit**: Vulnerability scanning using npm audit database
+- **Interactive Updates**: `bun update -i --recursive` for workspace management
+- **Package Metadata**: Comprehensive info viewer with dist-tags and maintainers
+- **Import Analysis**: Auto-detection of missing dependencies with `--analyze`
+
 ## 🏗️ Architecture
 
 ```
@@ -183,7 +192,8 @@ bun:performance-arsenal/
 │   ├── ProcessShellArsenal/
 │   ├── TestingArsenal/
 │   ├── TestingDebuggingArsenal/
-│   └── DatabaseInfrastructureArsenal/
+│   ├── DatabaseInfrastructureArsenal/
+│   └── PackageManagementArsenal/
 ├── src/
 │   ├── lab.ts           # Main application entry
 │   ├── metrics/         # Prometheus metrics export
