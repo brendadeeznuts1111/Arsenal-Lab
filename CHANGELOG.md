@@ -7,16 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2025-10-22
+
 ### Added
-- Complete GitHub integration with workflows, templates, and sponsorship
-- Structured reference documentation with `[SCOPE][DOMAIN][TYPE][META]` tagging
-- Enhanced package.json metadata for npm publishing
-- Comprehensive CI/CD pipeline with performance regression detection
-- GitHub issue and PR templates for better contributor experience
-- Dependabot configuration for automated dependency updates
-- Code of Conduct and Contributing guidelines
-- LICENSE file (MIT)
-- FUNDING.yml for GitHub Sponsors integration
+- **🔒 Security Arsenal**: Complete dependency vulnerability scanning suite
+  - Live security audit with severity filtering (Critical, High, Moderate, Low)
+  - Vulnerability history tracking and statistics dashboard
+  - Production-only dependency filtering for focused security analysis
+  - Export capabilities for Prometheus metrics and security reports
+  - Interactive vulnerability cards with detailed remediation guidance
+
+- **Enhanced Landing Page**: Updated public/arsenal-lab.html with current features
+  - Added Security Arsenal tab and interactive content
+  - Updated performance claims (500× operations, 7.9× database performance)
+  - Enhanced meta descriptions and social media tags
+  - Updated structured data with security scanning capabilities
+  - Improved feature showcase with security vulnerability scanning
+
+- **Complete GitHub Integration**:
+  - GitHub workflows, templates, and sponsorship configuration
+  - Structured reference documentation with `[SCOPE][DOMAIN][TYPE][META]` tagging
+  - Enhanced package.json metadata for npm publishing
+  - Comprehensive CI/CD pipeline with performance regression detection
+  - Dependabot configuration for automated dependency updates
+
+- **Developer Experience Enhancements**:
+  - Code of Conduct and Contributing guidelines
+  - LICENSE file (MIT) and FUNDING.yml for GitHub Sponsors
+  - Environment configuration files (.env.example, .env.production, .env.staging)
+  - Deployment and secrets management scripts
 
 ### Changed
 - Updated package name from `@bun/arsenal-lab` to `@bun/performance-arsenal`
