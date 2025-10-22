@@ -135,6 +135,116 @@ What do you think? Would this be valuable for your use cases?
 
 ---
 
+## 📦 Package Management Template
+
+**Title:** How do I optimize my Bun PM workflow for enterprise monorepos?
+
+**Category:** Package Management
+
+**Content:**
+```
+Enterprise Package Management: Monorepo Optimization Strategies
+
+**Context:**
+I'm managing a large enterprise monorepo with 50+ packages and struggling with:
+- Slow package installations across workspaces
+- Dependency conflicts between packages
+- Security audit performance
+- Catalog dependency management
+
+**Current Setup:**
+```json
+// Root package.json
+{
+  "workspaces": ["packages/*", "apps/*", "tools/*"],
+  "packageManager": "bun@1.4.0"
+}
+```
+
+**Questions:**
+1. **Catalog Dependencies** - How to effectively use Bun's catalog feature for shared deps?
+2. **Workspace Updates** - Best practices for `bun pm update --recursive`?
+3. **Security Audits** - Strategies for auditing large monorepos efficiently?
+4. **Lockfile Management** - Handling bun.lockb in CI/CD pipelines?
+
+**Current Pain Points:**
+- `bun install` takes 3+ minutes for full monorepo
+- Dependency drift between workspaces
+- Security audit timeouts on large codebases
+- Difficult to track which packages need updates
+
+**What I've Tried:**
+- Catalog dependencies for shared packages (react, typescript, etc.)
+- Selective workspace installations
+- Parallel audit runs by workspace
+- Custom scripts for dependency management
+
+**Looking for:**
+- Real-world monorepo optimization tips
+- Catalog dependency best practices
+- CI/CD integration strategies
+- Performance benchmarking approaches
+
+Has anyone solved similar enterprise monorepo challenges? Share your strategies! 📦
+```
+
+---
+
+## 📦 Package Security Audit Template
+
+**Title:** Critical vulnerabilities found in production - how to handle Bun PM audit results?
+
+**Category:** Package Management
+
+**Content:**
+```
+🚨 Critical Security Audit Results - Production Impact Assessment
+
+**Audit Results:**
+```bash
+bun pm audit --severity=critical
+# Found 3 critical vulnerabilities
+# Package: axios@1.6.0
+# Vulnerability: Server-Side Request Forgery
+# Severity: Critical
+# Patched: >=1.7.0
+```
+
+**Current Situation:**
+- Production application with 10k+ daily users
+- Using vulnerable axios version for critical API calls
+- Next deployment window: 2 weeks away
+- Business impact: Potential data breach concerns
+
+**Questions:**
+1. **Immediate Mitigation** - What are my options for short-term fixes?
+2. **Patch Strategy** - How to safely upgrade without breaking changes?
+3. **Testing Approach** - How to validate the security fix?
+4. **Rollback Plan** - What if the upgrade causes issues?
+
+**Considerations:**
+- Minimal code changes (API contract preservation)
+- Zero-downtime deployment requirement
+- Comprehensive testing before production
+- Stakeholder communication plan
+
+**Current Mitigation Attempts:**
+- ✅ Reviewed vulnerability details and exploit vectors
+- ✅ Identified affected code paths in the application
+- ✅ Prepared alternative implementations (fetch/node:http)
+- ❌ Cannot immediately upgrade due to breaking changes
+
+**Looking for:**
+- Real-world security incident response strategies
+- Safe upgrade patterns for critical vulnerabilities
+- Testing approaches for security patches
+- Communication templates for stakeholders
+
+How have you handled critical security findings in production Bun applications? 🛡️
+```
+
+---
+
 ## 🙌 Show and Tell Template
 
 **Title:** From 2.3s to 0.8s: My Bun Migration Success Story

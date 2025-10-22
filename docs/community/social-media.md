@@ -64,6 +64,59 @@ Case study: https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/[id]
 - Community-contributed articles
 - Technical deep dives
 
+#### Telegram Group (@arsenallab)
+**Focus**: Real-time community chat, quick questions, support
+**Activity**: Daily engagement and community discussions
+**Content Types**:
+- Quick help and troubleshooting
+- Performance tips and tricks
+- Community announcements
+- Live discussions during events
+- Beta testing coordination
+
+**Community Guidelines**:
+- Be respectful and professional
+- Search before asking duplicate questions
+- Share benchmarks and performance results
+- Help newcomers get started
+- No spam or self-promotion without mod approval
+
+#### Telegram Channel (@arsenallab_channel)
+**Focus**: Announcements, updates, curated content (read-only)
+**Posting Frequency**: 2-3 posts/week
+**Content Types**:
+- Release announcements
+- Breaking performance news
+- Featured community contributions
+- Event notifications
+- Weekly performance highlights
+
+**Sample Posts**:
+```
+🚀 Arsenal Lab v1.3.1 Released!
+
+New Features:
+✅ Enhanced crypto benchmarks with X25519/Ed25519
+✅ Improved memory profiling with heap snapshots
+✅ Real-time WebSocket performance monitoring
+
+Try it now: https://brendadeeznuts1111.github.io/Arsenal-Lab/
+
+Join the discussion: @arsenallab
+```
+
+```
+📊 This Week's Performance Highlight
+
+Community member @developer achieved 4.8x speedup migrating from Node.js to Bun using Arsenal Lab benchmarks!
+
+Cold start: 12s → 2.5s
+Memory: 120MB → 38MB
+Bundle: 15MB → 3.1MB
+
+Read the full case study: [link]
+```
+
 ### Content Calendar
 
 #### Weekly Schedule
@@ -113,6 +166,8 @@ Case study: https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/[id]
 - **JSR**: JavaScript registry integration (future)
 
 ### Community Platforms
+- **Telegram Group**: Real-time community chat and support (https://t.me/arsenallab)
+- **Telegram Channel**: Official announcements and updates (https://t.me/arsenallab_channel)
 - **GitHub Discussions**: Technical discussions and Q&A
 - **GitHub Issues**: Bug reports and feature requests
 - **Discord**: Real-time community chat (future)
@@ -202,11 +257,16 @@ Case study: https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/[id]
 
 ## 🔗 Important Links
 
+### Development & Documentation
 - **GitHub Repository**: https://github.com/brendadeeznuts1111/Arsenal-Lab
 - **Live Demo**: https://brendadeeznuts1111.github.io/Arsenal-Lab/
 - **Documentation**: https://github.com/brendadeeznuts1111/Arsenal-Lab/wiki
 - **Discussions**: https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions
 - **Issues**: https://github.com/brendadeeznuts1111/Arsenal-Lab/issues
+
+### Community
+- **Telegram Group**: https://t.me/arsenallab (Community chat and support)
+- **Telegram Channel**: https://t.me/arsenallab_channel (Official announcements)
 
 ---
 
