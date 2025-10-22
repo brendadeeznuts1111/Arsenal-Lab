@@ -127,6 +127,18 @@ open public/arsenal-lab.html
 
 This provides an overview of all arsenals with links to the full interactive experience.
 
+## 🔐 Patch Governance (Bun System Gate)
+
+Bootstrap enterprise-grade patch governance in 30 seconds:
+
+```bash
+curl -sSL https://bun.sh/gate | bash
+```
+
+Then commit the two new files and push – CI will pick up SARIF & cosign automatically.
+
+**What you get:** Invariant validation, tension monitoring, canary rollouts, SARIF security reporting, cryptographic signing – complete FAANG-ready governance suite.
+
 ## 📊 Live Demo
 
 🚀 **[Try the Arsenal Lab Live](https://brendadeeznuts1111.github.io/Arsenal-Lab/)** - Interactive playground with all Bun v1.4+ features!
