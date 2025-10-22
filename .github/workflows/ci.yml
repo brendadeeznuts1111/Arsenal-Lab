@@ -105,12 +105,9 @@ jobs:
         run: |
           # Copy demo files to public directory for GitHub Pages
           mkdir -p demo
-          cp public/arsenal-lab.html demo/index.html
-          cp public/build-config-vanilla.html demo/
-          cp public/manifest.json demo/
-          cp public/icon-192.svg demo/
-          cp public/sw.js demo/
-          cp public/README.md demo/
+          cp index.html demo/index.html
+          cp -r public/* demo/ 2>/dev/null || true
+          cp -r dist/* demo/dist/ 2>/dev/null || true
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
