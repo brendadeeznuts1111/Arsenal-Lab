@@ -76,7 +76,7 @@ export function Footer() {
           </a>
 
           {/* 🤝 YOUR CONTRIBUTING GUIDE */}
-          <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#contributing" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#-contributing" target="_blank" rel="noopener noreferrer">
             <span className="link-icon">🤝</span>
             Contributing
           </a>
@@ -94,11 +94,11 @@ export function Footer() {
           <div className="shortcut-group">
             <span className="shortcut-label">Quick Links</span>
             <div className="shortcut-list">
-              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#installation" target="_blank">Installation Guide</a>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#-installation" target="_blank">Installation Guide</a>
               <br />
-              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#contributing" target="_blank">Contributing Guide</a>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#-contributing" target="_blank">Contributing Guide</a>
               <br />
-              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#arsenal-collection" target="_blank">Arsenal Collection</a>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#-arsenal-collection" target="_blank">Arsenal Collection</a>
             </div>
           </div>
         </div>

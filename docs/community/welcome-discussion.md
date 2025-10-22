@@ -50,7 +50,7 @@ Share your projects, benchmarks, success stories, and achievements!
 
 ### For New Users
 1. **Explore the demo**: Try [arsenal-lab.html](https://github.com/brendadeeznuts1111/Arsenal-Lab/blob/main/public/arsenal-lab.html)
-2. **Run locally**: Follow the [installation guide](https://github.com/brendadeeznuts1111/Arsenal-Lab/blob/main/README.md#installation)
+2. **Run locally**: Follow the [installation guide](https://github.com/brendadeeznuts1111/Arsenal-Lab#-installation)
 3. **Ask questions**: Use the Q&A category for technical help
 4. **Share feedback**: Tell us what you think in General discussions
 
