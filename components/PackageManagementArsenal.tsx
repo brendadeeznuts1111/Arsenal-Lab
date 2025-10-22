@@ -134,6 +134,14 @@ export function PackageManagementArsenal() {
         <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>Auto-detect imports</span></div>
         <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>Persistent patching</span></div>
         <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>Git-friendly patches</span></div>
+        <div className="col-span-2 mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+          <div className="text-blue-600 dark:text-blue-400 text-[9px]">
+            💡 <strong>Advanced users:</strong> Additional CLI options available at
+            <a href="https://bun.com/docs/pm/cli/patch#cli-usage" target="_blank" className="underline ml-1 hover:text-blue-700 dark:hover:text-blue-300">
+              bun.com/docs/pm/cli/patch#cli-usage
+            </a>
+          </div>
+        </div>
       </footer>
     </div>
   );

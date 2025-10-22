@@ -53,6 +53,14 @@ bun patch-commit react
 - `package.json` - Added "patchedDependencies" section
 - `bun.lockb` - Updated to reference patched package version
 
+**Advanced CLI Options:**
+For power users, Bun patch supports many additional options for specialized use cases. See the [complete CLI reference](https://bun.com/docs/pm/cli/patch#cli-usage) for options like:
+- Network configuration (`--registry`, `--network-concurrency`)
+- Platform targeting (`--cpu`, `--os`)
+- Installation control (`--backend`, `--dry-run`, `--force`)
+- Caching and performance (`--cache-dir`, `--concurrent-scripts`)
+- And many more advanced configuration options
+
 ## 📋 Detailed Workflow
 
 ### Step 1: Prepare Package

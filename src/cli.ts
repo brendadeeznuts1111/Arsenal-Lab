@@ -770,6 +770,9 @@ if (command === '--help' || command === '-h') {
   patch             Persistently patch node_modules packages (--commit to save)
   patch-commit      Alias for 'patch --commit' (pnpm compatibility)
 
+  💡 Advanced users: Many additional CLI options available at:
+     https://bun.com/docs/pm/cli/patch#cli-usage
+
 📊 Benchmark Categories:
   database           SQLite & database performance
   redis             Redis client benchmarks
