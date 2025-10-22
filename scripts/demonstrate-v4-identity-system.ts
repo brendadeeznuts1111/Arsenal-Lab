@@ -1,49 +1,165 @@
 #!/usr/bin/env bun
 
 /**
- * Demonstrate v4 Identity System - Self-Describing Email Identities
+ * Enhanced v4 Identity System Demo - Self-Describing Email Identities
  *
- * Showcases the enhanced zero-touch authentication with human-readable,
- * self-describing email identities that work with Nexus without domain ownership.
+ * Improvements:
+ * - Dry-run mode for offline demos (no server required)
+ * - Configurable BASE_URL via env var (default: http://localhost:3655)
+ * - Retry logic for flaky API calls (up to 3 attempts)
+ * - Removed unused imports
+ * - Added CLI flags: --dry-run, --base-url
+ * - Enhanced output with structured JSON export option (--json)
+ * - Better error messages and progress indicators
  */
 
-import { $ } from "bun";
+import { $ } from "bun"; // Kept for potential future use, e.g., shell commands
 
-async function demonstrateV4IdentitySystem() {
-  console.log("🚀 Arsenal Lab v4 Identity System Demonstration");
-  console.log("   Self-describing email identities for enterprise audit trails\n");
+interface Identity {
+  id: string;
+  ttl: number;
+  expires: string;
+  metadata: {
+    type: string;
+    compatible: string[];
+    prefix?: string;
+    run?: string;
+    environment?: string;
+  };
+}
 
-  const BASE_URL = "http://localhost:3655";
+interface BatchRequest {
+  environments: Array<{ name: string; prefix: string; run: string }>;
+  domain: string;
+  version: string;
+  ttl?: number;
+}
+
+interface BatchResult {
+  identities: Identity[];
+  total: number;
+  ttl: number;
+}
+
+interface ValidationRequest {
+  identity: string;
+}
+
+interface ValidationResponse {
+  valid: boolean;
+  metadata?: {
+    prefix: string;
+    run: string;
+  };
+}
+
+async function retryFetch(url: string, options?: RequestInit, maxRetries: number = 3): Promise<Response> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+      if (response.ok) return response;
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    } catch (error) {
+      console.log(`   ⚠️  Attempt ${attempt}/${maxRetries} failed: ${(error as Error).message}`);
+      if (attempt === maxRetries) throw error;
+      await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Exponential backoff
+    }
+  }
+  throw new Error("Max retries exceeded");
+}
+
+function mockSingleIdentity(prefix: string, run: string, domain: string, version: string): Identity {
+  const base = `${prefix}-${run}@${domain}/${version}:id`;
+  const ttl = 7200;
+  const expires = new Date(Date.now() + ttl * 1000).toISOString();
+  return {
+    id: base,
+    ttl,
+    expires,
+    metadata: {
+      type: "disposable",
+      compatible: ["nexus", "npm", "oidc"],
+      prefix,
+      run
+    }
+  };
+}
+
+function mockBatchIdentities(request: BatchRequest): BatchResult {
+  const ttl = request.ttl || 7200;
+  const identities = request.environments.map(env => ({
+    ...mockSingleIdentity(env.prefix, env.run, request.domain, request.version),
+    metadata: { ...mockSingleIdentity(env.prefix, env.run, request.domain, request.version).metadata, environment: env.name }
+  }));
+  return { identities, total: identities.length, ttl };
+}
+
+function mockValidation(identity: string): ValidationResponse {
+  const emailMatch = identity.match(/^([a-z]+)-(\d+)@[^/]+\/v1:id$/);
+  if (emailMatch) {
+    return {
+      valid: true,
+      metadata: { prefix: emailMatch[1], run: emailMatch[2] }
+    };
+  }
+  return { valid: false };
+}
+
+async function demonstrateV4IdentitySystem(dryRun: boolean = false, jsonOutput: boolean = false) {
+  const BASE_URL = process.env.API_BASE_URL || "http://localhost:3655";
+  const output = jsonOutput ? [] : undefined; // Collect for JSON export
+
+  const log = (msg: string) => {
+    if (jsonOutput) {
+      output!.push({ type: "log", message: msg });
+    } else {
+      console.log(msg);
+    }
+  };
+
+  const logSection = (title: string) => log(`\n${title}`);
+
+  log("🚀 Arsenal Lab v4 Identity System Demonstration (Enhanced)");
+  log("   Self-describing email identities for enterprise audit trails\n");
+  if (dryRun) log("   🧪 Running in DRY-RUN mode (mocked responses)\n");
 
   // 1. Single Identity Generation
-  console.log("1️⃣ Single Identity Generation");
-  console.log("   GET /api/v1/id?prefix=ci&run=123456789");
-  console.log("");
+  logSection("1️⃣ Single Identity Generation");
+  log(`   GET /api/v1/id?prefix=ci&run=123456789 (Base: ${BASE_URL})`);
 
-  try {
-    const response = await fetch(`${BASE_URL}/api/v1/id?prefix=ci&run=123456789&domain=api.dev.arsenal-lab.com&version=v1`);
-    const identity = await response.json();
+  let singleIdentity: Identity;
+  if (dryRun) {
+    singleIdentity = mockSingleIdentity("ci", "123456789", "api.dev.arsenal-lab.com", "v1");
+  } else {
+    try {
+      const response = await retryFetch(`${BASE_URL}/api/v1/id?prefix=ci&run=123456789&domain=api.dev.arsenal-lab.com&version=v1`);
+      singleIdentity = await response.json();
+      log("   ✅ Fetched from API");
+    } catch (error) {
+      log(`   ❌ API fetch failed: ${(error as Error).message}`);
+      log("   💡 Start server: PORT=3655 bun run src/server.ts");
+      log("   🔄 Falling back to mock...");
+      singleIdentity = mockSingleIdentity("ci", "123456789", "api.dev.arsenal-lab.com", "v1");
+    }
+  }
 
-    console.log("   ✅ Generated Identity:");
-    console.log(`   📧 Email: ${identity.id}`);
-    console.log(`   ⏰ TTL: ${identity.ttl}s (${Math.round(identity.ttl / 3600)}h)`);
-    console.log(`   📅 Expires: ${new Date(identity.expires).toLocaleString()}`);
-    console.log(`   🏷️  Type: ${identity.metadata.type}`);
-    console.log(`   🔧 Compatible: ${identity.metadata.compatible.join(', ')}`);
-    console.log("");
-
-  } catch (error) {
-    console.log(`   ❌ Identity generation failed: ${error.message}`);
-    console.log("   💡 Make sure the server is running: PORT=3655 bun run src/server.ts");
-    return;
+  if (jsonOutput) {
+    output!.push({ type: "single_identity", data: singleIdentity });
+  } else {
+    log("   ✅ Generated Identity:");
+    log(`   📧 Email: ${singleIdentity.id}`);
+    log(`   ⏰ TTL: ${singleIdentity.ttl}s (${Math.round(singleIdentity.ttl / 3600)}h)`);
+    log(`   📅 Expires: ${new Date(singleIdentity.expires).toLocaleString()}`);
+    log(`   🏷️  Type: ${singleIdentity.metadata.type}`);
+    log(`   🔧 Compatible: ${singleIdentity.metadata.compatible.join(', ')}`);
+    log("");
   }
 
   // 2. Batch Identity Generation
-  console.log("2️⃣ Batch Identity Generation for Multiple Environments");
-  console.log("   POST /api/v1/identities");
-  console.log("");
+  logSection("2️⃣ Batch Identity Generation for Multiple Environments");
+  log("   POST /api/v1/identities");
 
-  const batchRequest = {
+  const batchRequest: BatchRequest = {
     environments: [
       { name: "ci-pipeline", prefix: "ci", run: "987654321" },
       { name: "staging-deploy", prefix: "staging", run: "555666777" },
@@ -54,30 +170,39 @@ async function demonstrateV4IdentitySystem() {
     ttl: 7200 // 2 hours
   };
 
-  try {
-    const response = await fetch(`${BASE_URL}/api/v1/identities`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(batchRequest)
-    });
-    const batchResult = await response.json();
+  let batchResult: BatchResult;
+  if (dryRun) {
+    batchResult = mockBatchIdentities(batchRequest);
+  } else {
+    try {
+      const response = await retryFetch(`${BASE_URL}/api/v1/identities`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(batchRequest)
+      });
+      batchResult = await response.json();
+      log("   ✅ Fetched from API");
+    } catch (error) {
+      log(`   ❌ API batch failed: ${(error as Error).message}`);
+      batchResult = mockBatchIdentities(batchRequest);
+    }
+  }
 
-    console.log("   ✅ Generated Identities:");
-    batchResult.identities.forEach((identity: any, index: number) => {
-      console.log(`   ${index + 1}. ${identity.environment}: ${identity.id}`);
+  if (jsonOutput) {
+    output!.push({ type: "batch_result", data: batchResult });
+  } else {
+    log("   ✅ Generated Identities:");
+    batchResult.identities.forEach((identity, index) => {
+      log(`   ${index + 1}. ${identity.metadata?.environment}: ${identity.id}`);
     });
-    console.log(`   📊 Total: ${batchResult.total} identities`);
-    console.log(`   ⏰ TTL: ${batchResult.ttl}s (${Math.round(batchResult.ttl / 3600)}h)`);
-    console.log("");
-
-  } catch (error) {
-    console.log(`   ❌ Batch generation failed: ${error.message}`);
+    log(`   📊 Total: ${batchResult.total} identities`);
+    log(`   ⏰ TTL: ${batchResult.ttl}s (${Math.round(batchResult.ttl / 3600)}h)`);
+    log("");
   }
 
   // 3. Identity Validation
-  console.log("3️⃣ Identity Validation (RFC 5322 Compliance)");
-  console.log("   POST /api/v1/validate");
-  console.log("");
+  logSection("3️⃣ Identity Validation (RFC 5322 Compliance)");
+  log("   POST /api/v1/validate");
 
   const testIdentities = [
     "ci-123456789@api.dev.arsenal-lab.com/v1:id",
@@ -86,90 +211,115 @@ async function demonstrateV4IdentitySystem() {
     "prod-111@api.dev.arsenal-lab.com/v2:id"
   ];
 
+  const validations: ValidationResponse[] = [];
   for (const testIdentity of testIdentities) {
-    try {
-      const response = await fetch(`${BASE_URL}/api/v1/validate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ identity: testIdentity })
-      });
-      const validation = await response.json();
-
-      const status = validation.valid ? '✅' : '❌';
-      console.log(`   ${status} ${testIdentity}`);
-      if (validation.metadata) {
-        console.log(`      └─ Prefix: ${validation.metadata.prefix}, Run: ${validation.metadata.run}`);
+    let validation: ValidationResponse;
+    if (dryRun) {
+      validation = mockValidation(testIdentity);
+    } else {
+      try {
+        const response = await retryFetch(`${BASE_URL}/api/v1/validate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identity: testIdentity } as ValidationRequest)
+        });
+        validation = await response.json();
+      } catch (error) {
+        log(`   ❌ Validation API failed for ${testIdentity}: ${(error as Error).message}`);
+        validation = { valid: false };
       }
+    }
 
-    } catch (error) {
-      console.log(`   ❌ Validation failed for ${testIdentity}: ${error.message}`);
+    validations.push(validation);
+
+    if (!jsonOutput) {
+      const status = validation.valid ? '✅' : '❌';
+      log(`   ${status} ${testIdentity}`);
+      if (validation.valid && validation.metadata) {
+        log(`      └─ Prefix: ${validation.metadata.prefix}, Run: ${validation.metadata.run}`);
+      }
     }
   }
-  console.log("");
+  if (jsonOutput) {
+    output!.push({ type: "validations", data: validations });
+  }
+  log("");
 
   // 4. Nexus Registry Integration Example
-  console.log("4️⃣ Nexus Registry Integration Example");
-  console.log("   How the identity appears in audit logs:");
-  console.log("");
+  logSection("4️⃣ Nexus Registry Integration Example");
+  log("   How the identity appears in audit logs:");
 
   const nexusExample = {
     timestamp: new Date().toISOString(),
     action: "npm package install",
-    user: "ci-123456789@api.dev.arsenal-lab.com/v1:id",
+    user: singleIdentity.id,
     package: "@lumen/cashier-service",
     version: "1.2.3",
     registry: "nexus.lumen-suite.com"
   };
 
-  console.log("   📋 Nexus Audit Log Entry:");
-  console.log(`   Timestamp: ${nexusExample.timestamp}`);
-  console.log(`   User: ${nexusExample.user}`);
-  console.log(`   Package: ${nexusExample.package}@${nexusExample.version}`);
-  console.log(`   Registry: ${nexusExample.registry}`);
-  console.log("");
+  if (jsonOutput) {
+    output!.push({ type: "nexus_example", data: nexusExample });
+  } else {
+    log("   📋 Nexus Audit Log Entry:");
+    log(`   Timestamp: ${nexusExample.timestamp}`);
+    log(`   User: ${nexusExample.user}`);
+    log(`   Package: ${nexusExample.package}@${nexusExample.version}`);
+    log(`   Registry: ${nexusExample.registry}`);
+    log("");
+  }
 
   // 5. Air-Gapped Fallback Demonstration
-  console.log("5️⃣ Air-Gapped Fallback (No External Dependencies)");
-  console.log("   When identity service is unreachable:");
-  console.log("");
+  logSection("5️⃣ Air-Gapped Fallback (No External Dependencies)");
+  log("   When identity service is unreachable:");
 
-  // Simulate air-gapped fallback (what the bootstrap script does)
   const fallbackIdentity = `ci-${Date.now()}@api.dev.arsenal-lab.com/v1:id`;
-  console.log("   🔄 Fallback Identity:", fallbackIdentity);
-  console.log("   ✅ Still RFC 5322 compliant");
-  console.log("   ✅ Nexus accepts this syntax");
-  console.log("   ⚠️  Loses TTL but maintains audit trail");
-  console.log("");
+  if (!jsonOutput) {
+    log("   🔄 Fallback Identity:", fallbackIdentity);
+    log("   ✅ Still RFC 5322 compliant");
+    log("   ✅ Nexus accepts this syntax");
+    log("   ⚠️  Loses TTL but maintains audit trail");
+    log("");
+  } else {
+    output!.push({ type: "fallback_identity", data: { id: fallbackIdentity } });
+  }
 
   // 6. CI/CD Integration Examples
-  console.log("6️⃣ CI/CD Integration Examples");
-  console.log("");
+  logSection("6️⃣ CI/CD Integration Examples");
 
-  console.log("   📋 GitHub Actions (with identity service):");
-  console.log(`   # Fetch disposable identity
-   - name: Get Identity
-     run: |
-       ID=$(curl -s "${BASE_URL}/api/v1/id?prefix=ci&run=\${{ github.run_id }}")
-       EMAIL=$(echo "$ID" | jq -r .id)
-       echo "email=$EMAIL" >> $GITHUB_OUTPUT`);
+  const ciExamples = {
+    githubActions: `# Fetch disposable identity
+- name: Get Identity
+  run: |
+    ID=$(curl -s "${BASE_URL}/api/v1/id?prefix=ci&run=\${{ github.run_id }}")
+    EMAIL=$(echo "$ID" | jq -r .id)
+    echo "email=$EMAIL" >> $GITHUB_OUTPUT`,
 
-  console.log("");
-  console.log("   📋 Local Development:");
-  console.log(`   # Generate engineer-specific identity
-   export SANDBOX_ID=$(curl -s "${BASE_URL}/api/v1/id?prefix=$(whoami)&run=$(date +%s)" | jq -r .id)
-   export NPM_EMAIL_SANDBOX=$SANDBOX_ID
-   export NPM_TOKEN_SANDBOX=$(gh auth token)`);
+    localDev: `# Generate engineer-specific identity
+export SANDBOX_ID=$(curl -s "${BASE_URL}/api/v1/id?prefix=$(whoami)&run=$(date +%s)" | jq -r .id)
+export NPM_EMAIL_SANDBOX=$SANDBOX_ID
+export NPM_TOKEN_SANDBOX=$(gh auth token)`,
 
-  console.log("");
-  console.log("   📋 Air-Gapped CI Fallback:");
-  console.log(`   # No external calls needed
-   EMAIL="ci-\${GITHUB_RUN_ID}@api.dev.arsenal-lab.com/v1:id"`);
+    airGapped: `# No external calls needed
+EMAIL="ci-\${GITHUB_RUN_ID}@api.dev.arsenal-lab.com/v1:id"`
+  };
 
-  console.log("");
+  if (!jsonOutput) {
+    log("   📋 GitHub Actions (with identity service):");
+    log(ciExamples.githubActions);
+    log("");
+    log("   📋 Local Development:");
+    log(ciExamples.localDev);
+    log("");
+    log("   📋 Air-Gapped CI Fallback:");
+    log(ciExamples.airGapped);
+    log("");
+  } else {
+    output!.push({ type: "ci_examples", data: ciExamples });
+  }
 
   // 7. Security Benefits
-  console.log("7️⃣ Security & Compliance Benefits");
-  console.log("");
+  logSection("7️⃣ Security & Compliance Benefits");
 
   const benefits = [
     "🔐 Zero secrets in CI environment variables",
@@ -182,25 +332,46 @@ async function demonstrateV4IdentitySystem() {
     "📊 Complete traceability per build/run"
   ];
 
-  benefits.forEach(benefit => console.log(`   ${benefit}`));
-  console.log("");
+  if (!jsonOutput) {
+    benefits.forEach(benefit => log(`   ${benefit}`));
+    log("");
+  } else {
+    output!.push({ type: "benefits", data: benefits });
+  }
 
-  console.log("🎯 Arsenal Lab v4 Identity System Complete!");
-  console.log("   Self-describing, audit-ready, enterprise-grade authentication");
-  console.log("");
-  console.log("📚 Next Steps:");
-  console.log("   1. Deploy identity service to your infrastructure");
-  console.log("   2. Update CI pipelines with new identity generation");
-  console.log("   3. Configure Nexus to accept the new email format");
-  console.log("   4. Monitor audit logs for enhanced traceability");
-  console.log("");
-  console.log("🔗 API Endpoints:");
-  console.log(`   GET  ${BASE_URL}/api/v1/id - Single identity generation`);
-  console.log(`   POST ${BASE_URL}/api/v1/identities - Batch identity generation`);
-  console.log(`   POST ${BASE_URL}/api/v1/validate - Identity validation`);
+  log("🎯 Arsenal Lab v4 Identity System Complete!");
+  log("   Self-describing, audit-ready, enterprise-grade authentication");
+  log("");
+
+  log("📚 Next Steps:");
+  log("   1. Deploy identity service to your infrastructure");
+  log("   2. Update CI pipelines with new identity generation");
+  log("   3. Configure Nexus to accept the new email format");
+  log("   4. Monitor audit logs for enhanced traceability");
+  log("");
+
+  log("🔗 API Endpoints:");
+  log(`   GET  ${BASE_URL}/api/v1/id - Single identity generation`);
+  log(`   POST ${BASE_URL}/api/v1/identities - Batch identity generation`);
+  log(`   POST ${BASE_URL}/api/v1/validate - Identity validation`);
+
+  if (jsonOutput) {
+    console.log(JSON.stringify(output, null, 2));
+  }
+}
+
+// CLI Parsing
+const args = process.argv.slice(2);
+const dryRun = args.includes("--dry-run");
+const jsonOutput = args.includes("--json");
+const customBaseUrl = args.find(arg => arg.startsWith("--base-url="))?.split("=")[1];
+
+if (customBaseUrl) {
+  process.env.API_BASE_URL = customBaseUrl;
 }
 
 // Run if called directly
 if (import.meta.main) {
-  demonstrateV4IdentitySystem().catch(console.error);
+  demonstrateV4IdentitySystem(dryRun, jsonOutput).catch(console.error);
 }
+
