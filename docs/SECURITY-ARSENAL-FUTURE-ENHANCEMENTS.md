@@ -16,6 +16,7 @@ These features were identified during development but not implemented. They coul
 **Priority:** High
 **Complexity:** Medium
 **Bun Version:** 1.3+
+**Blog Post:** https://bun.com/blog/bun-v1.3#security-scanner-api
 
 ### Overview
 Bun v1.3+ includes a built-in Security Scanner API that allows custom security scanners to be integrated directly into the package manager. This could provide real-time security scanning during `bun install` and `bun add` operations.
@@ -121,7 +122,310 @@ Add a UI panel for managing security scanners:
 
 ---
 
-## 2. 🔗 GitHub Integration
+## 2. 🔐 Bun.secrets Integration for Credential Storage
+
+**Priority:** High
+**Complexity:** Low
+**Bun Version:** 1.3+
+**Blog Post:** https://bun.com/blog/bun-v1.3#bun-secrets-for-encrypted-credential-storage
+
+### Overview
+Bun 1.3 introduces the `Bun.secrets` API for OS-native encrypted credential storage. Security Arsenal could use this for securely storing API keys, tokens, and other sensitive configuration.
+
+### Reference Documentation
+- Uses Keychain on macOS
+- Uses libsecret on Linux
+- Uses Windows Credential Manager on Windows
+- Encrypted at rest, separate from environment variables
+
+### Implementation Ideas
+
+#### A. Secure API Key Storage
+Store security scanner API keys and tokens securely:
+
+```typescript
+// components/SecurityArsenal/utils/credentials.ts
+import { secrets } from 'bun';
+
+export async function storeAPIKey(service: string, key: string) {
+  await secrets.set({
+    service: 'arsenal-security',
+    name: `${service}-api-key`,
+    value: key
+  });
+}
+
+export async function getAPIKey(service: string): Promise<string | null> {
+  return await secrets.get({
+    service: 'arsenal-security',
+    name: `${service}-api-key`
+  });
+}
+
+// Usage
+await storeAPIKey('github', 'ghp_...');
+await storeAPIKey('snyk', 'token...');
+const githubToken = await getAPIKey('github');
+```
+
+#### B. UI for Credential Management
+Add secure settings panel:
+
+```
+┌─────────────────────────────────────────┐
+│ Security Arsenal - Credentials          │
+├─────────────────────────────────────────┤
+│ GitHub Token:     [••••••••] [Change]   │
+│ Snyk API Key:     [••••••••] [Change]   │
+│ Socket.dev Key:   [Not Set]  [Add]      │
+├─────────────────────────────────────────┤
+│ All credentials are encrypted using     │
+│ your OS's native credential storage.    │
+└─────────────────────────────────────────┘
+```
+
+#### C. Replace Environment Variables
+Migrate from `.env` files to secure storage:
+
+```typescript
+// Before (insecure - stored in .env file)
+const apiKey = process.env.GITHUB_TOKEN;
+
+// After (secure - stored in OS credential manager)
+const apiKey = await secrets.get({
+  service: 'arsenal-security',
+  name: 'github-api-key'
+});
+```
+
+### Benefits
+- **Security:** Credentials encrypted at rest
+- **Separation:** Not stored in environment variables or config files
+- **OS Integration:** Uses battle-tested OS credential managers
+- **No Leaks:** Can't accidentally commit credentials to git
+- **Audit Trail:** OS may provide access logs
+
+### Implementation Steps
+1. Create `credentials.ts` utility with `Bun.secrets` wrapper
+2. Add UI for credential management in Settings
+3. Migrate existing API key usage to `Bun.secrets`
+4. Add credential import/export for team sharing (encrypted)
+5. Add tests for credential storage
+6. Update documentation
+
+### Estimated Effort
+- Credentials utility: 0.5 days
+- UI implementation: 1 day
+- Migration: 0.5 days
+- Testing: 0.5 days
+- **Total:** 2-3 days
+
+---
+
+## 3. 🛡️ CSRF Protection with Bun.CSRF
+
+**Priority:** Medium
+**Complexity:** Low
+**Bun Version:** 1.3+
+**Blog Post:** https://bun.com/blog/bun-v1.3#csrf-protection
+
+### Overview
+Bun 1.3 adds `Bun.CSRF` for cross-site request forgery protection. Security Arsenal web interface could use this for protecting sensitive operations.
+
+### Implementation Ideas
+
+#### A. Protect Sensitive Operations
+Add CSRF protection to audit triggers and configuration changes:
+
+```typescript
+// src/server.ts
+import { CSRF } from 'bun';
+
+const secret = await secrets.get({
+  service: 'arsenal-security',
+  name: 'csrf-secret'
+}) || 'your-secret-key';
+
+// Generate token for client
+app.get('/api/csrf-token', (req) => {
+  const token = CSRF.generate({
+    secret,
+    encoding: 'hex',
+    expiresIn: 60 * 60 * 1000 // 1 hour
+  });
+  return { token };
+});
+
+// Verify token on sensitive operations
+app.post('/api/security/audit', async (req) => {
+  const csrfToken = req.headers.get('x-csrf-token');
+
+  if (!CSRF.verify(csrfToken, { secret })) {
+    return new Response('Invalid CSRF token', { status: 403 });
+  }
+
+  // Proceed with audit...
+});
+```
+
+#### B. Client-Side Integration
+Automatically include CSRF tokens in requests:
+
+```typescript
+// components/SecurityArsenal/utils/api.ts
+let csrfToken: string | null = null;
+
+async function fetchCSRFToken() {
+  const response = await fetch('/api/csrf-token');
+  const data = await response.json();
+  csrfToken = data.token;
+}
+
+export async function securePost(url: string, body: any) {
+  if (!csrfToken) await fetchCSRFToken();
+
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrfToken
+    },
+    body: JSON.stringify(body)
+  });
+}
+```
+
+### Benefits
+- **Security:** Prevents CSRF attacks on sensitive operations
+- **Built-in:** No external library needed
+- **Token Expiry:** Automatic expiration support
+- **Multiple Encodings:** Hex, base64, base64url
+
+### Estimated Effort
+- Server implementation: 0.5 days
+- Client integration: 0.5 days
+- Testing: 0.5 days
+- **Total:** 1-2 days
+
+---
+
+## 4. ⚡ Enhanced Crypto Benchmarks
+
+**Priority:** Medium
+**Complexity:** Low
+**Bun Version:** 1.3+
+**Blog Post:** https://bun.com/blog/bun-v1.3#crypto-performance-improvements
+
+### Overview
+Bun 1.3 includes massive crypto performance improvements. The existing Performance Arsenal Crypto tab could be enhanced to showcase all new algorithms and improvements.
+
+### New Algorithms to Benchmark
+
+#### A. Enhanced Algorithms
+Add benchmarks for new/improved algorithms:
+
+```typescript
+// components/PerformanceArsenal/benchmarks/cryptoV13.ts
+export const bunV13CryptoImprovements = [
+  {
+    name: 'DiffieHellman',
+    improvement: '~400×',
+    description: 'Key exchange protocol',
+    before: '41.15 s/iter',
+    after: '103.90 ms/iter'
+  },
+  {
+    name: 'Cipheriv/Decipheriv (AES-256-GCM)',
+    improvement: '~400×',
+    description: 'Symmetric encryption',
+    before: '912.65 µs/iter',
+    after: '2.25 µs/iter'
+  },
+  {
+    name: 'scrypt',
+    improvement: '~6×',
+    description: 'Password-based key derivation',
+    before: '224.92 ms/iter',
+    after: '36.94 ms/iter'
+  },
+  {
+    name: 'X25519',
+    improvement: 'NEW',
+    description: 'Elliptic curve key exchange',
+    algorithm: 'x25519'
+  },
+  {
+    name: 'HKDF',
+    improvement: 'NEW',
+    description: 'HMAC-based key derivation',
+    functions: ['crypto.hkdf()', 'crypto.hkdfSync()']
+  },
+  {
+    name: 'Prime Generation',
+    improvement: 'NEW',
+    description: 'Generate and check prime numbers',
+    functions: ['crypto.generatePrime()', 'crypto.checkPrime()']
+  }
+];
+```
+
+#### B. Interactive Benchmarks
+Add runnable benchmarks for each algorithm:
+
+```typescript
+// Test X25519 key exchange
+const { publicKey, privateKey } = crypto.generateKeyPairSync('x25519');
+const sharedSecret = crypto.diffieHellman({ privateKey, publicKey });
+
+// Test HKDF key derivation
+const derivedKey = crypto.hkdfSync('sha256',
+  Buffer.from('secret'),
+  Buffer.from('salt'),
+  Buffer.from('info'),
+  32
+);
+
+// Test prime generation
+const prime = crypto.generatePrimeSync(2048);
+const isPrime = crypto.checkPrimeSync(prime);
+```
+
+#### C. Comparison Charts
+Visual comparison of Bun 1.2 vs 1.3 vs Node.js:
+
+```
+┌─────────────────────────────────────────┐
+│ DiffieHellman Performance               │
+├─────────────────────────────────────────┤
+│ Node.js 20   ████████████████ 45s      │
+│ Bun 1.2      ████████████████ 41s      │
+│ Bun 1.3      █ 104ms (400× faster!)    │
+└─────────────────────────────────────────┘
+```
+
+### Benefits
+- **Educational:** Showcases Bun's crypto improvements
+- **Interactive:** Users can run benchmarks in browser
+- **Comparative:** Shows real performance gains
+- **Complete:** Covers all new v1.3 crypto features
+
+### Implementation Steps
+1. Update `cryptoImprovements` data with v1.3 algorithms
+2. Add benchmark implementations for new algorithms
+3. Update Crypto tab UI with new benchmarks
+4. Add comparison charts
+5. Update documentation
+
+### Estimated Effort
+- Data updates: 0.5 days
+- Benchmark implementations: 1 day
+- UI updates: 0.5 days
+- Testing: 0.5 days
+- **Total:** 2-3 days
+
+---
+
+## 5. 🔗 GitHub Integration
 
 **Priority:** Medium
 **Complexity:** Medium

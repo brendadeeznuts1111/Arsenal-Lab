@@ -293,6 +293,7 @@ code node_modules/query-string/index.js
 
 # Step 3: Commit the patch
 bun patch --commit query-string@6.14.1
+# OR: bun patch-commit query-string@6.14.1  # pnpm compatibility
 ```
 
 **What Happened:**

@@ -293,6 +293,8 @@ bun patch [package]@[version]
 ### Step 3: Commit & Deploy
 ```bash
 bun patch --commit [package]@[version]
+# OR using pnpm compatibility alias:
+bun patch-commit [package]@[version]
 # Generated: patches/[package]+[version].patch
 ```
 

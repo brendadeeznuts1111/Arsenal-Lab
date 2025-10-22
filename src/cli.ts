@@ -98,6 +98,9 @@ async function handlePMCommand(subCommand: string, pmArgs: string[]) {
     case 'patch':
       await handlePMPatch(pmArgs);
       break;
+    case 'patch-commit':  // pnpm compatibility alias
+      await handlePMPatch(['--commit', ...pmArgs]);
+      break;
     default:
       console.log(`
 📦 Bun PM - Package Manager Utilities
@@ -124,6 +127,7 @@ Available commands:
   audit             Scan for vulnerabilities (--severity=high, --json)
   install           Install packages (--analyze to scan for missing imports)
   patch             Persistently patch node_modules packages (--commit to save)
+  patch-commit      Alias for 'patch --commit' (pnpm compatibility)
 
 Examples:
   bun pm pack
@@ -139,6 +143,7 @@ Examples:
   bun pm install --analyze
   bun pm patch react
   bun pm patch --commit react
+  bun pm patch-commit react  # pnpm compatibility
 `);
       break;
   }
@@ -734,6 +739,13 @@ if (command === '--help' || command === '-h') {
   trust             Trust dependencies and run scripts
   version           Manage package version
   pkg               Manage package.json data
+  outdated          Show outdated packages
+  update            Update packages (-i for interactive, --recursive for workspaces)
+  info              View package metadata
+  audit             Scan for vulnerabilities (--severity=high, --json)
+  install           Install packages (--analyze to scan for missing imports)
+  patch             Persistently patch node_modules packages (--commit to save)
+  patch-commit      Alias for 'patch --commit' (pnpm compatibility)
 
 📊 Benchmark Categories:
   database           SQLite & database performance

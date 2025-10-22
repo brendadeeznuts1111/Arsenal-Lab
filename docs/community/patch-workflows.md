@@ -35,6 +35,9 @@ bun patch --commit react
 
 # Custom patches directory
 bun patch --commit react --patches-dir=mypatches
+
+# pnpm compatibility alias
+bun patch-commit react
 ```
 
 ## 📋 Detailed Workflow

@@ -2,11 +2,21 @@
 
 Complete guide for setting up and managing the Arsenal Lab Telegram bot, channel, and supergroup.
 
+## ⚠️ **SECURITY NOTICE**
+
+**NEVER commit the Telegram bot token to version control!**
+
+The bot token is a sensitive credential that grants full access to your bot. It must be:
+- Stored in `.env` file (which is gitignored)
+- Or stored using Bun.secrets API
+- Never included in documentation or code commits
+- Treated like a password or API key
+
 ## 🤖 Bot Information
 
 - **Bot Username**: @arsenallab_bot
 - **Bot URL**: https://t.me/arsenallab_bot
-- **API Token**: Stored securely (see Security section below)
+- **API Token**: Stored securely in `.env` (see Security section below)
 
 ## 📡 Telegram Ecosystem
 
@@ -48,7 +58,12 @@ Read-only channel for official announcements and updates.
 
 The bot token is a sensitive credential that must be kept secure.
 
-**Token**: `8346580654:AAFZxUBu2OhaBoVjjfXlJLg4npFAasBZCco`
+**Your Token**: Get it from @BotFather when you create your bot. It will look like:
+```
+1234567890:ABCdefGHIjklMNOpqrsTUVwxyz-1234567890
+```
+
+**NEVER share this token publicly or commit it to git!**
 
 ### Using Bun.secrets API
 
@@ -60,7 +75,7 @@ bun run manage-secrets.ts
 # Select: Add/Update Secret
 # Service: arsenal-lab
 # Name: TELEGRAM_BOT_TOKEN
-# Value: 8346580654:AAFZxUBu2OhaBoVjjfXlJLg4npFAasBZCco
+# Value: <paste your actual bot token here>
 ```
 
 ### Environment Variables (Fallback)
@@ -69,7 +84,7 @@ For development and CI/CD, you can use environment variables:
 
 ```bash
 # .env (gitignored)
-TELEGRAM_BOT_TOKEN=8346580654:AAFZxUBu2OhaBoVjjfXlJLg4npFAasBZCco
+TELEGRAM_BOT_TOKEN=your_actual_bot_token_from_botfather
 TELEGRAM_CHANNEL_ID=@arsenallab_channel
 TELEGRAM_GROUP_ID=@arsenallab
 ```

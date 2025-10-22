@@ -300,7 +300,7 @@ const PatchGuide = ({ mode }: { mode: string }) => (
   <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg text-xs">
     {mode === 'prepare' ? (
       <div className="space-y-2">
-        <div className="font-semibold text-purple-700 dark:text-purple-300">🎯 Prepare Package for Patching</div>
+        <div className="font-semibold text-purple-700 dark:text-purple-300">🎯 Step 1: Prepare Package for Patching</div>
         <div className="text-purple-600 dark:text-purple-400 space-y-1">
           <div>• Creates fresh copy in node_modules/ (no cache links)</div>
           <div>• Makes it safe to edit packages directly</div>
@@ -309,13 +309,22 @@ const PatchGuide = ({ mode }: { mode: string }) => (
         <div className="text-gray-600 dark:text-gray-400 mt-2">
           <strong>⚠️ Important:</strong> Only edit node_modules/ after running this command!
         </div>
+        <div className="text-blue-600 dark:text-blue-400 mt-2">
+          <strong>🧪 Step 2: Test Your Changes Locally</strong>
+          <div className="text-xs mt-1 space-y-1">
+            <div>• Edit files safely in node_modules/</div>
+            <div>• Run your app to test the changes</div>
+            <div>• Verify functionality works as expected</div>
+            <div>• Check for any side effects or breaking changes</div>
+          </div>
+        </div>
         <div className="text-green-600 dark:text-green-400 mt-1">
-          <strong>Next:</strong> Edit your package, then run --commit
+          <strong>📝 Step 3: Ready for Commit</strong> - When testing is complete, commit your patch
         </div>
       </div>
     ) : (
       <div className="space-y-2">
-        <div className="font-semibold text-purple-700 dark:text-purple-300">📝 Commit Your Patch</div>
+        <div className="font-semibold text-purple-700 dark:text-purple-300">📝 Step 3: Commit Your Patch</div>
         <div className="text-purple-600 dark:text-purple-400 space-y-1">
           <div>• Generates .patch file in patches/ directory</div>
           <div>• Updates package.json with "patchedDependencies"</div>
@@ -324,6 +333,15 @@ const PatchGuide = ({ mode }: { mode: string }) => (
         </div>
         <div className="text-green-600 dark:text-green-400 mt-2">
           <strong>Benefits:</strong> Persistent, maintainable, shareable patches
+        </div>
+        <div className="text-blue-600 dark:text-blue-400 mt-2">
+          <strong>🔄 How it works:</strong>
+          <div className="text-xs mt-1 space-y-1">
+            <div>• Creates diff between original and modified package</div>
+            <div>• Stores patch file for version control</div>
+            <div>• Updates package.json to track patched dependencies</div>
+            <div>• Future installs automatically apply the patch</div>
+          </div>
         </div>
       </div>
     )}
