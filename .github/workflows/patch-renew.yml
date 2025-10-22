@@ -1,0 +1,20 @@
+name: Patch-Renew Bot
+on:
+  schedule:
+    - cron: '0 9 * * 1'   # every Monday 09:00 UTC
+  workflow_dispatch:      # manual trigger
+jobs:
+  renew:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PATCH_RENEW_TOKEN }}
+      - uses: oven-sh/setup-bun@v1
+      - name: Check upstream + open PR
+        run: |
+          curl -sSL https://raw.githubusercontent.com/brendadeeznuts1111/Arsenal-Lab/main/scripts/auto-patch-sync.sh | bash
+          # script opens PR if upstream ≠ current

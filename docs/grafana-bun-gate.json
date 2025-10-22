@@ -1,0 +1,49 @@
+{
+  "dashboard": {
+    "title": "Bun System Gate - Governance Dashboard",
+    "tags": ["bun", "governance", "security", "patches"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "Invariant Violations",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(invariant_violations_total[5m])",
+            "legendFormat": "Violations/min"
+          }
+        ]
+      },
+      {
+        "title": "Canary Rollout Status",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "canary_rollout_percentage",
+            "legendFormat": "{{package}}"
+          }
+        ]
+      },
+      {
+        "title": "Patch Signature Status",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "patch_signature_status",
+            "legendFormat": "{{patch}}"
+          }
+        ]
+      },
+      {
+        "title": "Tension Alerts",
+        "type": "alertlist",
+        "alertName": "Bun Gate Tension"
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "30s"
+  }
+}

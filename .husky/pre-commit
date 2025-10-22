@@ -1,56 +1,8 @@
-#!/usr/bin/env bun
-import { $ } from "bun";
-
-async function runPreCommit() {
-  try {
-    console.log("🔍 Running pre-commit patch governance checks...");
-
-    // Get changed files
-    const changed = await $`git diff --cached --name-only`.text();
-    const changedLines = changed.trim().split('\n').filter(line => line.length > 0);
-
-    // Check for node_modules changes (indicates patch creation)
-    if (changedLines.some(line => line.includes("node_modules"))) {
-      console.log("🔍 node_modules change detected – validating patches...");
-
-      // Run invariant validation
-      await $`bun run postinstall`;
-
-      // Auto-commit any newly generated patches
-      const patchFiles = await $`find patches -name "*.patch" -newer .git/COMMIT_EDITMSG 2>/dev/null || true`.text();
-      if (patchFiles.trim()) {
-        console.log("📝 Auto-committing newly generated patches...");
-        await $`git add patches/`;
-      }
-    }
-
-    // Check for patch file changes
-    if (changedLines.some(line => line.includes("patches/"))) {
-      console.log("🔍 Patch files changed – running governance validation...");
-
-      // Run full patch audit
-      await $`bun run patch:audit`;
-
-      // Run tension analysis on changed patches
-      for (const line of changedLines) {
-        if (line.endsWith('.patch')) {
-          const pkg = line.replace('patches/', '').replace('.patch', '');
-          console.log(`🔍 Analyzing tension for ${pkg}...`);
-          try {
-            await $`bun run scripts/monitor-amber-edges.ts ${line} ${pkg}`;
-          } catch (error) {
-            console.log(`⚠️  Tension analysis warning (non-blocking): ${error.message}`);
-          }
-        }
-      }
-    }
-
-    console.log("✅ Pre-commit checks passed!");
-
-  } catch (error) {
-    console.error("❌ Pre-commit checks failed:", error.message);
-    process.exit(1);
-  }
-}
-
-if (import.meta.main) await runPreCommit();
+#!/usr/bin/env bash
+# Bun Gate – pre-commit gatekeeper
+set -euo pipefail
+echo "🛡️  Bun Gate pre-commit check…"
+bun run invariant:validate
+bun run gate:sign           # signs any *new* patches
+git add *.sig               # stage signatures
+echo "✅ Gate passed – proceeding with commit"
