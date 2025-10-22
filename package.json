@@ -11,6 +11,10 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
+    "postinstall": "bun scripts/invariant-testing.ts",
+    "patch:audit": "bun scripts/validate-patch.ts --audit-all",
+    "patch:sync": "bun scripts/auto-patch-sync.ts",
+    "patch:create": "bun scripts/create-patch.ts",
     "dev": "bun --hot src/server.ts",
     "build": "bun build src/lab.ts --outdir dist --target browser && bun build src/cli.ts --outdir dist --target bun",
     "start": "bun run dist/index.js",
@@ -78,6 +82,10 @@
     "backend:deploy": "cd backend && bun run deploy",
     "fullstack:dev": "concurrently \"bun run dev\" \"bun run backend:dev\"",
     "fullstack:build": "bun run build && bun run backend:build"
+  },
+  "patchedDependencies": {
+    "react@18.2.0": "patches/react@18.2.0.patch",
+    "typescript@5.3.0": "patches/typescript@5.3.0.patch"
   },
   "dependencies": {
     "clsx": "^2.1.1",

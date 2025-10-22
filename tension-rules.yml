@@ -1,0 +1,34 @@
+patch_monitoring:
+  rules:
+    - name: crypto_backdoor_detection
+      condition: "patch_content.includes('rapidhash') && package_category == 'security'"
+      severity: BLOCK
+      actions: ["create_github_issue", "notify_security_channel", "block_ci_pipeline"]
+    - name: performance_optimization_tradeoff
+      condition: "patch_content.includes('cache') && patch_size > 1000"
+      severity: AMBER
+      actions: ["create_monitor_ticket", "schedule_code_review"]
+    - name: experimental_feature_flag
+      condition: "patch_content.includes('experimental') || patch_content.includes('unstable')"
+      severity: YELLOW
+      actions: ["log_warning", "require_approval"]
+    - name: security_boundary_violation
+      condition: "patch_content.includes('process.env') && package_category == 'security'"
+      severity: BLOCK
+      actions: ["create_security_incident", "notify_compliance_team", "block_deployment"]
+    - name: large_patch_complexity
+      condition: "patch_size > 5000"
+      severity: AMBER
+      actions: ["schedule_architectural_review", "create_performance_ticket"]
+    - name: deprecated_api_usage
+      condition: "patch_content.includes('deprecated') || patch_content.includes('legacy')"
+      severity: YELLOW
+      actions: ["log_deprecation_warning", "schedule_upgrade_task"]
+    - name: cross_layer_dependency
+      condition: "patch_content.includes('import') && patch_content.includes('../')"
+      severity: AMBER
+      actions: ["create_architecture_ticket", "require_domain_expert_review"]
+    - name: unsafe_type_assertion
+      condition: "patch_content.includes('as any') || patch_content.includes('as unknown')"
+      severity: YELLOW
+      actions: ["create_typescript_review", "log_type_safety_concern"]
