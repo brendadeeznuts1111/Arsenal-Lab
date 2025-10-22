@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  arsenal-lab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3655:3655"
+    environment:
+      - NODE_ENV=production
+      - PORT=3655
+      - ARSENAL_API_URL=https://arsenal-lab.yourcompany.com
+      - GOOGLE_ANALYTICS_ID=G-YOUR-GA-ID
+      - GITHUB_USERNAME=your-org
+      - GITHUB_REPO=arsenal-lab
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3655/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: PostgreSQL for advanced analytics
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=arsenal_lab
+      - POSTGRES_USER=arsenal
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change-this-in-production}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    ports:
+      - "5432:5432"
+    profiles:
+      - full
+
+  # Optional: Redis for caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    profiles:
+      - full
+
+  # Optional: Prometheus monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    profiles:
+      - monitoring
+
+  # Optional: Grafana dashboards
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docs/grafana-bun-gate.json:/etc/grafana/provisioning/dashboards/bun-gate.json
+    depends_on:
+      - prometheus
+    profiles:
+      - monitoring
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  default:
+    name: arsenal-lab-network
