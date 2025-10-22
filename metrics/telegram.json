@@ -1,0 +1,68 @@
+{
+  "ts": "2025-10-22T06:00:00.000Z",
+  "global": {
+    "msgIn": 24,
+    "msgOut": 18,
+    "githubHits": 156,
+    "githubRateLimited": 3,
+    "githubAvgLatencies": {
+      "/repos/brendadeeznuts1111/Arsenal-Lab/contents/README.md": 245,
+      "/repos/brendadeeznuts1111/Arsenal-Lab/actions/workflows": 180,
+      "/repos/brendadeeznuts1111/Arsenal-Lab/issues": 320
+    }
+  },
+  "topChats": [
+    {
+      "chatId": 8013171035,
+      "title": "Billabong billy",
+      "totalMessages": 4,
+      "lastActivity": "2025-10-22T05:33:07.924Z"
+    },
+    {
+      "chatId": 9876543210,
+      "title": "Arsenal Dev Team",
+      "totalMessages": 12,
+      "lastActivity": "2025-10-22T05:45:22.456Z"
+    },
+    {
+      "chatId": 1122334455,
+      "title": "Bug Reports",
+      "totalMessages": 8,
+      "lastActivity": "2025-10-22T05:30:15.789Z"
+    }
+  ],
+  "chats": [
+    {
+      "chatId": 8013171035,
+      "title": "Billabong billy",
+      "msgIn": 2,
+      "msgOut": 2,
+      "commands": 2,
+      "lastActivity": "2025-10-22T05:33:07.924Z"
+    },
+    {
+      "chatId": 9876543210,
+      "title": "Arsenal Dev Team",
+      "msgIn": 10,
+      "msgOut": 8,
+      "commands": 5,
+      "lastActivity": "2025-10-22T05:45:22.456Z"
+    },
+    {
+      "chatId": 1122334455,
+      "title": "Bug Reports",
+      "msgIn": 6,
+      "msgOut": 4,
+      "commands": 1,
+      "lastActivity": "2025-10-22T05:30:15.789Z"
+    },
+    {
+      "chatId": 5566778899,
+      "title": "Feature Requests",
+      "msgIn": 6,
+      "msgOut": 4,
+      "commands": 3,
+      "lastActivity": "2025-10-22T05:15:30.123Z"
+    }
+  ]
+}
