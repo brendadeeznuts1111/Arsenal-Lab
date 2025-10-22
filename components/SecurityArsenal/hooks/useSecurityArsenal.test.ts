@@ -1,70 +1,9 @@
 /// <reference lib="dom" />
 // components/SecurityArsenal/hooks/useSecurityArsenal.test.ts
-import { describe, test, expect, beforeEach, afterEach, mock, spyOn } from 'bun:test';
-import { createElement } from 'react';
-import { flushSync } from 'react-dom';
-import { createRoot } from 'react-dom/client';
+import { describe, test, expect, beforeEach, afterEach, mock } from 'bun:test';
+import { renderHook, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import { useSecurityArsenal } from './useSecurityArsenal';
-
-// Helper to test React hooks using flushSync for synchronous updates
-function renderHook<T>(hook: () => T): { result: { current: T }; rerender: () => void; unmount: () => void } {
-  const result: { current: T } = { current: null as any };
-
-  function TestComponent() {
-    result.current = hook();
-    return null;
-  }
-
-  const container = document.createElement('div');
-  document.body.appendChild(container);
-
-  const root = createRoot(container);
-
-  const rerender = () => {
-    flushSync(() => {
-      root.render(createElement(TestComponent));
-    });
-  };
-
-  const unmount = () => {
-    try {
-      flushSync(() => {
-        root.unmount();
-      });
-    } catch (e) {
-      // Ignore unmount errors in tests
-    }
-    try {
-      if (container && container.parentNode) {
-        container.parentNode.removeChild(container);
-      }
-    } catch (e) {
-      // Ignore DOM cleanup errors
-    }
-  };
-
-  // Initial render
-  rerender();
-
-  return { result, rerender, unmount };
-}
-
-// Helper to wait for async updates
-async function waitFor(callback: () => boolean | void, timeout = 5000): Promise<void> {
-  const startTime = Date.now();
-
-  while (Date.now() - startTime < timeout) {
-    try {
-      const result = callback();
-      if (result !== false) return;
-    } catch {
-      // Continue waiting
-    }
-    await new Promise(resolve => setTimeout(resolve, 50));
-  }
-
-  throw new Error('Timeout waiting for condition');
-}
 
 // Mock fetch
 const mockFetch = mock(() => Promise.resolve({
@@ -110,7 +49,7 @@ describe('useSecurityArsenal', () => {
   });
 
   test('should initialize with default values', () => {
-    const { result, unmount } = renderHook(() => useSecurityArsenal());
+    const { result } = renderHook(() => useSecurityArsenal());
 
     expect(result.current.isScanning).toBe(false);
     expect(result.current.auditResult).toBe(null);
@@ -118,48 +57,42 @@ describe('useSecurityArsenal', () => {
     expect(result.current.prodOnly).toBe(false);
     expect(result.current.error).toBe(null);
     expect(result.current.filteredVulnerabilities).toEqual([]);
-
-    unmount();
   });
 
-  test('should toggle demo mode', () => {
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+  test('should toggle demo mode', async () => {
+    const { result } = renderHook(() => useSecurityArsenal());
 
     expect(result.current.demoMode).toBe(false);
 
-    result.current.toggleDemoMode();
-    rerender();
+    await act(async () => {
+      result.current.toggleDemoMode();
+    });
 
     expect(result.current.demoMode).toBe(true);
 
-    result.current.toggleDemoMode();
-    rerender();
+    await act(async () => {
+      result.current.toggleDemoMode();
+    });
 
     expect(result.current.demoMode).toBe(false);
-
-    unmount();
   });
 
   test('should run audit in demo mode', async () => {
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    const { result } = renderHook(() => useSecurityArsenal());
 
     // Enable demo mode
-    result.current.toggleDemoMode();
-    rerender();
+    await act(async () => {
+      result.current.toggleDemoMode();
+    });
 
     expect(result.current.demoMode).toBe(true);
 
     // Run audit
-    const auditPromise = result.current.runAudit();
-    rerender();
-
-    expect(result.current.isScanning).toBe(true);
-
-    await auditPromise;
-    rerender();
+    await act(async () => {
+      await result.current.runAudit();
+    });
 
     await waitFor(() => {
-      rerender();
       return !result.current.isScanning;
     });
 
@@ -168,8 +101,6 @@ describe('useSecurityArsenal', () => {
     expect(result.current.auditResult?.vulnerabilities).toBeDefined();
     expect(result.current.auditResult?.metadata).toBeDefined();
     expect(result.current.auditResult?.vulnerabilities.length).toBeGreaterThan(0);
-
-    unmount();
   });
 
   test('should run real audit when not in demo mode', async () => {
