@@ -1,7 +1,8 @@
 // backend/src/middleware/production.middleware.ts
 // Production middleware for Arsenal Lab Backend
 
-import { metrics, logPatterns } from '../monitoring/production-monitor.js';
+import { metrics } from '../monitoring/production-monitor.js';
+import { logPatterns } from '../utils/production-logger.js';
 
 export class ProductionMiddleware {
   static requestLogger() {

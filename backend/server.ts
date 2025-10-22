@@ -3,10 +3,10 @@ import { Database } from 'bun:sqlite';
 import { Hono } from 'hono';
 
 // Production imports
-import { productionMonitor } from './src/monitoring/production-monitor.js';
-import { logger, logPatterns } from './src/utils/production-logger.js';
+import { getConfigSummary, productionConfig, validateProductionConfig } from './src/config/production.config.js';
 import { productionMiddleware } from './src/middleware/production.middleware.js';
-import { productionConfig, validateProductionConfig, getConfigSummary } from './src/config/production.config.js';
+import { productionMonitor } from './src/monitoring/production-monitor.js';
+import { logPatterns } from './src/utils/production-logger.js';
 
 // Types
 interface BuildConfiguration {
