@@ -1,0 +1,3 @@
+[submodule "wiki-repo"]
+	path = wiki-repo
+	url = https://github.com/brendadeeznuts1111/Arsenal-Lab.wiki.git
