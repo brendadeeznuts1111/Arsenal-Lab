@@ -1,0 +1,7 @@
+# Bun configuration for Arsenal Lab
+[test]
+# Preload happy-dom to make browser APIs available in tests
+preload = ["./test/setup.ts"]
+
+# Enable coverage reporting
+coverage = true

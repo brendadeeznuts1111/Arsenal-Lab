@@ -49,7 +49,7 @@ export function getAuditHistory(): AuditHistoryItem[] {
 
 export function getLatestAuditResult(): AuditHistoryItem | null {
   const history = getAuditHistory();
-  return history.length > 0 ? history[0] : null;
+  return history.length > 0 && history[0] !== undefined ? history[0] : null;
 }
 
 export function clearAuditHistory(): void {
@@ -78,14 +78,18 @@ export function getAuditStats() {
   // Calculate critical vulnerability trend (last 5 scans)
   const recentScans = history.slice(0, 5);
   const criticalCounts = recentScans.map(item => item.result.metadata.critical);
-  const criticalTrend = criticalCounts.length > 1
-    ? ((criticalCounts[0] - criticalCounts[criticalCounts.length - 1]) / criticalCounts.length)
+  const firstCritical = criticalCounts[0];
+  const lastCritical = criticalCounts[criticalCounts.length - 1];
+  const criticalTrend = criticalCounts.length > 1 && firstCritical !== undefined && lastCritical !== undefined
+    ? ((firstCritical - lastCritical) / criticalCounts.length)
     : 0;
+
+  const firstHistoryItem = history[0];
 
   return {
     totalScans: history.length,
     avgVulnerabilities: Math.round(avgVulnerabilities * 10) / 10,
     criticalTrend: Math.round(criticalTrend * 100) / 100,
-    lastScan: history[0].result.timestamp
+    lastScan: firstHistoryItem !== undefined ? firstHistoryItem.result.timestamp : null
   };
 }

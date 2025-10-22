@@ -1171,12 +1171,30 @@ bun run arsenal:ci --output-dir ./results --security
 
 The interactive Security Arsenal component provides:
 
-- Real-time vulnerability scanning
-- Severity-based filtering and sorting
-- Dependency graph visualization
-- Automated fix suggestions
-- Export to Prometheus metrics format
-- Historical trend tracking
+- **Real-time vulnerability scanning** - Live audit execution with progress indicators
+- **Demo Mode** - Sample vulnerability data for testing and demonstrations
+- **Severity-based filtering** - Filter by low/moderate/high/critical severity levels
+- **Historical tracking** - Automatic storage of up to 50 scan results
+- **Statistics dashboard** - Track trends, averages, and improvement over time
+- **Export capabilities**:
+  - JSON format for detailed analysis
+  - Prometheus metrics format (`.prom`) for monitoring integration
+- **Responsive UI** - Works on desktop, tablet, and mobile with dark mode support
+
+**Demo Mode:**
+Enable demo mode to explore the Security Arsenal without a real project:
+```bash
+# In browser: Add ?demo=true to URL
+http://localhost:3655?demo=true
+
+# Or toggle demo mode in the UI checkbox
+```
+
+**Features:**
+- 📊 **Stats Panel** - View total scans, average vulnerabilities, and critical vulnerability trends
+- 📜 **History Panel** - Browse and reload up to 10 recent scan results
+- 🔍 **Live Filtering** - Instantly filter vulnerabilities by severity level
+- 🎭 **Demo Mode** - Test with realistic sample data without bun.lock file
 
 Access via the Security Arsenal tab in the web interface at `http://localhost:3655`.
 
@@ -1185,8 +1203,41 @@ Access via the Security Arsenal tab in the web interface at `http://localhost:36
 1. **Regular Scanning**: Run `bun audit` regularly, not just in CI/CD
 2. **Set Baselines**: Establish acceptable vulnerability thresholds
 3. **Prioritize Fixes**: Address high/critical vulnerabilities first
-4. **Track Progress**: Export metrics to monitor security improvements
+4. **Track Progress**: Export metrics to monitor security improvements over time
 5. **Automate Updates**: Use `bun update` with caution, test thoroughly
+6. **Review History**: Check scan history to identify persistent vulnerabilities
+7. **Monitor Trends**: Use stats panel to track improvement or degradation
+
+### Historical Tracking & Analytics
+
+The Security Arsenal automatically tracks your scan history (up to 50 scans) in browser localStorage:
+
+**Statistics Tracked:**
+- Total number of scans performed
+- Average vulnerabilities per scan
+- Critical vulnerability trend (improving/degrading)
+- Last scan timestamp
+
+**History Features:**
+- View past 10 scans with summary metrics
+- Click any historical scan to reload and review
+- Clear all history with one click
+- Automatically persists across browser sessions
+
+**Example Workflow:**
+```bash
+# Week 1: Initial scan
+bun run dev → Click Security tab → Run audit
+# Result: 15 vulnerabilities (3 critical, 5 high)
+
+# Week 2: After fixes
+bun run dev → Click Security tab → Run audit
+# Result: 8 vulnerabilities (1 critical, 2 high)
+
+# View improvement in Stats Panel:
+# Critical Trend: -2.0 (improvement!)
+# Avg Vulnerabilities: 11.5
+```
 
 ### Security Commands Reference
 

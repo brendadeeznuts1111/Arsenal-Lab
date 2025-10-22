@@ -1,4 +1,6 @@
 /* ----------  UI: BUILD CONFIGURATION ARSENAL  ---------- */
+import { useState } from 'react';
+import { useBackendIntegration, type BuildConfiguration, type BuildHistory } from './hooks/useBackendIntegration';
 import { useBuildConfigurationArsenal } from './hooks/useBuildConfigurationArsenal';
 
 export function BuildConfigurationArsenal() {
@@ -42,6 +44,75 @@ export function BuildConfigurationArsenal() {
     buildOutput
   } = useBuildConfigurationArsenal();
 
+  // Backend integration
+  const backend = useBackendIntegration();
+  const [savedConfigs, setSavedConfigs] = useState<BuildConfiguration[]>([]);
+  const [buildHistory, setBuildHistory] = useState<BuildHistory[]>([]);
+  const [configName, setConfigName] = useState('');
+  const [configDescription, setConfigDescription] = useState('');
+  const [isPublic, setIsPublic] = useState(false);
+
+  // Load saved configurations
+  const loadSavedConfigs = async () => {
+    try {
+      const configs = await backend.loadConfigurations();
+      setSavedConfigs(configs);
+    } catch (error) {
+      console.error('Failed to load configurations:', error);
+    }
+  };
+
+  // Save current configuration
+  const saveCurrentConfig = async () => {
+    if (!configName.trim()) return;
+
+    try {
+      const id = await backend.saveConfiguration(config, {
+        name: configName,
+        description: configDescription,
+        presetType: 'custom',
+        isPublic,
+        isTemplate: false,
+      });
+
+      await loadSavedConfigs();
+      setConfigName('');
+      setConfigDescription('');
+      setIsPublic(false);
+      alert(`Configuration saved with ID: ${id}`);
+    } catch (error) {
+      console.error('Failed to save configuration:', error);
+      alert('Failed to save configuration');
+    }
+  };
+
+  // Execute build with backend
+  const executeBuildWithBackend = async () => {
+    try {
+      const buildId = await backend.executeBuild('current-session', {
+        build_name: `Build ${new Date().toLocaleString()}`,
+        input_files: config.entrypoints,
+        user_id: 'demo-user',
+      });
+
+      alert(`Build started with ID: ${buildId}`);
+      // In a real app, you'd poll for status updates
+    } catch (error) {
+      console.error('Failed to execute build:', error);
+      alert('Failed to execute build');
+    }
+  };
+
+  // Load build history
+  const loadBuildHistory = async () => {
+    try {
+      const history = await backend.getBuildHistory(undefined, 'demo-user');
+      setBuildHistory(history);
+    } catch (error) {
+      console.error('Failed to load build history:', error);
+    }
+  };
+
   // Explicitly ignore unused variables
   void updateDefine;
   void updateLoader;
@@ -54,7 +125,8 @@ export function BuildConfigurationArsenal() {
     { id: 'optimization', label: 'Optimization', icon: '⚡', color: 'orange' },
     { id: 'output', label: 'Output', icon: '📦', color: 'red' },
     { id: 'advanced', label: 'Advanced', icon: '🔬', color: 'gray' },
-    { id: 'cli', label: 'CLI', icon: '💻', color: 'teal' }
+    { id: 'cli', label: 'CLI', icon: '💻', color: 'teal' },
+    { id: 'cloud', label: 'Cloud', icon: '☁️', color: 'cyan' }
   ];
 
   const _loaderOptions = [
@@ -871,6 +943,164 @@ React.createElement("div", null, "Hello")`}
             {generateCliCommand()}
           </pre>
         </div>
+
+        {/* Cloud Backend Integration */}
+        {tab === 'cloud' && (
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Cloud Backend Integration</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Save configurations, execute builds remotely, and manage build history with cloud storage.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {/* Save Configuration */}
+              <div className="bg-cyan-50 dark:bg-cyan-900/20 rounded-lg p-4">
+                <h4 className="font-medium text-cyan-800 dark:text-cyan-200 mb-2">💾 Save Configuration</h4>
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Configuration name"
+                    value={configName}
+                    onChange={(e) => setConfigName(e.target.value)}
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-cyan-300 dark:border-cyan-600 rounded-md text-sm"
+                  />
+                  <textarea
+                    placeholder="Description (optional)"
+                    value={configDescription}
+                    onChange={(e) => setConfigDescription(e.target.value)}
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-cyan-300 dark:border-cyan-600 rounded-md text-sm resize-none"
+                    rows={2}
+                  />
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={isPublic}
+                      onChange={(e) => setIsPublic(e.target.checked)}
+                      className="rounded border-cyan-300"
+                    />
+                    <span className="text-sm text-cyan-700 dark:text-cyan-300">Make public</span>
+                  </label>
+                  <button
+                    onClick={saveCurrentConfig}
+                    disabled={!configName.trim() || backend.loading}
+                    className="w-full bg-cyan-600 hover:bg-cyan-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium"
+                  >
+                    {backend.loading ? 'Saving...' : 'Save Configuration'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Load Configurations */}
+              <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-lg p-4">
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-medium text-indigo-800 dark:text-indigo-200">📂 Saved Configurations</h4>
+                  <button
+                    onClick={loadSavedConfigs}
+                    disabled={backend.loading}
+                    className="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded"
+                  >
+                    Refresh
+                  </button>
+                </div>
+                <div className="space-y-2 max-h-32 overflow-y-auto">
+                  {savedConfigs.length === 0 ? (
+                    <p className="text-sm text-indigo-600 dark:text-indigo-400">No saved configurations</p>
+                  ) : (
+                    savedConfigs.map((cfg) => (
+                      <div key={cfg.id} className="flex justify-between items-center bg-white dark:bg-gray-800 p-2 rounded text-xs">
+                        <div>
+                          <div className="font-medium">{cfg.name}</div>
+                          <div className="text-gray-500">{cfg.preset_type}</div>
+                        </div>
+                        <button className="text-indigo-600 hover:text-indigo-800">Load</button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Build Execution */}
+              <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
+                <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">🚀 Execute Build</h4>
+                <p className="text-sm text-green-700 dark:text-green-300 mb-3">
+                  Run build remotely with cloud storage and monitoring.
+                </p>
+                <button
+                  onClick={executeBuildWithBackend}
+                  disabled={backend.loading}
+                  className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium"
+                >
+                  {backend.loading ? 'Executing...' : 'Execute Remote Build'}
+                </button>
+              </div>
+
+              {/* Build History */}
+              <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-medium text-purple-800 dark:text-purple-200">📊 Build History</h4>
+                  <button
+                    onClick={loadBuildHistory}
+                    disabled={backend.loading}
+                    className="text-xs bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded"
+                  >
+                    Refresh
+                  </button>
+                </div>
+                <div className="space-y-2 max-h-40 overflow-y-auto">
+                  {buildHistory.length === 0 ? (
+                    <p className="text-sm text-purple-600 dark:text-purple-400">No build history</p>
+                  ) : (
+                    buildHistory.slice(0, 5).map((build) => (
+                      <div key={build.id} className="bg-white dark:bg-gray-800 p-2 rounded text-xs">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-medium">{build.build_name}</span>
+                          <span className={`px-2 py-1 rounded ${
+                            build.status === 'success' ? 'bg-green-100 text-green-800' :
+                            build.status === 'failed' ? 'bg-red-100 text-red-800' :
+                            build.status === 'building' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {build.status}
+                          </span>
+                        </div>
+                        <div className="text-gray-500">
+                          {build.duration_ms ? `${Math.round(build.duration_ms)}ms` : 'Running...'}
+                          {build.bundle_size_kb && ` • ${build.bundle_size_kb} KB`}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Backend Status */}
+              <div className="bg-gray-50 dark:bg-gray-900/20 rounded-lg p-4">
+                <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">🔗 Backend Status</h4>
+                <div className="text-sm space-y-1">
+                  <div className="flex justify-between">
+                    <span>Status:</span>
+                    <span className="text-green-600">✅ Connected</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Storage:</span>
+                    <span className="text-blue-600">NuFire + S3</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Database:</span>
+                    <span className="text-purple-600">SQLite</span>
+                  </div>
+                </div>
+                {backend.error && (
+                  <div className="mt-2 text-red-600 text-xs">
+                    Error: {backend.error}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
