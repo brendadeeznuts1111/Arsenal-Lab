@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -92,7 +92,7 @@ jobs:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -127,7 +127,7 @@ jobs:
     if: github.event_name == 'schedule' && github.event.schedule == '0 9 * * 1' # Every Monday at 9 AM UTC
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
