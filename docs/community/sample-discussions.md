@@ -294,6 +294,14 @@ code node_modules/query-string/index.js
 # Step 3: Commit the patch
 bun patch --commit query-string@6.14.1
 # OR: bun patch-commit query-string@6.14.1  # pnpm compatibility
+
+# What happens during commit:
+# 1. Analyzes changes in node_modules/query-string/
+# 2. Generates patches/query-string+6.14.1.patch
+# 3. Updates package.json with "patchedDependencies"
+# 4. Updates bun.lockb with patched package reference
+# 5. Applies patch immediately to current installation
+# 6. Future bun install commands will auto-apply this patch
 ```
 
 **What Happened:**

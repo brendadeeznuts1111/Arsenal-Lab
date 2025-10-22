@@ -295,8 +295,20 @@ bun patch [package]@[version]
 bun patch --commit [package]@[version]
 # OR using pnpm compatibility alias:
 bun patch-commit [package]@[version]
-# Generated: patches/[package]+[version].patch
+
+# What happens:
+# 1. Analyzes changes in node_modules/
+# 2. Generates patches/[package]+[version].patch
+# 3. Updates package.json "patchedDependencies"
+# 4. Updates bun.lockb with patched reference
+# 5. Applies patch immediately to current install
+# 6. Future installs auto-apply the patch
 ```
+
+**Files to commit:**
+- `patches/[package]+[version].patch` - Git-friendly patch file
+- `package.json` - Added "patchedDependencies" section
+- `bun.lockb` - Updated package references
 
 ## Results & Validation
 <!-- Quantify your success -->

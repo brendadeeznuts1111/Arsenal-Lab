@@ -40,6 +40,19 @@ bun patch --commit react --patches-dir=mypatches
 bun patch-commit react
 ```
 
+**What happens during commit:**
+1. **🔍 Analyzes changes** - Creates diff between original and modified package
+2. **📄 Generates .patch file** - Stores patch in patches/ directory (or custom --patches-dir)
+3. **📦 Updates package.json** - Adds "patchedDependencies" section tracking the patch
+4. **🔒 Updates lockfile** - Modifies bun.lockb to reference the patched package
+5. **🚀 Applies immediately** - Current installation starts using the patched version
+6. **🔄 Auto-applies on install** - Future `bun install` commands automatically apply the patch
+
+**Files affected:**
+- `patches/react+18.2.0.patch` - The actual patch file (git-friendly)
+- `package.json` - Added "patchedDependencies" section
+- `bun.lockb` - Updated to reference patched package version
+
 ## 📋 Detailed Workflow
 
 ### Step 1: Prepare Package

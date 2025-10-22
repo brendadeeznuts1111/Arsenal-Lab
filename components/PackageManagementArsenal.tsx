@@ -328,19 +328,30 @@ const PatchGuide = ({ mode }: { mode: string }) => (
         <div className="text-purple-600 dark:text-purple-400 space-y-1">
           <div>• Generates .patch file in patches/ directory</div>
           <div>• Updates package.json with "patchedDependencies"</div>
-          <div>• Patch applies automatically on future installs</div>
-          <div>• Git-friendly: commit and share patches</div>
+          <div>• Updates bun.lockb with patched package reference</div>
+          <div>• Applies patch immediately to current installation</div>
+          <div>• Future bun install commands auto-apply the patch</div>
         </div>
         <div className="text-green-600 dark:text-green-400 mt-2">
           <strong>Benefits:</strong> Persistent, maintainable, shareable patches
         </div>
         <div className="text-blue-600 dark:text-blue-400 mt-2">
-          <strong>🔄 How it works:</strong>
+          <strong>🔄 Complete Commit Process:</strong>
           <div className="text-xs mt-1 space-y-1">
-            <div>• Creates diff between original and modified package</div>
-            <div>• Stores patch file for version control</div>
-            <div>• Updates package.json to track patched dependencies</div>
-            <div>• Future installs automatically apply the patch</div>
+            <div>1. <strong>Analyze:</strong> Creates diff between original and modified package</div>
+            <div>2. <strong>Generate:</strong> Stores .patch file in patches/ directory</div>
+            <div>3. <strong>Update:</strong> Adds "patchedDependencies" to package.json</div>
+            <div>4. <strong>Lock:</strong> Updates bun.lockb with patched package reference</div>
+            <div>5. <strong>Apply:</strong> Immediately uses patched version in current project</div>
+            <div>6. <strong>Share:</strong> Other developers get patch via git/version control</div>
+          </div>
+        </div>
+        <div className="text-orange-600 dark:text-orange-400 mt-2">
+          <strong>📋 Files to commit:</strong>
+          <div className="text-xs mt-1 space-y-1">
+            <div>• patches/your-package+version.patch</div>
+            <div>• package.json (patchedDependencies section)</div>
+            <div>• bun.lockb (updated package reference)</div>
           </div>
         </div>
       </div>

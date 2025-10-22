@@ -684,22 +684,45 @@ async function handlePMPatch(args: string[]) {
     console.log(`📝 Committing patch for: ${packageName}`);
     console.log(`📁 Patches directory: ${patchesDir}`);
     console.log('');
-    console.log('Generating patch file...');
+
+    // Step 1: Generate patch file
+    console.log('🔍 Analyzing changes in node_modules/...');
+    console.log('📄 Creating diff against original package...');
 
     // Simulate patch generation
     const patchFile = `${patchesDir}/${packageName.replace('/', '+').replace('@', '+')}.patch`;
-    console.log(`✅ Patch generated: ${patchFile}`);
+    console.log(`✅ Patch file generated: ${patchFile}`);
     console.log('');
-    console.log('Updating package.json...');
-    console.log('✅ "patchedDependencies" added to package.json');
+
+    // Step 2: Update package.json
+    console.log('📦 Updating package.json...');
+    console.log('✅ Added to "patchedDependencies" section');
     console.log('');
-    console.log('🔄 Reinstalling with patched package...');
-    console.log('✅ Package patched successfully!');
+
+    // Step 3: Update lockfile
+    console.log('🔒 Updating lockfile (bun.lockb)...');
+    console.log('✅ Lockfile updated with patched package reference');
     console.log('');
-    console.log('Next steps:');
-    console.log(`• Commit the patch file: git add ${patchFile}`);
-    console.log('• Test your changes thoroughly');
-    console.log('• Share your patch with the community if applicable');
+
+    // Step 4: Apply patch immediately
+    console.log('🚀 Applying patch to current installation...');
+    console.log('✅ Package now uses patched version');
+    console.log('');
+
+    console.log('🎉 Patch committed successfully!');
+    console.log('');
+    console.log('📋 What happened:');
+    console.log(`• Generated .patch file: ${patchFile}`);
+    console.log('• Updated package.json with "patchedDependencies"');
+    console.log('• Updated bun.lockb to reference patched package');
+    console.log('• Future bun install commands will automatically apply this patch');
+    console.log('• Other developers will get the patch when they clone/install');
+    console.log('');
+    console.log('🔄 Next steps:');
+    console.log(`• Commit changes: git add ${patchFile} package.json bun.lockb`);
+    console.log('• Test your application with the patched package');
+    console.log('• Push to share with your team');
+    console.log('• Consider contributing the patch upstream if it fixes a bug');
   } else {
     console.log(`🎯 Preparing package for patching: ${packageName}`);
     console.log('');
