@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
+import { $ } from "bun";
 import { readFileSync } from "node:fs";
 import { parse } from "yaml";
-import { $ } from "bun";
 
 interface PatchAnalytics {
   patchedDeps: Record<string, string>;

@@ -15,14 +15,19 @@ import type { BotConfig, BotContext, TelegramUpdate, TelegramMessage } from './t
 import { getCommandHandler } from './commands';
 import { rateLimiters } from './utils/rate-limiter';
 import { formatWelcome, formatError, formatRateLimit } from './utils/formatter';
+import { MessageQueue } from './utils/message-queue';
+import { telegramMetrics } from './utils/metrics';
+import { splitLongMessage } from './utils/text-splitter';
 
 export class ArsenalLabBot {
   private config: BotConfig;
   private startTime: number;
+  private messageQueue: MessageQueue;
 
   constructor(config: BotConfig) {
     this.config = config;
     this.startTime = Date.now();
+    this.messageQueue = new MessageQueue(config);
   }
 
   /**
@@ -75,12 +80,16 @@ export class ArsenalLabBot {
   private async handleCommand(ctx: BotContext): Promise<void> {
     const { command, user, chat } = ctx;
 
+    // Track command usage
+    telegramMetrics.recordCommand(command);
+
     // Check rate limit
     const rateLimiter = this.getRateLimiter(command);
     if (!rateLimiter.isAllowed(user.id)) {
       const resetTime = rateLimiter.getResetTime(user.id);
       const response = formatRateLimit(resetTime);
-      await this.sendMessage(chat.id, response);
+      await this.sendMessage(chat.id, response, true); // Silent notification
+      telegramMetrics.recordRateLimit();
       return;
     }
 
@@ -105,6 +114,7 @@ export class ArsenalLabBot {
       }
     } catch (error) {
       console.error(`Error executing command ${command}:`, error);
+      telegramMetrics.recordError(`command_${command}`);
       const response = formatError(
         'An error occurred while processing your command',
         'Please try again later'
@@ -130,31 +140,26 @@ export class ArsenalLabBot {
   }
 
   /**
-   * Send message to Telegram chat
-   * TODO: Implement actual API call
+   * Send message to Telegram chat (with queue and splitting)
    */
-  private async sendMessage(chatId: number, text: string): Promise<void> {
-    const apiUrl = `https://api.telegram.org/bot${this.config.token}/sendMessage`;
-
+  private async sendMessage(chatId: number, text: string, silent: boolean = false): Promise<void> {
     try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text,
-          parse_mode: 'Markdown',
-        }),
-      });
+      // Split long messages
+      const parts = splitLongMessage(text);
 
-      if (!response.ok) {
-        const error = await response.json();
-        console.error('Error sending message:', error);
+      // Send each part through the message queue
+      for (const part of parts) {
+        await this.messageQueue.send(chatId, part, {
+          parseMode: 'HTML',
+          disableNotification: silent,
+        });
+        telegramMetrics.recordQueued();
       }
+
+      telegramMetrics.recordMessageSent();
     } catch (error) {
       console.error('Failed to send message:', error);
+      telegramMetrics.recordError('send_message');
       throw error;
     }
   }
@@ -170,7 +175,16 @@ export class ArsenalLabBot {
         groupId: this.config.groupId,
         hasWebhook: !!this.config.webhookUrl,
       },
+      queue: this.messageQueue.getStatus(),
+      metrics: telegramMetrics.getMetrics(),
     };
+  }
+
+  /**
+   * Get metrics report
+   */
+  getMetricsReport(): string {
+    return telegramMetrics.getReport();
   }
 }
 

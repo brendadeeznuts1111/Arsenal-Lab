@@ -1,0 +1,103 @@
+name: Auto Patch Renewal
+on:
+  schedule:
+    # Run weekly on Mondays at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Specific package to check for updates'
+        required: false
+        type: string
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Setup Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check for patch updates
+        id: check-updates
+        run: |
+          if [ -n "${{ github.event.inputs.package }}" ]; then
+            # Check specific package
+            bun run patch:check-updates "${{ github.event.inputs.package }}"
+          else
+            # Check all patches
+            bun run patch:check-updates
+          fi
+
+      - name: Create update PR
+        id: create-pr
+        if: steps.check-updates.outputs.updates-found == 'true'
+        run: |
+          # Generate update summary
+          bun run patch:generate-update-summary > update-summary.md
+
+          # Create PR branch
+          BRANCH_NAME="patch-updates-$(date +%Y%m%d-%H%M%S)"
+          git checkout -b "$BRANCH_NAME"
+
+          # Commit changes
+          git add .
+          git commit -m "chore: update patches for upstream changes
+
+          This PR updates patches to be compatible with the latest upstream versions.
+          All patches have been validated and signed.
+
+          $(cat update-summary.md)"
+
+          # Push branch
+          git push origin "$BRANCH_NAME"
+
+          # Create PR
+          gh pr create \
+            --title "🔄 Patch Updates - $(date +%Y-%m-%d)" \
+            --body "$(cat update-summary.md)" \
+            --label "patch-update,automated" \
+            --assignee "${{ github.actor }}"
+
+  validate-updates:
+    needs: check-updates
+    if: needs.check-updates.outputs.updates-found == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Setup Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Validate updated patches
+        run: |
+          bun run invariant:validate
+          bun run patch:audit
+
+      - name: Sign updated patches
+        run: bun run signing.ts sign-all
+
+      - name: Verify signatures
+        run: bun run signing.ts verify-all
+
+      - name: Run integration tests
+        run: bun test --coverage

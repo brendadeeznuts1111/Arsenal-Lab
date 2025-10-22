@@ -11,7 +11,7 @@
  */
 
 import type { BotContext } from '../types';
-import { formatComparison } from '../utils/formatter';
+import { htmlFormatter } from '../utils/formatter-enhanced';
 
 export async function handleCompare(ctx: BotContext): Promise<string> {
   const runtime1 = ctx.args[0]?.toLowerCase();
@@ -35,7 +35,7 @@ export async function handleCompare(ctx: BotContext): Promise<string> {
   // TODO: Run actual comparison benchmarks
   const results = await runComparisonStub(runtime1, runtime2);
 
-  return formatComparison(runtime1, runtime2, results);
+  return htmlFormatter.formatComparison(runtime1, runtime2, results);
 }
 
 /**

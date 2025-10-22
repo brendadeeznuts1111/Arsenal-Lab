@@ -1,7 +1,6 @@
 #!/usr/bin/env bun
 import { readFileSync, writeFileSync } from "node:fs";
 import { parse } from "yaml";
-import { $ } from "bun";
 
 interface CanaryPatch {
   stage: "stable" | "canary";

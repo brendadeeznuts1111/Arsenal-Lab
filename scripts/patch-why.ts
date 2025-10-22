@@ -1,7 +1,6 @@
 #!/usr/bin/env bun
-import { readFileSync, existsSync } from "node:fs";
-import { join } from "path";
 import { $ } from "bun";
+import { existsSync, readFileSync } from "node:fs";
 
 interface PatchMetadata {
   reason: string;
