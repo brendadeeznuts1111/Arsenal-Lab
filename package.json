@@ -50,6 +50,8 @@
     "demo:zero-touch-auth": "bun run scripts/demonstrate-zero-touch-auth.ts",
     "demo:v1.3.1-enhanced": "bun run scripts/demonstrate-v1.3.1-enhanced-auth.ts",
     "demo:v1.3.1-fixes": "bun run scripts/demonstrate-v1.3.1-web-yaml-fixes.ts",
+    "performance:log": "bun run scripts/performance-logger.ts",
+    "performance:monitor": "bun run scripts/performance-logger.ts --interval 5000",
     "bootstrap": "bash scripts/bootstrap.sh",
     "bootstrap:ci": "bash scripts/bootstrap.sh && bun install --dry-run",
     "verify:auth": "bun install --verbose 2>&1 | grep -E 'npm-auth-email|pkgs.arsenal-lab.com'",
