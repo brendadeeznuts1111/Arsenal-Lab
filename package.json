@@ -62,6 +62,17 @@
     "demo:curl": "bun run demo.ts --curl",
     "demo:update": "bun run demo.ts --update",
     "demo:watch": "bun run demo.ts --watch",
+    "dashboard": "bun run src/server.ts",
+    "dashboard:dev": "bun run src/server.ts",
+    "dashboard:prod": "NODE_ENV=production bun run src/server.ts",
+    "monitoring": "docker compose -f docker-compose.white-label.yml up -d",
+    "monitoring:down": "docker compose -f docker-compose.white-label.yml down",
+    "monitoring:logs": "docker compose -f docker-compose.white-label.yml logs -f",
+    "white-label": "docker compose -f docker-compose.white-label.yml up -d",
+    "white-label:down": "docker compose -f docker-compose.white-label.yml down",
+    "white-label:logs": "docker compose -f docker-compose.white-label.yml logs -f",
+    "telegram-bot": "cd telegram-bot && bun run dev",
+    "identity-service": "REDIS_URL=redis://localhost:6379/1 bun run src/server.ts",
     "performance:log": "bun run scripts/performance-logger.ts",
     "performance:monitor": "bun run scripts/performance-logger.ts --interval 5000",
     "bootstrap": "bash scripts/bootstrap.sh",
@@ -155,8 +166,9 @@
     "typescript@5.3.0": "patches/typescript@5.3.0.patch"
   },
   "dependencies": {
-    "cli-cursor": "5.0.0",
     "clsx": "^2.1.1",
+    "grammy": "1.38.3",
+    "ioredis": "5.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "upgrade": "^1.1.0"

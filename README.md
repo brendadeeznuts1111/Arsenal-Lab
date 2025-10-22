@@ -31,7 +31,7 @@
 - **500× zero-copy** postMessage operations
 - **28% memory reduction** in real applications
 
-**A+ Grade Enterprise Solution - FAANG-grade performance testing suite for Bun runtime v1.4+** - Interactive playground showcasing every enhancement across performance, databases, testing, infrastructure, and package management.
+**A+ Grade Enterprise Solution - FAANG-grade performance testing suite for Bun runtime v1.4+** - Interactive playground showcasing every enhancement across performance, databases, testing, infrastructure, package management, enterprise dashboards, and white-label sports betting platforms.
 
 ## 💬 **Join Our Community!**
 
@@ -87,6 +87,71 @@ b run dev                         # Hot reload + governance pre-load
 ⚙️ **[Environment Configuration](docs/env-example.md)** - Public/private env vars with Bun 1.3
 
 💬 **[Feedback & Bug Reports](docs/FEEDBACK.md)** - Report issues and request features
+
+## 📊 **Enterprise Dashboard & Monitoring**
+
+**Complete enterprise monitoring stack** - Real-time metrics, analytics, and administrative controls with Grafana, Prometheus, and health monitoring.
+
+### 🚀 **Dashboard Features**
+- **📊 System Monitoring** - Real-time performance metrics and health indicators
+- **🎛️ Administration** - User management, system configuration, and controls
+- **📈 Analytics** - Advanced reporting and interactive data visualization
+- **🔐 Enterprise Security** - Identity management and compliance monitoring
+- **⚡ Live Updates** - Real-time data with automatic refresh
+
+### 🛠️ **Quick Launch**
+```bash
+# Start dashboard server
+bun run src/server.ts
+
+# Launch monitoring stack
+docker compose -f docker-compose.white-label.yml up -d
+
+# Access dashboard
+open http://localhost:3001
+
+# Access monitoring
+open http://localhost:3000  # Grafana
+open http://localhost:9090  # Prometheus
+```
+
+📖 **[Dashboard Documentation](docs/dashboard-integration.md)** - Complete setup and integration guide
+
+## 🏟️ **White-label Sports Betting Platform**
+
+**Complete sports betting white-label solution** - Rent sports-books but own your customers, data, and brand experience.
+
+### 🎯 **Platform Features**
+- **🔐 Zero-password Authentication** - Disposable identity tokens via Telegram
+- **📊 Customer Data Ownership** - Your database, your analytics
+- **🤖 Telegram Integration** - Native betting interface
+- **🎨 Brand Customization** - Replace logos, colors, and UI
+- **💰 Revenue Optimization** - Direct API integration
+- **📈 Real-time Monitoring** - Betting activity and performance
+
+### 🚀 **One-Command Setup**
+```bash
+# Start white-label stack
+docker compose -f docker-compose.white-label.yml up -d
+
+# Configure your brand
+cp reverse-proxy/branding.css.example reverse-proxy/branding.css
+# Edit colors, logos, and branding
+
+# Start Telegram bot
+cd telegram-bot && bun run dev
+```
+
+### 📋 **Complete Architecture**
+- **Identity Service** - Disposable email tokens
+- **Customer Database** - PostgreSQL with audit trails
+- **Telegram Bot** - Interactive betting commands
+- **Reverse Proxy** - Brand injection and API routing
+- **Monitoring Stack** - Prometheus + Grafana
+
+📖 **[Production Deployment](docs/production-deployment.md)** - Complete white-label guide
+
+📖 **[White-label Architecture](backend/database/white-label-schema.sql)** - Database schema and API documentation
 
 ## 🚀 Installation
 

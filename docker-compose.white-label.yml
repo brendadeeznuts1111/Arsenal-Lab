@@ -1,0 +1,202 @@
+# White-label Sports Betting Stack
+# Complete production deployment for operators who rent sports-books
+
+version: '3.8'
+
+services:
+  # ===== IDENTITY SERVICE =====
+  # Disposable identity tokens for zero-password auth
+  identity-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: yourbrand-identity
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - REDIS_URL=redis://redis:6379/1
+      - JWT_SECRET=${JWT_SECRET:-your-production-jwt-secret}
+      - API_BASE_URL=https://identity.yourbrand.com
+      - CORS_ORIGIN=https://fantasy.yourbrand.com
+      - RATE_LIMIT_REQUESTS=100
+      - RATE_LIMIT_WINDOW=3600
+    depends_on:
+      - redis
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - white-label
+
+  # ===== TELEGRAM BOT =====
+  # Betting interface via Telegram
+  telegram-bot:
+    build:
+      context: ./telegram-bot
+      dockerfile: Dockerfile
+    container_name: yourbrand-telegram-bot
+    environment:
+      - TG_BOT_TOKEN=${TG_BOT_TOKEN}
+      - IDENTITY_SERVICE_URL=http://identity-service:3001
+      - RENTER_API_URL=https://fantasy402.com/api
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/white_label
+      - BOT_USERNAME=@YourBrandBot
+      - SUPPORT_USERNAME=@YourBrandSupport
+      - ENABLE_BETTING=true
+      - ENABLE_KYC=true
+      - MAX_BETS_PER_HOUR=10
+      - MAX_STAKE_PER_BET=1000
+    depends_on:
+      - identity-service
+      - postgres
+    restart: unless-stopped
+    networks:
+      - white-label
+
+  # ===== REVERSE PROXY =====
+  # Hardened proxy with branding injection
+  caddy:
+    image: caddy:latest
+    container_name: yourbrand-reverse-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./reverse-proxy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./reverse-proxy/loader.js:/var/www/yourbrand/loader.js:ro
+      - ./reverse-proxy/branding.css:/var/www/yourbrand/branding.css:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      - TLS_EMAIL=admin@yourbrand.com
+    depends_on:
+      - identity-service
+      - telegram-bot
+    restart: unless-stopped
+    networks:
+      - white-label
+
+  # ===== DATABASE =====
+  # Authoritative customer and bet data
+  postgres:
+    image: postgres:15-alpine
+    container_name: yourbrand-postgres
+    environment:
+      - POSTGRES_DB=white_label
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/white-label-schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - white-label
+
+  # ===== REDIS =====
+  # TTL caching for identities and sessions
+  redis:
+    image: redis:7-alpine
+    container_name: yourbrand-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - white-label
+
+  # ===== MONITORING STACK =====
+  # Prometheus metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: yourbrand-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    networks:
+      - white-label
+
+  # ===== GRAFANA =====
+  # Dashboard for metrics visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: yourbrand-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docs/grafana-bun-gate.json:/etc/grafana/provisioning/dashboards/bun-gate.json:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - white-label
+
+  # ===== OPTIONAL: KYC SERVICE =====
+  # jumio-kyc:
+  #   image: jumio/kyx:latest
+  #   environment:
+  #     - JUMIO_API_TOKEN=${JUMIO_API_TOKEN}
+  #     - JUMIO_API_SECRET=${JUMIO_API_SECRET}
+  #   networks:
+  #     - white-label
+
+  # ===== OPTIONAL: ODDS COMPILER =====
+  # odds-compiler:
+  #   build: ./odds-compiler
+  #   environment:
+  #     - CI=true
+  #     - NPM_TOKEN=${NPM_TOKEN}
+  #   volumes:
+  #     - ./odds-compiler:/app
+  #   networks:
+  #     - white-label
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  white-label:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

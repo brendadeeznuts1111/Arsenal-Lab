@@ -49,10 +49,8 @@
   <link rel="alternate" type="application/rss+xml" title="Arsenal Lab Commits" href="https://github.com/brendadeeznuts1111/Arsenal-Lab/commits/main.atom">
 
   <!-- Favicons -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.svg">
   <link rel="manifest" href="/site.webmanifest">
 
   <!-- Canonical URL -->
@@ -261,6 +259,7 @@
           <button onclick="switchTab('database', this)">🗄️ Database & Infra</button>
           <button onclick="switchTab('build', this)">🔧 Build Config</button>
           <button onclick="switchTab('bunx', this)">🚀 bunx Demo</button>
+          <button onclick="switchTab('dashboard', this)">📊 Dashboard</button>
           <button onclick="switchTab('community', this)">💬 Community</button>
           <button onclick="exportMetrics()">📊 Export Metrics</button>
         </div>
@@ -300,6 +299,11 @@
                 <div style="font-size:2rem;margin-bottom:.5rem;">🗄️</div>
                 <div style="font-weight:600;margin-bottom:.25rem;">Database</div>
                 <div style="font-size:.875rem;color:#8b949e;">7.9× faster queries</div>
+              </div>
+              <div style="background:#161b22;padding:1rem;border-radius:.5rem;border:1px solid #30363d;min-width:200px;">
+                <div style="font-size:2rem;margin-bottom:.5rem;">📊</div>
+                <div style="font-weight:600;margin-bottom:.25rem;">Dashboard</div>
+                <div style="font-size:.875rem;color:#8b949e;">Enterprise monitoring</div>
               </div>
             </div>
             <p style="color:#8b949e;font-size:.875rem;">
@@ -434,6 +438,100 @@
             </div>
           </div>
         `,
+        dashboard: `
+          <div style="padding:2rem 1rem;max-width:1200px;margin:0 auto;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;text-align:center;">📊 Dashboard Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;text-align:center;max-width:600px;margin-left:auto;margin-right:auto;">
+              Enterprise dashboard modules for monitoring, analytics, and administrative controls with real-time metrics from all system services.
+            </p>
+
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;margin-bottom:2rem;">
+              <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+                <a href="http://localhost:3001" target="_blank" style="background:#238636;color:#fff;padding:0.75rem 1.5rem;border-radius:0.375rem;text-decoration:none;font-weight:600;display:flex;align-items:center;gap:0.5rem;">
+                  <span>🚀</span>
+                  <span>Launch Dashboard</span>
+                </a>
+                <a href="http://localhost:3000" target="_blank" style="background:#f59e0b;color:#1f2937;padding:0.75rem 1.5rem;border-radius:0.375rem;text-decoration:none;font-weight:600;display:flex;align-items:center;gap:0.5rem;">
+                  <span>📊</span>
+                  <span>Grafana</span>
+                </a>
+                <a href="http://localhost:9090" target="_blank" style="background:#ef4444;color:#fff;padding:0.75rem 1.5rem;border-radius:0.375rem;text-decoration:none;font-weight:600;display:flex;align-items:center;gap:0.5rem;">
+                  <span>📈</span>
+                  <span>Prometheus</span>
+                </a>
+                <a href="http://localhost:3001/api/health" target="_blank" style="background:#8b5cf6;color:#fff;padding:0.75rem 1.5rem;border-radius:0.375rem;text-decoration:none;font-weight:600;display:flex;align-items:center;gap:0.5rem;">
+                  <span>❤️</span>
+                  <span>Health Check</span>
+                </a>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;">
+                <div style="background:#0d1117;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;">
+                  <h3 style="color:#58a6ff;margin-bottom:1rem;">📊 System Monitoring</h3>
+                  <p style="color:#8b949e;margin-bottom:1rem;">Real-time performance metrics, system health indicators, and alerting dashboard.</p>
+                  <ul style="color:#8b949e;margin:0;padding-left:1.5rem;">
+                    <li>CPU, Memory, Disk usage tracking</li>
+                    <li>Response time monitoring</li>
+                    <li>Error rate analysis</li>
+                    <li>Active sessions monitoring</li>
+                  </ul>
+                </div>
+
+                <div style="background:#0d1117;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;">
+                  <h3 style="color:#238636;margin-bottom:1rem;">🎛️ Administration</h3>
+                  <p style="color:#8b949e;margin-bottom:1rem;">System administration controls, user management, and configuration tools.</p>
+                  <ul style="color:#8b949e;margin:0;padding-left:1.5rem;">
+                    <li>System configuration</li>
+                    <li>User role management</li>
+                    <li>Backup and restore</li>
+                    <li>System maintenance</li>
+                  </ul>
+                </div>
+
+                <div style="background:#0d1117;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;">
+                  <h3 style="color:#bb9af7;margin-bottom:1rem;">📈 Analytics</h3>
+                  <p style="color:#8b949e;margin-bottom:1rem;">Advanced analytics and reporting with interactive charts and data visualization.</p>
+                  <ul style="color:#8b949e;margin:0;padding-left:1.5rem;">
+                    <li>Performance analytics</li>
+                    <li>User behavior tracking</li>
+                    <li>Revenue analytics</li>
+                    <li>Custom reporting</li>
+                  </ul>
+                </div>
+
+                <div style="background:#0d1117;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;">
+                  <h3 style="color:#f85149;margin-bottom:1rem;">🔐 Enterprise Security</h3>
+                  <p style="color:#8b949e;margin-bottom:1rem;">FAANG-grade security features including identity management and access controls.</p>
+                  <ul style="color:#8b949e;margin:0;padding-left:1.5rem;">
+                    <li>Identity service integration</li>
+                    <li>Role-based access control</li>
+                    <li>Audit logging</li>
+                    <li>Compliance monitoring</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;">
+              <h3 style="color:#f85149;margin-bottom:1.5rem;">🚀 Quick Start</h3>
+              <div style="background:#0d1117;padding:1.5rem;border-radius:.375rem;border:1px solid #30363d;margin-bottom:1.5rem;">
+                <h4 style="color:#79c0ff;margin-bottom:1rem;">1. Start the Dashboard Server</h4>
+                <code style="color:#79c0ff;background:#161b22;padding:0.5rem;border-radius:0.25rem;display:block;">bun run src/server.ts</code>
+              </div>
+
+              <div style="background:#0d1117;padding:1.5rem;border-radius:.375rem;border:1px solid #30363d;margin-bottom:1.5rem;">
+                <h4 style="color:#79c0ff;margin-bottom:1rem;">2. Launch Monitoring Stack (Optional)</h4>
+                <code style="color:#79c0ff;background:#161b22;padding:0.5rem;border-radius:0.25rem;display:block;">docker compose -f docker-compose.white-label.yml up -d</code>
+              </div>
+
+              <div style="background:#0d1117;padding:1.5rem;border-radius:.375rem;border:1px solid #30363d;">
+                <h4 style="color:#79c0ff;margin-bottom:1rem;">3. Access Dashboard</h4>
+                <p style="color:#8b949e;margin-bottom:1rem;">Click the "Launch Dashboard" button above or visit:</p>
+                <code style="color:#79c0ff;background:#161b22;padding:0.5rem;border-radius:0.25rem;display:block;">http://localhost:3001</code>
+              </div>
+            </div>
+          </div>
+        `,
         community: `
           <div style="padding:2rem 1rem;max-width:800px;margin:0 auto;">
             <h2 style="color:#58a6ff;margin-bottom:1rem;text-align:center;">💬 Community Hub</h2>
@@ -498,6 +596,68 @@
               </div>
             </div>
           </div>
+        `,
+        dashboard: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">📊 Dashboard Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Enterprise dashboard modules for monitoring, analytics, and administrative controls with real-time metrics.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#bb9af7;margin-bottom:1rem;">⚡ Interactive Dashboard</h3>
+              <p style="color:#8b949e;margin-bottom:1.5rem;">Real-time monitoring, analytics, and system administration controls available in the full application.</p>
+              <div style="background:#0d1117;padding:1rem;border-radius:.375rem;border:1px solid #30363d;">
+                <p style="color:#79c0ff;font-size:.875rem;">Loading interactive dashboard...</p>
+                <div style="margin-top:1rem;">
+                  <div style="display:inline-block;width:20px;height:20px;border:2px solid #58a6ff;border-radius:50%;border-top-color:transparent;animation:spin 1s ease-in-out infinite;"></div>
+                </div>
+              </div>
+              <div style="margin-top:1rem;padding:1rem;background:#1f2937;border-radius:.375rem;border:1px solid #374151;">
+                <h4 style="color:#f97316;margin-bottom:.5rem;">📊 Dashboard Features:</h4>
+                <ul style="text-align:left;color:#9ca3af;font-size:.875rem;margin:0;padding-left:1.5rem;">
+                  <li>Real-time system metrics monitoring</li>
+                  <li>Performance analytics dashboard</li>
+                  <li>User activity tracking</li>
+                  <li>System administration controls</li>
+                  <li>Alert management system</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <style>
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          </style>
+        `,
+        stats: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">📈 Statistics Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Web application metrics and performance data with real-time updates.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#10b981;margin-bottom:1rem;">📊 Live Statistics</h3>
+              <p style="color:#8b949e;margin-bottom:1.5rem;">Real-time web application statistics and performance metrics available in the full application.</p>
+              <div style="background:#0d1117;padding:1rem;border-radius:.375rem;border:1px solid #30363d;">
+                <p style="color:#79c0ff;font-size:.875rem;">Loading statistics...</p>
+                <div style="margin-top:1rem;">
+                  <div style="display:inline-block;width:20px;height:20px;border:2px solid #10b981;border-radius:50%;border-top-color:transparent;animation:spin 1s ease-in-out infinite;"></div>
+                </div>
+              </div>
+              <div style="margin-top:1rem;padding:1rem;background:#1f2937;border-radius:.375rem;border:1px solid #374151;">
+                <h4 style="color:#f97316;margin-bottom:.5rem;">📈 Stats Features:</h4>
+                <ul style="text-align:left;color:#9ca3af;font-size:.875rem;margin:0;padding-left:1.5rem;">
+                  <li>User engagement metrics</li>
+                  <li>Application performance data</li>
+                  <li>Real-time system health</li>
+                  <li>Browser performance monitoring</li>
+                  <li>Auto-refreshing statistics</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <style>
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          </style>
         `
       };
 

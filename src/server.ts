@@ -1,5 +1,5 @@
 // src/server.ts - UNIFIED API: Arsenal Lab + Build Configs + System Gate + Database
-import { serve } from "bun";
+import { redis, serve } from "bun";
 import { Database } from "bun:sqlite";
 import { getPatchAnalytics } from "./debug/patch-analytics.js";
 
@@ -82,6 +82,28 @@ async function initializeSecrets() {
 // Cache secrets for performance
 let cachedSecrets: any = null;
 
+// Rate limiting helper
+async function checkRateLimit(clientIP: string, limit = 100, windowSeconds = 3600): Promise<{ allowed: boolean; remaining: number }> {
+  try {
+    const key = `ratelimit:${clientIP}`;
+    const count = await redis.incr(key);
+
+    // Set expiry if this is the first request in window
+    if (count === 1) {
+      await redis.expire(key, windowSeconds);
+    }
+
+    return {
+      allowed: count <= limit,
+      remaining: Math.max(0, limit - count)
+    };
+  } catch (error) {
+    // Redis failure - allow request but log
+    console.warn('⚠️  Rate limiting failed:', error);
+    return { allowed: true, remaining: limit };
+  }
+}
+
 serve({
   port: PORT,
   async fetch(req) {
@@ -90,6 +112,19 @@ serve({
     // Initialize secrets on first request
     if (!cachedSecrets) {
       cachedSecrets = await initializeSecrets();
+    }
+
+    // Handle CORS preflight requests
+    if (req.method === "OPTIONS") {
+      return new Response(null, {
+        status: 200,
+        headers: {
+          'Access-Control-Allow-Origin': process.env.CORS_ORIGIN || 'https://sports.yourbook.com',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          'Access-Control-Max-Age': '86400'
+        }
+      });
     }
 
     // Serve index.html for root path with dynamic secrets injection
@@ -618,6 +653,64 @@ serve({
         }), {
           status: 503,
           headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
+    // Prometheus metrics endpoint for monitoring
+    if (url.pathname === "/api/metrics" && req.method === "GET") {
+      const startTime = Date.now();
+      try {
+        // Get identity service metrics
+        let identityRequestsTotal = 0;
+        let identityRequestsSuccess = 0;
+        let identityRequestsError = 0;
+        let cacheHitRatio = 0;
+
+        try {
+          // These would be real metrics in production
+          identityRequestsTotal = await redis.get('identity_requests_total') || 0;
+          identityRequestsSuccess = await redis.get('identity_requests_success') || 0;
+          identityRequestsError = await redis.get('identity_requests_error') || 0;
+
+          if (identityRequestsTotal > 0) {
+            cacheHitRatio = ((identityRequestsSuccess / identityRequestsTotal) * 100).toFixed(2);
+          }
+        } catch (redisError) {
+          // Redis metrics not available - use defaults
+        }
+
+        const metrics = `# HELP identity_requests_total Total number of identity requests
+# TYPE identity_requests_total counter
+identity_requests_total ${identityRequestsTotal}
+
+# HELP identity_requests_total{method="GET",status="200"} Successful identity generation requests
+# TYPE identity_requests_total counter
+identity_requests_total{method="GET",status="200"} ${identityRequestsSuccess}
+
+# HELP identity_requests_total{method="GET",status="5xx"} Failed identity generation requests
+# TYPE identity_requests_total counter
+identity_requests_total{method="GET",status="5xx"} ${identityRequestsError}
+
+# HELP identity_cache_hit_ratio Cache hit ratio percentage
+# TYPE identity_cache_hit_ratio gauge
+identity_cache_hit_ratio ${cacheHitRatio}
+
+# HELP identity_service_up Service availability
+# TYPE identity_service_up gauge
+identity_service_up 1
+`;
+
+        recordApiCall("GET", "/api/metrics", startTime, 200);
+        return new Response(metrics, {
+          status: 200,
+          headers: { 'Content-Type': 'text/plain; version=0.0.4; charset=utf-8' }
+        });
+      } catch (error: any) {
+        recordApiCall("GET", "/api/metrics", startTime, 500);
+        return new Response(`# ERROR: ${error.message}`, {
+          status: 500,
+          headers: { 'Content-Type': 'text/plain' }
         });
       }
     }
@@ -1352,6 +1445,27 @@ arsenal_build_info{version="1.0.0",service="arsenal-lab"} 1
     if (url.pathname === "/api/v1/id" && req.method === "GET") {
       const startTime = Date.now();
       try {
+        // Rate limiting: 100 requests per hour per IP
+        const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+        const rateLimit = await checkRateLimit(clientIP, 100, 3600);
+
+        if (!rateLimit.allowed) {
+          recordApiCall("GET", "/api/v1/id", startTime, 429);
+          return new Response(JSON.stringify({
+            error: "Rate limit exceeded",
+            retry_after: 3600,
+            limit: 100,
+            remaining: rateLimit.remaining
+          }), {
+            status: 429,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-RateLimit-Limit': '100',
+              'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+              'Retry-After': '3600'
+            }
+          });
+        }
         const urlParams = new URL(url).searchParams;
         const prefix = urlParams.get('prefix') || 'unknown';
         const run = urlParams.get('run') || Date.now().toString();
@@ -1379,10 +1493,26 @@ arsenal_build_info{version="1.0.0",service="arsenal-lab"} 1
           }
         };
 
+        // Cache in Redis with TTL (hot cache for production)
+        try {
+          await redis.setex(identity, ttl, JSON.stringify(identityResponse));
+        } catch (redisError) {
+          // Redis failure shouldn't break the service - log and continue
+          console.warn('⚠️  Redis caching failed:', redisError);
+        }
+
         recordApiCall("GET", "/api/v1/id", startTime, 200);
         return new Response(JSON.stringify(identityResponse), {
           status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': process.env.CORS_ORIGIN || 'https://sports.yourbook.com',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'X-Content-Type-Options': 'nosniff',
+            'X-Frame-Options': 'DENY',
+            'X-XSS-Protection': '1; mode=block'
+          }
         });
       } catch (error: any) {
         recordApiCall("GET", "/api/v1/id", startTime, 500);
@@ -1420,10 +1550,28 @@ arsenal_build_info{version="1.0.0",service="arsenal-lab"} 1
           generated: new Date().toISOString()
         };
 
+        // Cache each identity in Redis with TTL (hot cache for production)
+        try {
+          for (const identity of identities) {
+            await redis.setex(identity.id, ttl, JSON.stringify(identity));
+          }
+        } catch (redisError) {
+          // Redis failure shouldn't break the service - log and continue
+          console.warn('⚠️  Redis batch caching failed:', redisError);
+        }
+
         recordApiCall("POST", "/api/v1/identities", startTime, 200);
         return new Response(JSON.stringify(response), {
           status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': process.env.CORS_ORIGIN || 'https://sports.yourbook.com',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'X-Content-Type-Options': 'nosniff',
+            'X-Frame-Options': 'DENY',
+            'X-XSS-Protection': '1; mode=block'
+          }
         });
       } catch (error: any) {
         recordApiCall("POST", "/api/v1/identities", startTime, 500);
@@ -1440,6 +1588,18 @@ arsenal_build_info{version="1.0.0",service="arsenal-lab"} 1
       try {
         const body = await req.json();
         const { identity } = body;
+
+        // First check Redis cache for identity data
+        let cachedIdentity = null;
+        try {
+          const cached = await redis.get(identity);
+          if (cached) {
+            cachedIdentity = JSON.parse(cached);
+          }
+        } catch (redisError) {
+          // Redis failure - continue with validation
+          console.warn('⚠️  Redis lookup failed:', redisError);
+        }
 
         // Validate identity format
         const identityRegex = /^([a-zA-Z0-9_-]+)-(\d+)@([a-zA-Z0-9.-]+)\/(v\d+):id$/;
@@ -1466,13 +1626,23 @@ arsenal_build_info{version="1.0.0",service="arsenal-lab"} 1
           valid: isValid,
           metadata,
           validated: new Date().toISOString(),
-          rfc5322_compliant: isValid // Nexus accepts this syntax
+          rfc5322_compliant: isValid, // Nexus accepts this syntax
+          cached: cachedIdentity !== null, // Indicate if served from cache
+          expires: cachedIdentity?.expires || null
         };
 
         recordApiCall("POST", "/api/v1/validate", startTime, 200);
         return new Response(JSON.stringify(response), {
           status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': process.env.CORS_ORIGIN || 'https://sports.yourbook.com',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'X-Content-Type-Options': 'nosniff',
+            'X-Frame-Options': 'DENY',
+            'X-XSS-Protection': '1; mode=block'
+          }
         });
       } catch (error: any) {
         recordApiCall("POST", "/api/v1/validate", startTime, 500);
@@ -1488,7 +1658,7 @@ arsenal_build_info{version="1.0.0",service="arsenal-lab"} 1
     // ==============================="
 
     // Only serve static files for non-API paths
-    if (!url.pathname.startsWith("/api/") && !url.pathname.startsWith("/metrics")) {
+    if (!url.pathname.startsWith("/api/")) {
       // Serve static assets from public directory
       try {
         const file = await Bun.file("public" + url.pathname);

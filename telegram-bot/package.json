@@ -1,0 +1,33 @@
+{
+  "name": "white-label-telegram-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot for white-label sports betting operations",
+  "main": "src/bot.ts",
+  "scripts": {
+    "start": "bun run src/bot.ts",
+    "dev": "bun --watch run src/bot.ts",
+    "build": "bun build src/bot.ts --outfile dist/bot.js --target node",
+    "lint": "bun x eslint src/**/*.ts",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "grammy": "^1.19.0",
+    "@grammyjs/conversations": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "bun-types": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "sports-betting",
+    "white-label",
+    "gambling"
+  ],
+  "author": "YourBrand",
+  "license": "UNLICENSED"
+}

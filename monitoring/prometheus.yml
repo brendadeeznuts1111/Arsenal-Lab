@@ -1,0 +1,51 @@
+# Prometheus Configuration for White-label Sports Betting
+# Monitors identity service, telegram bot, and reverse proxy
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # Identity Service
+  - job_name: 'identity-service'
+    static_configs:
+      - targets: ['identity-service:3001']
+    metrics_path: '/api/metrics'
+    scrape_interval: 5s
+
+  # Telegram Bot (if it exposes metrics)
+  - job_name: 'telegram-bot'
+    static_configs:
+      - targets: ['telegram-bot:3000']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # Caddy Reverse Proxy
+  - job_name: 'caddy'
+    static_configs:
+      - targets: ['caddy:2019']
+
+  # Node Exporter (system metrics)
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # PostgreSQL
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres:9187']
+
+  # Redis
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:9121']
+
+# Alerting (optional)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets: ['alertmanager:9093']

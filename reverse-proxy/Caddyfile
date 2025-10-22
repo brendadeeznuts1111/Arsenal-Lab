@@ -1,0 +1,215 @@
+# White-label Sports Betting Reverse Proxy
+# Harden rented sports-book UI while injecting your branding and functionality
+
+# Global settings
+{
+    # SSL/TLS
+    email your-email@yourbrand.com
+
+    # Security headers
+    security {
+        # Hide Caddy version
+        hide_version
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+        format json
+    }
+}
+
+# Main domain - Your branded sports-book
+fantasy.yourbrand.com {
+    # Security headers
+    header {
+        # HTTPS enforcement
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
+        # XSS protection
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+
+        # Content Security Policy
+        Content-Security-Policy "default-src 'self' https:; script-src 'self' 'nonce-{nonce}' https://telegram.org https://t.me; style-src 'self' 'nonce-{nonce}'; frame-src https://fantasy402.com https://telegram.org; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
+
+        # Referrer policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+
+        # Permissions policy
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+        # Remove server identification
+        Server "YourBrand/1.0"
+    }
+
+    # Rate limiting
+    rate_limit {
+        zone static {
+            key {remote_host}
+            window 1m
+            events 100
+        }
+        zone api {
+            key {remote_host}
+            window 1h
+            events 1000
+        }
+    }
+
+    # Compress responses
+    encode gzip
+
+    # Inject your loader script (before proxy)
+    @not_api {
+        path_not /api/*
+        path_not /_yourbrand/*
+    }
+
+    handle @not_api {
+        # Inject your branding and functionality
+        import injection.caddy
+
+        # Proxy to renter with headers
+        reverse_proxy https://fantasy402.com {
+            # Hide your proxy
+            header_up Host fantasy402.com
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+
+            # Your customer context
+            header_up X-Your-Customer-ID {customer_id}
+            header_up X-Your-Brand "YourBrand"
+            header_up X-Your-Bot-Username "@YourBrandBot"
+
+            # Health check
+            health_uri /health
+            health_interval 30s
+            health_timeout 10s
+        }
+    }
+
+    # Your API endpoints (bypass renter)
+    handle /api/* {
+        # Route to your services
+        uri strip_prefix /api
+
+        # Identity service
+        @identity {
+            path /v1/id /v1/identities /v1/validate
+        }
+        handle @identity {
+            reverse_proxy http://identity-service:3001 {
+                header_up Host {host}
+                header_up X-Forwarded-Proto {scheme}
+            }
+        }
+
+        # Bot webhooks
+        @telegram {
+            path /telegram/webhook
+        }
+        handle @telegram {
+            reverse_proxy http://telegram-bot:3000 {
+                header_up Host {host}
+                header_up X-Forwarded-Proto {scheme}
+            }
+        }
+
+        # Your API
+        handle {
+            reverse_proxy http://your-api:3001 {
+                header_up Host {host}
+                header_up X-Forwarded-Proto {scheme}
+            }
+        }
+    }
+
+    # Your assets and pages
+    handle /_yourbrand/* {
+        # Serve your custom assets
+        uri strip_prefix /_yourbrand
+        root * /var/www/yourbrand
+        file_server
+    }
+}
+
+# Bot webhook domain (optional - for cleaner URLs)
+bot.yourbrand.com {
+    # Redirect to main domain with bot parameter
+    redir https://fantasy.yourbrand.com?ref=telegram{bquery} permanent
+}
+
+# API-only domain (optional - for direct API access)
+api.yourbrand.com {
+    # Direct API access without UI
+    reverse_proxy http://your-api:3001 {
+        header_up Host {host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}
+
+# Static assets domain (CDN)
+cdn.yourbrand.com {
+    # Static assets with long cache
+    header Cache-Control "public, max-age=31536000, immutable"
+    root * /var/www/cdn
+    file_server
+}
+
+# Injection middleware (separate file)
+# File: injection.caddy
+(injection.caddy) {
+    # Generate nonce for CSP
+    request_header X-Nonce {rand.16}
+
+    # Inject your loader script
+    @html {
+        header Content-Type text/html*
+    }
+
+    handle_response @html {
+        # Inject before </head>
+        replace "</head>" `
+<script nonce="{req_header.X-Nonce}">
+    // Your loader script
+    window.YOURBRAND = {
+        customerId: "{customer_id}",
+        botUsername: "@YourBrandBot",
+        apiUrl: "https://api.yourbrand.com",
+        telegramBot: "https://t.me/YourBrandBot"
+    };
+
+    // Load your main script
+    const script = document.createElement('script');
+    script.src = '/_yourbrand/loader.js';
+    script.nonce = '{req_header.X-Nonce}';
+    document.head.appendChild(script);
+</script>
+</head>`
+
+        # Inject your CSS
+        replace "</head>" `
+<link rel="stylesheet" href="/_yourbrand/branding.css" />
+</head>`
+    }
+
+    # Override renter login elements
+    handle_response @html {
+        # Replace login button
+        replace "<button id=\"login\">Login</button>" `
+<button id="tg-login" class="yourbrand-login">
+    <svg width="20" height="20"><use href="/_yourbrand/telegram-icon.svg#icon"/></svg>
+    Login with Telegram
+</button>`
+
+        # Hide password fields
+        replace "<input type=\"password\"" "<input type=\"password\" style=\"display:none\""
+    }
+}

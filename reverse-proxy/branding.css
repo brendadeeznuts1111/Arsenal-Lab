@@ -1,0 +1,311 @@
+/**
+ * YourBrand Sports Betting Branding
+ * Overrides rented sports-book styles with your branding
+ */
+
+/* Import Google Fonts for your brand */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* CSS Variables for your brand */
+:root {
+    --yourbrand-primary: #007bff;
+    --yourbrand-secondary: #28a745;
+    --yourbrand-accent: #ffc107;
+    --yourbrand-danger: #dc3545;
+    --yourbrand-dark: #212529;
+    --yourbrand-light: #f8f9fa;
+    --yourbrand-text: #333333;
+    --yourbrand-border: #dee2e6;
+
+    --yourbrand-radius: 8px;
+    --yourbrand-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    --yourbrand-transition: all 0.3s ease;
+}
+
+/* Global overrides */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    color: var(--yourbrand-text) !important;
+}
+
+/* Hide renter branding */
+.logo img[src*="fantasy402"],
+.logo img[src*="Fantasy"],
+[class*="fantasy"] .logo,
+[id*="fantasy"] .logo {
+    display: none !important;
+}
+
+/* Your brand header */
+.yourbrand-header {
+    background: linear-gradient(135deg, var(--yourbrand-primary), var(--yourbrand-secondary));
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: var(--yourbrand-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.yourbrand-header .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: white !important;
+}
+
+/* Navigation */
+.yourbrand-nav {
+    background: var(--yourbrand-dark);
+    padding: 0.5rem 2rem;
+}
+
+.yourbrand-nav a {
+    color: white !important;
+    text-decoration: none;
+    margin: 0 1rem;
+    transition: var(--yourbrand-transition);
+}
+
+.yourbrand-nav a:hover {
+    color: var(--yourbrand-accent) !important;
+}
+
+/* Login button override */
+.yourbrand-tg-login {
+    background: linear-gradient(135deg, #0088cc, #0088cc) !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    border-radius: var(--yourbrand-radius) !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: var(--yourbrand-transition) !important;
+    box-shadow: var(--yourbrand-shadow) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-decoration: none !important;
+}
+
+.yourbrand-tg-login:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 20px rgba(0, 136, 204, 0.4) !important;
+}
+
+.yourbrand-tg-login:active {
+    transform: translateY(0) !important;
+}
+
+.yourbrand-tg-login svg {
+    fill: currentColor;
+}
+
+/* Hide original login elements */
+input[type="password"],
+input[name*="password"],
+.form-group:has(input[type="password"]) {
+    display: none !important;
+}
+
+.login-form .form-group:not(:has(.yourbrand-tg-login)) {
+    display: none !important;
+}
+
+/* Bet placement improvements */
+.bet-form {
+    background: white;
+    border-radius: var(--yourbrand-radius);
+    box-shadow: var(--yourbrand-shadow);
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+.bet-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.bet-form label {
+    font-weight: 600;
+    color: var(--yourbrand-text);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.bet-form input,
+.bet-form select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--yourbrand-border);
+    border-radius: var(--yourbrand-radius);
+    font-size: 1rem;
+    transition: var(--yourbrand-transition);
+}
+
+.bet-form input:focus,
+.bet-form select:focus {
+    border-color: var(--yourbrand-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.bet-form .btn {
+    background: var(--yourbrand-primary) !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    border-radius: var(--yourbrand-radius) !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: var(--yourbrand-transition) !important;
+    width: 100% !important;
+}
+
+.bet-form .btn:hover {
+    background: #0056b3 !important;
+    transform: translateY(-1px);
+}
+
+/* Notifications */
+.yourbrand-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: var(--yourbrand-radius);
+    color: white;
+    font-weight: 600;
+    z-index: 10000;
+    box-shadow: var(--yourbrand-shadow);
+    animation: slideIn 0.3s ease;
+}
+
+.yourbrand-notification.success {
+    background: var(--yourbrand-secondary);
+}
+
+.yourbrand-notification.error {
+    background: var(--yourbrand-danger);
+}
+
+.yourbrand-notification.info {
+    background: var(--yourbrand-primary);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Modal styles */
+.yourbrand-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.yourbrand-modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--yourbrand-radius);
+    box-shadow: var(--yourbrand-shadow);
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+}
+
+.yourbrand-modal-content h3 {
+    margin-top: 0;
+    color: var(--yourbrand-primary);
+}
+
+.yourbrand-modal-content button {
+    background: var(--yourbrand-primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--yourbrand-radius);
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+/* Footer */
+.yourbrand-footer {
+    background: var(--yourbrand-dark);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+
+.yourbrand-footer a {
+    color: var(--yourbrand-accent) !important;
+    text-decoration: none;
+}
+
+.yourbrand-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .yourbrand-header {
+        padding: 1rem;
+    }
+
+    .yourbrand-nav {
+        padding: 0.5rem 1rem;
+    }
+
+    .yourbrand-nav a {
+        margin: 0 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .bet-form {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+
+    .yourbrand-tg-login {
+        padding: 10px 16px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Hide any remaining renter branding */
+*[class*="fantasy"],
+*[id*="fantasy"],
+*[src*="fantasy"],
+*[href*="fantasy"] {
+    display: none !important;
+}
+
+/* Override any inline styles that might conflict */
+.yourbrand-tg-login[style],
+.yourbrand-notification[style] {
+    all: revert !important;
+}
+
+/* Print styles */
+@media print {
+    .yourbrand-notification,
+    .yourbrand-modal {
+        display: none !important;
+    }
+}
