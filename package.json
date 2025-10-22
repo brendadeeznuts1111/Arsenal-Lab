@@ -126,7 +126,7 @@
     "@testing-library/react-hooks": "^8.0.1",
     "@types/bun": "latest",
     "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
+    "@types/react-dom": "^19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "concurrently": "^8.2.2",
