@@ -1,0 +1,242 @@
+# Bun System Gate - Enterprise Development Rules
+# FAANG-grade development practices for enterprise software
+
+## ENTERPRISE ARCHITECTURE PRINCIPLES
+
+### 🏗️ A+ Grade Architecture
+**REQUIREMENTS:**
+- **Microservices**: Clean separation between UI, API, database
+- **Scalability**: Horizontal scaling ready from day one
+- **Observability**: Comprehensive logging, metrics, tracing
+- **Security**: Defense in depth, zero-trust model
+- **Performance**: 500x faster operations benchmarked
+
+### 📊 Enterprise Metrics
+**TRACK:**
+- **Performance**: 500x faster than Node.js
+- **Security**: Zero critical violations
+- **Reliability**: 99.9%+ uptime
+- **Compliance**: 100% governance validation
+- **Coverage**: 83.77%+ test coverage
+
+## GOVERNANCE INTEGRATION
+
+### 🔐 Pre-commit Hooks
+**AUTOMATIC:**
+```bash
+# Runs on every commit
+bun run invariant:validate  # Security validation
+bun run gate:sign          # Cryptographic signing
+```
+
+### 🚨 Governance Commands
+**ALWAYS AVAILABLE:**
+```bash
+bun run invariant:validate   # Security invariant validation
+bun run tension:check       # Monitor amber/block tensions
+bun run gate:sarif          # GitHub Security tab reports
+bun run patch:ctl           # Canary rollout management
+```
+
+## DEVELOPMENT STANDARDS
+
+### 📝 Code Quality
+**MANDATORY:**
+```typescript
+// ✅ REQUIRED - Strict TypeScript
+interface ComponentProps {
+  readonly id: string;
+  title: string;
+  onClick: (id: string) => void;
+}
+
+// ✅ REQUIRED - Comprehensive error handling
+try {
+  const result = await operation();
+  return result;
+} catch (error) {
+  logger.error('Operation failed', { error, context });
+  throw new ApplicationError('Operation failed', { cause: error });
+}
+```
+
+### 🧪 Testing Standards
+**REQUIREMENTS:**
+```typescript
+// ✅ REQUIRED - Unit tests for all functions
+describe('UserService', () => {
+  it('should create user successfully', async () => {
+    const user = await userService.create(validUserData);
+    expect(user.id).toBeDefined();
+    expect(user.email).toBe(validUserData.email);
+  });
+
+  it('should reject invalid email', async () => {
+    await expect(userService.create(invalidUserData))
+      .rejects.toThrow(ValidationError);
+  });
+});
+
+// ✅ REQUIRED - 83.77%+ coverage
+// ✅ REQUIRED - Integration tests for APIs
+// ✅ REQUIRED - E2E tests for critical paths
+```
+
+### 📚 Documentation
+**MANDATORY:**
+```typescript
+/**
+ * Creates a new user account with enterprise validation
+ *
+ * @param userData - User registration data
+ * @returns Promise<User> - Created user object
+ * @throws {ValidationError} When user data is invalid
+ * @throws {ConflictError} When email already exists
+ *
+ * @example
+ * ```typescript
+ * const user = await userService.create({
+ *   email: 'user@example.com',
+ *   name: 'John Doe',
+ *   password: 'securePassword123'
+ * });
+ * ```
+ */
+async create(userData: CreateUserInput): Promise<User> {
+  // Implementation
+}
+```
+
+## ENTERPRISE SECURITY
+
+### 🛡️ Security First Approach
+**PRINCIPLES:**
+- **Fail Secure**: Default to secure behavior
+- **Defense in Depth**: Multiple security layers
+- **Zero Trust**: Validate everything
+- **Audit Everything**: Complete traceability
+- **Automate Governance**: No manual security processes
+
+### 🔐 Compliance Requirements
+**MANDATORY:**
+- **Invariant Validation**: All code passes security rules
+- **Cryptographic Signing**: Every patch has .sig verification
+- **SARIF Reporting**: Security issues in GitHub Security tab
+- **Access Control**: Proper authentication and authorization
+- **Data Protection**: Encryption at rest and in transit
+
+## DEPLOYMENT & OPERATIONS
+
+### 🚀 Enterprise Deployment
+**SUPPORTED:**
+```bash
+# Multiple cloud platforms
+bun run deploy:vercel     # Vercel deployment
+bun run deploy:railway    # Railway deployment
+bun run deploy:fly        # Fly.io deployment
+
+# Production server
+bun run build && bun run start
+```
+
+### 📊 Monitoring & Observability
+**REQUIRED:**
+```bash
+# Enable telemetry
+bun run telemetry:init
+
+# Metrics endpoint
+curl http://localhost:9464/metrics
+
+# Health checks
+curl http://localhost:3001/health
+```
+
+### 🔄 CI/CD Pipeline
+**AUTOMATED:**
+- **Pre-commit**: Governance validation
+- **CI**: Automated testing and security scans
+- **Release**: Automated tagging and publishing
+- **Deploy**: Automated deployment with rollbacks
+
+## TEAM COLLABORATION
+
+### 🤝 Code Review Standards
+**REQUIREMENTS:**
+- **Security Review**: All changes pass governance validation
+- **Performance Review**: No performance regressions
+- **Architecture Review**: Maintains A+ grade patterns
+- **Testing Review**: Adequate test coverage maintained
+
+### 📋 Pull Request Template
+**MANDATORY FIELDS:**
+```markdown
+## Description
+Brief description of changes
+
+## Security Impact
+- [ ] Security review completed
+- [ ] Governance validation passes
+- [ ] No new security vulnerabilities
+
+## Performance Impact
+- [ ] Performance benchmarks pass
+- [ ] No performance regressions
+- [ ] Memory usage acceptable
+
+## Testing
+- [ ] Unit tests pass (83.77%+ coverage)
+- [ ] Integration tests pass
+- [ ] E2E tests pass (if applicable)
+
+## Deployment
+- [ ] Deployment tested in staging
+- [ ] Rollback plan documented
+- [ ] Monitoring alerts configured
+```
+
+## COMPLIANCE & AUDIT
+
+### 📋 Audit Trail
+**MAINTAINED:**
+- **Git History**: Complete change history
+- **Security Reports**: SARIF reports archived
+- **Performance Metrics**: Benchmark results tracked
+- **Compliance Logs**: Governance validation results
+
+### 🎯 A+ Grade Standards
+**VERIFIED:**
+- **Architecture**: Enterprise-grade microservices
+- **Security**: FAANG-level security measures
+- **Performance**: 500x faster operations
+- **Quality**: 83.77%+ test coverage
+- **Documentation**: Comprehensive technical docs
+
+## INCIDENT RESPONSE
+
+### 🚨 Emergency Procedures
+**DOCUMENTED:**
+```bash
+# 1. Assess situation
+bun run invariant:validate
+bun run gate:sarif > emergency-report.sarif
+
+# 2. Contain if needed
+launchdarkly toggle <rule> off  # Kill-switch
+
+# 3. Investigate
+# Check logs, metrics, security reports
+
+# 4. Communicate
+# Update stakeholders, create incident report
+
+# 5. Recover
+# Fix root cause, re-enable features
+# Deploy with canary rollout
+bun run patch:ctl rollout <fix> 10  # 10% canary
+bun run patch:ctl rollout <fix> 100 # Full production
+```
+
+---
+
+**This is enterprise software with FAANG-grade requirements. Every decision must consider scalability, security, compliance, and performance at the highest standards.** 🏆

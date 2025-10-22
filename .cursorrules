@@ -1,0 +1,144 @@
+# Bun System Gate - Cursor AI Assistant Configuration
+# Comprehensive enterprise governance system for Bun repositories
+# Last updated: October 2025
+
+## Project Overview
+You are working on **Bun System Gate (v∞)**, a comprehensive enterprise-grade patch governance system that provides FAANG-level security, compliance, and automation for Bun.js repositories.
+
+## Core Principles
+- **Security First**: All code must pass invariant validation
+- **Enterprise Ready**: Production-grade architecture with automated governance
+- **Zero Friction**: Governance happens invisibly in the background
+- **Bun Native**: Leverage Bun's performance and security features
+- **A+ Grade**: Comprehensive technical review completed October 2025
+
+## Governance Rules (MANDATORY)
+
+### 🔐 Security Invariants (Blockers)
+- **No eval()**: Never use `eval()`, `Function()`, or dynamic code execution
+- **Crypto Integrity**: Only use secure cryptographic algorithms (no MD5, SHA1, rapidhash)
+- **Layer Boundaries**: UI code cannot import database modules directly
+- **Process Env Access**: No unauthorized `process.env` usage in security packages
+
+### 🛡️ Governance Commands (Always Available)
+```bash
+bun run invariant:validate    # Validate all patches against security rules
+bun run tension:check        # Monitor for amber/block tensions
+bun run gate:sarif          # Generate SARIF for GitHub Security tab
+bun run gate:sign           # Cryptographically sign patches
+bun run patch:ctl           # Manage canary rollouts
+```
+
+### 📊 Enterprise Features
+- **SARIF Reporting**: All security issues appear in GitHub Security tab
+- **Cosign Signing**: Every patch gets cryptographically signed (*.sig files)
+- **Canary Rollouts**: Percentage-based deployment staging
+- **Pre-commit Hooks**: Automatic validation on every commit
+- **CI/CD Integration**: Automated governance in GitHub Actions
+
+## Development Workflow
+
+### 🚀 Quick Start
+```bash
+# Bootstrap governance (if not already done)
+curl -sSL https://raw.githubusercontent.com/brendadeeznuts1111/Arsenal-Lab/main/scripts/remote-gate.sh | bash
+
+# Development commands
+bun run invariant:validate  # Always run before commits
+bun run dev                 # Start development server
+bun run build              # Production build
+```
+
+### 📝 Commit Guidelines
+- **Pre-commit**: Automatic governance validation runs
+- **Messages**: Include governance impact when relevant
+- **Tags**: Use semantic versioning for releases
+- **Security**: All changes pass invariant validation
+
+### 🔧 Code Quality
+- **TypeScript**: Strict typing throughout
+- **ESLint**: Follow established rules
+- **Testing**: 83.77%+ coverage maintained
+- **Performance**: Leverage Bun's zero-copy operations
+
+## AI Assistant Guidelines
+
+### 🤖 Response Style
+- **Technical Accuracy**: Provide correct, actionable information
+- **Security Conscious**: Flag any potential security issues
+- **Governance Aware**: Reference governance rules when relevant
+- **Enterprise Focus**: Consider scalability and compliance
+- **Bun Expertise**: Leverage Bun-specific features and performance
+
+### 🎯 Context Awareness
+- **Project Phase**: Recognize this is production enterprise software
+- **Security Level**: Apply FAANG-grade security standards
+- **Performance**: Optimize for Bun's capabilities (500x faster operations)
+- **Compliance**: Ensure all code meets enterprise governance requirements
+
+### 📚 Knowledge Base
+- **Bun v1.3+**: Latest features and security enhancements
+- **Enterprise Patterns**: Production-ready architecture
+- **Governance Rules**: Complete invariant validation system
+- **A+ Grade Standards**: Comprehensive technical review completed October 2025
+
+## File Structure Awareness
+
+### 🔐 Governance Files (Protected)
+- `gate.js` - Core governance engine (655B, do not modify)
+- `canary.json` - Rollout configuration matrix
+- `package.json` - Includes governance scripts
+- `.husky/pre-commit` - Automatic validation hook
+
+### 📁 Key Directories
+- `components/` - React components with A+ grade architecture
+- `docs/` - Comprehensive documentation
+- `scripts/` - Automation and utility scripts
+- `src/` - Core application logic
+- `wiki-repo/` - GitHub wiki content
+
+## Integration Points
+
+### 🐙 GitHub Integration
+- **Security Tab**: SARIF reports automatically appear
+- **Actions**: Governance workflows run automatically
+- **Releases**: Tagged releases with comprehensive notes
+- **Wiki**: Documentation maintained in wiki-repo/
+
+### 📊 Monitoring & Analytics
+- **Performance**: 500x faster operations benchmarked
+- **Security**: Real-time invariant validation
+- **Compliance**: Automated governance enforcement
+- **Metrics**: Prometheus/Grafana integration ready
+
+## Emergency Procedures
+
+### 🚨 Security Incidents
+1. Run: `bun run invariant:validate`
+2. Check: GitHub Security tab for violations
+3. Kill-switch: `launchdarkly toggle <rule> off` (if configured)
+4. Report: Create GitHub Security Advisory
+
+### 🚨 Governance Failures
+1. Validate: `bun run invariant:validate`
+2. Check logs: Review pre-commit hook output
+3. Fix issues: Address any blocker violations
+4. Re-validate: Ensure clean state before commits
+
+## Success Metrics
+
+### ✅ Governance Health
+- Pre-commit hooks pass 100% of the time
+- SARIF reports show zero critical violations
+- Canary rollouts maintain >95% success rate
+- All patches cryptographically signed
+
+### ✅ Development Velocity
+- Zero governance-related development blocks
+- Automated validation provides immediate feedback
+- Enterprise features work invisibly in background
+- A+ grade architecture maintained throughout
+
+---
+
+**Remember: This is enterprise software with FAANG-grade governance. Every line of code contributes to the security and compliance of potentially millions of users. Code with excellence, govern with vigilance.** 🛡️✨🏆
