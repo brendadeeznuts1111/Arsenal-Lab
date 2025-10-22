@@ -21,8 +21,20 @@ export { BuildConfigurationArsenal } from './BuildConfigurationArsenal';
 // Package Management Arsenal
 export { PackageManagementArsenal } from './PackageManagementArsenal';
 
+// Bunx Demo
+export { BunxDemo } from './BunxDemo';
+
+// API Arsenal
+export { APIArsenal } from './APIArsenal';
+
+// Stats Arsenal
+export { StatsArsenal } from './StatsArsenal';
+
 // Telegram Bot Metrics
 export { TelegramBotMetrics } from './TelegramBotMetrics';
+
+// Dashboard Arsenal
+export { DashboardArsenal } from '../dashboard-modules';
 
 // Layout Components
 export { Banner } from './Layout/Banner';

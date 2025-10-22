@@ -6,8 +6,11 @@ import { Footer } from '../components/Layout/Footer';
 import { getPerformanceMonitor } from '../components/PerformanceArsenal/utils/performanceObserver';
 import { getPrometheusMetrics } from './metrics/arsenal';
 
+// Debug logging for browser execution
+console.log('🔧 Arsenal Lab script loaded, React available:', typeof React, typeof ReactDOM);
+
 // Lab state
-type TabType = 'performance' | 'process' | 'testing' | 'debugging' | 'database' | 'build' | 'bunx' | 'security' | 'package';
+type TabType = 'performance' | 'process' | 'testing' | 'debugging' | 'database' | 'build' | 'bunx' | 'security' | 'package' | 'dashboard' | 'stats' | 'api';
 let currentTab: TabType = 'performance';
 let performanceMonitor = getPerformanceMonitor();
 
@@ -88,6 +91,15 @@ function renderLab() {
           </button>
           <button onclick="switchTab('bunx')" class="${currentTab === 'bunx' ? 'active' : ''}">
             🚀 bunx Demo
+          </button>
+          <button onclick="switchTab('dashboard')" class="${currentTab === 'dashboard' ? 'active' : ''}">
+            📊 Dashboard
+          </button>
+          <button onclick="switchTab('api')" class="${currentTab === 'api' ? 'active' : ''}">
+            🚀 API Toolkit
+          </button>
+          <button onclick="switchTab('stats')" class="${currentTab === 'stats' ? 'active' : ''}">
+            📈 Stats
           </button>
           <button onclick="exportMetrics()">
             📊 Export Metrics
@@ -234,7 +246,7 @@ function renderLab() {
   startStatsUpdates();
 }
 
-function switchTab(tab: string) {
+function switchTab(tab: TabType) {
   currentTab = tab;
   renderLab();
 }
@@ -293,9 +305,82 @@ function renderTabContent() {
     });
   } else if (currentTab === 'bunx') {
     // Mount React Bunx Demo
-    import('../components/BunxDemo').then(({ BunxDemo }) => {
+    import('../components').then(({ BunxDemo }) => {
       const root = ReactDOM.createRoot(content);
       root.render(React.createElement(BunxDemo));
+    });
+  } else if (currentTab === 'dashboard') {
+    // Mount React Dashboard Arsenal with dynamic import
+    console.log('🔧 Dashboard tab clicked, checking React availability...');
+    console.log('React on window:', (window as any).React);
+    console.log('ReactDOM on window:', (window as any).ReactDOM);
+
+    import('../dashboard-modules/index.tsx').then((module) => {
+      console.log('✅ DashboardArsenal module loaded:', module);
+      try {
+        const DashboardArsenal = module.DashboardArsenal;
+        console.log('🔧 DashboardArsenal component:', DashboardArsenal);
+
+        const root = ReactDOM.createRoot(content);
+        root.render(React.createElement(DashboardArsenal));
+        console.log('🎉 DashboardArsenal rendered successfully');
+      } catch (renderError) {
+        console.error('❌ Failed to render DashboardArsenal:', renderError);
+        const errorMessage = renderError instanceof Error ? renderError.message : String(renderError);
+        content.innerHTML = `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">📊 Dashboard Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Enterprise dashboard modules for monitoring, analytics, and administrative controls with real-time metrics.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#ef4444;margin-bottom:1rem;">⚠️ Render Error</h3>
+              <p style="color:#8b949e;margin-bottom:1.5rem;">Component loaded but failed to render.</p>
+              <div style="background:#0d1117;padding:1rem;border-radius:.375rem;border:1px solid #30363d;">
+                <p style="color:#f85149;font-size:.875rem;">Render Error: ${errorMessage}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }).catch(error => {
+      console.error('Failed to load DashboardArsenal module:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      // Fallback to static content
+      content.innerHTML = `
+        <div style="text-align:center;padding:2rem 1rem;">
+          <h2 style="color:#58a6ff;margin-bottom:1rem;">📊 Dashboard Arsenal</h2>
+          <p style="color:#8b949e;margin-bottom:2rem;">Enterprise dashboard modules for monitoring, analytics, and administrative controls with real-time metrics.</p>
+          <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+            <h3 style="color:#ef4444;margin-bottom:1rem;">⚠️ Module Load Error</h3>
+            <p style="color:#8b949e;margin-bottom:1.5rem;">Failed to load the dashboard module.</p>
+            <div style="background:#0d1117;padding:1rem;border-radius:.375rem;border:1px solid #30363d;">
+              <p style="color:#f85149;font-size:.875rem;">Import Error: ${errorMessage}</p>
+              <p style="color:#79c0ff;font-size:.875rem;margin-top:.5rem;">Check network connectivity and module availability.</p>
+            </div>
+            <div style="margin-top:1rem;padding:1rem;background:#1f2937;border-radius:.375rem;border:1px solid #374151;">
+              <h4 style="color:#f97316;margin-bottom:.5rem;">📊 Dashboard Features:</h4>
+              <ul style="text-align:left;color:#9ca3af;font-size:.875rem;margin:0;padding-left:1.5rem;">
+                <li>Real-time system metrics monitoring</li>
+                <li>Performance analytics dashboard</li>
+                <li>User activity tracking</li>
+                <li>System administration controls</li>
+                <li>Alert management system</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  } else if (currentTab === 'api') {
+    // Mount React API Arsenal
+    import('../components').then(({ APIArsenal }) => {
+      const root = ReactDOM.createRoot(content);
+      root.render(React.createElement(APIArsenal));
+    });
+  } else if (currentTab === 'stats') {
+    // Mount React Stats Arsenal
+    import('../components').then(({ StatsArsenal }) => {
+      const root = ReactDOM.createRoot(content);
+      root.render(React.createElement(StatsArsenal));
     });
   }
 }
@@ -340,6 +425,10 @@ function exportMetrics() {
 
 // Initialize lab (only in browser environment)
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+  // Make React globally available immediately for dynamic imports
+  (window as any).React = React;
+  (window as any).ReactDOM = ReactDOM;
+
   // If DOM is already loaded, initialize immediately
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
@@ -352,7 +441,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
       console.log('🎯 Arsenal Lab v1.4.0 ready! Use bun run arsenal:ci for automated testing.');
     });
   } else {
-    // DOM already loaded
+    // DOM already loaded - initialize immediately
     renderLab();
 
     // Global functions for buttons (only available in browser)
