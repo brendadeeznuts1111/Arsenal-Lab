@@ -1,6 +1,6 @@
 {
   "name": "@bun/performance-arsenal",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "🏆 A+ Grade Production-Ready Enterprise Solution - FAANG-grade performance testing suite for Bun runtime v1.3+ - Interactive playground showcasing every enhancement across performance, databases, testing, and infrastructure",
   "badge": {
     "grade": "A+",

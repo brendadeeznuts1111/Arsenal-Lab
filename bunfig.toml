@@ -10,6 +10,7 @@ preload = ["./test/setup.ts"]
 coverage = true
 coverageThreshold = 80  # Realistic coverage goal
 coverageSkipTestFiles = true  # Don't include test files in coverage
+coverageReporter = ["text", "lcov"]  # Generate both console output and lcov for CI
 
 # Test reliability - randomize with fixed seed for reproducibility in CI
 # Bun v1.3: Use --randomize flag to find test dependencies

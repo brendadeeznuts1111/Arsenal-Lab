@@ -6,11 +6,13 @@ import { useState } from 'react';
 /*  HOOK                                                              */
 /* ------------------------------------------------------------------ */
 export function usePackageManagementArsenal() {
-  const [tab, setTab] = useState<'info' | 'outdated' | 'audit' | 'analyze'>('info');
+  const [tab, setTab] = useState<'info' | 'outdated' | 'audit' | 'analyze' | 'patch'>('info');
   const [pkg, setPkg] = useState('react');
   const [sev, setSev] = useState<'all' | 'low' | 'moderate' | 'high' | 'critical'>('high');
   const [ws, setWs] = useState(false);
-  return { tab, setTab, pkg, setPkg, sev, setSev, ws, setWs };
+  const [patchMode, setPatchMode] = useState<'prepare' | 'commit'>('prepare');
+  const [patchesDir, setPatchesDir] = useState('patches');
+  return { tab, setTab, pkg, setPkg, sev, setSev, ws, setWs, patchMode, setPatchMode, patchesDir, setPatchesDir };
 }
 
 /* ------------------------------------------------------------------ */
@@ -20,6 +22,9 @@ const infoCmd = (p: string) => `bun info ${p}`;
 const outdatedCmd = (r: boolean) => `bun update -i${r ? ' --recursive' : ''}`;
 const auditCmd = (s: string, j: boolean) => `bun audit${s !== 'all' ? ` --severity=${s}` : ''}${j ? ' --json > audit.json' : ''}`;
 const analyzeCmd = () => `bun install --analyze`;
+const patchCmd = (p: string, mode: string, dir?: string) => mode === 'commit'
+  ? `bun patch --commit ${p}${dir !== 'patches' ? ` --patches-dir=${dir}` : ''}`
+  : `bun patch ${p}`;
 
 /* ------------------------------------------------------------------ */
 /*  MOCK DATA                                                         */
@@ -74,13 +79,14 @@ const severityColors: Record<string, string> = {
 /*  MAIN COMPONENT                                                     */
 /* ------------------------------------------------------------------ */
 export function PackageManagementArsenal() {
-  const { tab, setTab, pkg, setPkg, sev, setSev, ws, setWs } = usePackageManagementArsenal();
+  const { tab, setTab, pkg, setPkg, sev, setSev, ws, setWs, patchMode, setPatchMode, patchesDir, setPatchesDir } = usePackageManagementArsenal();
 
   const tabs = [
     { id: 'info', label: 'Info', color: 'blue', icon: '📦' },
     { id: 'outdated', label: 'Outdated', color: 'orange', icon: '🔄' },
     { id: 'audit', label: 'Audit', color: 'red', icon: '🛡️' },
     { id: 'analyze', label: 'Analyze', color: 'green', icon: '🔍' },
+    { id: 'patch', label: 'Patch', color: 'purple', icon: '🩹' },
   ];
 
   return (
@@ -118,6 +124,7 @@ export function PackageManagementArsenal() {
       {tab === 'outdated' && <OutdatedPanel ws={ws} setWs={setWs} />}
       {tab === 'audit' && <AuditPanel sev={sev} setSev={setSev} />}
       {tab === 'analyze' && <AnalyzePanel />}
+      {tab === 'patch' && <PatchPanel pkg={pkg} setPkg={setPkg} patchMode={patchMode} setPatchMode={setPatchMode} patchesDir={patchesDir} setPatchesDir={setPatchesDir} />}
 
       {/* Footer */}
       <footer className="mt-5 pt-3 border-t border-gray-200 dark:border-gray-700 grid grid-cols-2 gap-2 text-[10px]">
@@ -125,6 +132,8 @@ export function PackageManagementArsenal() {
         <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>Workspace support</span></div>
         <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>npm audit DB</span></div>
         <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>Auto-detect imports</span></div>
+        <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>Persistent patching</span></div>
+        <div className="flex items-center gap-2"><span className="text-green-500">✅</span><span>Git-friendly patches</span></div>
       </footer>
     </div>
   );
@@ -181,6 +190,36 @@ const AnalyzePanel = () => (
     <CopyButton text={analyzeCmd()} />
     <CodeBlock code={analyzeCmd()} />
     <AnalyzeReport />
+  </Section>
+);
+
+const PatchPanel = ({ pkg, setPkg, patchMode, setPatchMode, patchesDir, setPatchesDir }: any) => (
+  <Section title="Persistent Package Patching" desc="Maintainable, git-friendly patches for node_modules">
+    <div className="flex gap-2 mb-2">
+      <select value={patchMode} onChange={e => setPatchMode(e.target.value)} className="px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800">
+        <option value="prepare">Prepare Package</option>
+        <option value="commit">Commit Patch</option>
+      </select>
+      {patchMode === 'commit' && (
+        <input
+          value={patchesDir}
+          onChange={e => setPatchesDir(e.target.value)}
+          placeholder="patches dir"
+          className="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+        />
+      )}
+    </div>
+    <div className="flex gap-2 mb-2">
+      <input
+        value={pkg}
+        onChange={e => setPkg(e.target.value)}
+        placeholder="package name"
+        className="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+      />
+      <CopyButton text={patchCmd(pkg, patchMode, patchesDir)} />
+    </div>
+    <CodeBlock code={patchCmd(pkg, patchMode, patchesDir)} />
+    <PatchGuide mode={patchMode} />
   </Section>
 );
 
@@ -254,5 +293,39 @@ const AnalyzeReport = () => (
     <div className="flex items-center justify-between mb-1"><span>Missing dependencies detected:</span><span className="font-mono text-green-600">3 packages</span></div>
     <div className="space-y-1 font-mono text-[10px]"><div>lodash (imported in src/utils.ts)</div><div>axios (imported in src/api.ts)</div><div>express (imported in src/server.ts)</div></div>
     <div className="mt-2 text-green-600">✅ Auto-installed via --analyze</div>
+  </div>
+);
+
+const PatchGuide = ({ mode }: { mode: string }) => (
+  <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg text-xs">
+    {mode === 'prepare' ? (
+      <div className="space-y-2">
+        <div className="font-semibold text-purple-700 dark:text-purple-300">🎯 Prepare Package for Patching</div>
+        <div className="text-purple-600 dark:text-purple-400 space-y-1">
+          <div>• Creates fresh copy in node_modules/ (no cache links)</div>
+          <div>• Makes it safe to edit packages directly</div>
+          <div>• Preserves Global Cache integrity</div>
+        </div>
+        <div className="text-gray-600 dark:text-gray-400 mt-2">
+          <strong>⚠️ Important:</strong> Only edit node_modules/ after running this command!
+        </div>
+        <div className="text-green-600 dark:text-green-400 mt-1">
+          <strong>Next:</strong> Edit your package, then run --commit
+        </div>
+      </div>
+    ) : (
+      <div className="space-y-2">
+        <div className="font-semibold text-purple-700 dark:text-purple-300">📝 Commit Your Patch</div>
+        <div className="text-purple-600 dark:text-purple-400 space-y-1">
+          <div>• Generates .patch file in patches/ directory</div>
+          <div>• Updates package.json with "patchedDependencies"</div>
+          <div>• Patch applies automatically on future installs</div>
+          <div>• Git-friendly: commit and share patches</div>
+        </div>
+        <div className="text-green-600 dark:text-green-400 mt-2">
+          <strong>Benefits:</strong> Persistent, maintainable, shareable patches
+        </div>
+      </div>
+    )}
   </div>
 );
