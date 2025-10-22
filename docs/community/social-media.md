@@ -64,18 +64,47 @@ Case study: https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/[id]
 - Community-contributed articles
 - Technical deep dives
 
-#### Telegram Group (@arsenallab)
-**Focus**: Real-time community chat, quick questions, support
-**Activity**: Daily engagement and community discussions
-**Content Types**:
-- Quick help and troubleshooting
-- Performance tips and tricks
-- Community announcements
-- Live discussions during events
-- Beta testing coordination
+#### Telegram Bot (@arsenallab_bot)
+**Focus**: Interactive commands, automated benchmarks, notifications
+**Availability**: 24/7 automated responses
+**Bot Features**:
+- `/benchmark [type]` - Run performance benchmarks
+- `/compare bun node` - Compare runtime performance
+- `/stats` - Get Arsenal Lab usage statistics
+- `/help` - Show available commands
+- `/latest` - Latest release information
+- Automated notifications for new releases
+- Real-time performance monitoring alerts
+
+**Sample Interactions**:
+```
+User: /benchmark crypto
+Bot: 🔐 Running crypto benchmark...
+
+Results:
+• Bun: 2.3ms
+• Node.js: 11.2ms
+• Speedup: 4.87×
+
+Try it yourself: https://brendadeeznuts1111.github.io/Arsenal-Lab/
+```
+
+#### Telegram Supergroup (@arsenallab) with Topics
+**Focus**: Organized community discussions with topic-based channels
+**Activity**: Daily engagement across multiple topics
+**Topics Structure**:
+- 📢 **Announcements** - Official updates and releases
+- 💬 **General** - Open discussions and community chat
+- 🐛 **Bug Reports** - Issue tracking and troubleshooting
+- 💡 **Feature Requests** - Ideas and enhancement proposals
+- 🚀 **Performance Tips** - Optimization techniques and best practices
+- 🎓 **Help & Support** - Questions and assistance
+- 📊 **Benchmarks** - Share and discuss performance results
+- 🤝 **Contributing** - Coordination for contributors
 
 **Community Guidelines**:
 - Be respectful and professional
+- Use appropriate topics for discussions
 - Search before asking duplicate questions
 - Share benchmarks and performance results
 - Help newcomers get started
@@ -166,7 +195,8 @@ Read the full case study: [link]
 - **JSR**: JavaScript registry integration (future)
 
 ### Community Platforms
-- **Telegram Group**: Real-time community chat and support (https://t.me/arsenallab)
+- **Telegram Bot**: Interactive benchmarks and commands (https://t.me/arsenallab_bot)
+- **Telegram Supergroup**: Organized discussions with topics (https://t.me/arsenallab)
 - **Telegram Channel**: Official announcements and updates (https://t.me/arsenallab_channel)
 - **GitHub Discussions**: Technical discussions and Q&A
 - **GitHub Issues**: Bug reports and feature requests
@@ -265,7 +295,8 @@ Read the full case study: [link]
 - **Issues**: https://github.com/brendadeeznuts1111/Arsenal-Lab/issues
 
 ### Community
-- **Telegram Group**: https://t.me/arsenallab (Community chat and support)
+- **Telegram Bot**: https://t.me/arsenallab_bot (Interactive commands and benchmarks)
+- **Telegram Supergroup**: https://t.me/arsenallab (Organized discussions with topics)
 - **Telegram Channel**: https://t.me/arsenallab_channel (Official announcements)
 
 ---

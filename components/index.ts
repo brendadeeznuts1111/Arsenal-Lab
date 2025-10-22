@@ -27,6 +27,7 @@ export { EnhancedBanner } from './Layout/EnhancedBanner';
 export { Footer } from './Layout/Footer';
 export { ProductionReadyBanner } from './Layout/ProductionReadyBanner';
 export { VersionBanner } from './Layout/VersionBanner';
+export { CommunityShowcase } from './Layout/CommunityShowcase';
 
 // Live Demo Components
 export { LiveTestingDemo } from './TestingDebuggingArsenal/ui/LiveTestingDemo';

@@ -36,12 +36,30 @@
 
 🚀 **Active community hub** for Bun developers, performance enthusiasts, and contributors!
 
-- **💬 [Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - 6 organized categories for conversations
+### 📡 Stay Connected
+
+[![Telegram Bot](https://img.shields.io/badge/Telegram-Bot-2CA5E0?style=for-the-badge&logo=telegram)](https://t.me/arsenallab_bot)
+[![Telegram Group](https://img.shields.io/badge/Telegram-Group-2CA5E0?style=for-the-badge&logo=telegram)](https://t.me/arsenallab)
+[![Telegram Channel](https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=for-the-badge&logo=telegram)](https://t.me/arsenallab_channel)
+[![GitHub Discussions](https://img.shields.io/github/discussions/brendadeeznuts1111/Arsenal-Lab?style=for-the-badge)](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)
+
+- **🤖 [Telegram Bot](https://t.me/arsenallab_bot)** - Interactive benchmarks, commands, and automated updates
+- **📡 [Telegram Supergroup](https://t.me/arsenallab)** - Community discussions with organized topics
+- **📢 [Telegram Channel](https://t.me/arsenallab_channel)** - Official announcements and performance updates
+- **💬 [Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - 7 organized categories for conversations
+
+### 🌟 **Community Features**
+- **🏆 A+ Grade Validators** - Enterprise contributors validating performance claims
+- **📦 Package Management Discussions** - Advanced Bun PM command optimization
+- **🚀 Enterprise Deployments** - Production success stories and best practices
+- **⭐ Recognition Program** - Monthly spotlight for outstanding achievements
+- **📊 Community Showcase** - Real enterprise metrics and quantified results
+- **📧 Monthly Newsletter** - Community highlights, events, and enterprise spotlights
 - **📡 [RSS Feeds](https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom)** - Stay updated with releases and discussions
 - **🤝 [Contributing](.github/CONTRIBUTING.md)** - Help build the future of fast JavaScript
 - **📖 [Documentation](docs/)** - Comprehensive guides and API references
 
-**👋 New here?** Start with our [Welcome Discussion](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/10)! 🎉
+**👋 New here?** Start with our [Welcome Discussion](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/10), chat with [@arsenallab_bot](https://t.me/arsenallab_bot), or join our [Telegram Supergroup](https://t.me/arsenallab)! 🎉
 
 ## 🚀 Installation
 

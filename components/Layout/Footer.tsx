@@ -57,6 +57,24 @@ export function Footer() {
             Issues
           </a>
 
+          {/* 🤖 TELEGRAM BOT */}
+          <a href="https://t.me/arsenallab_bot" target="_blank" rel="noopener noreferrer">
+            <span className="link-icon">🤖</span>
+            Telegram Bot
+          </a>
+
+          {/* 📡 TELEGRAM SUPERGROUP */}
+          <a href="https://t.me/arsenallab" target="_blank" rel="noopener noreferrer">
+            <span className="link-icon">📡</span>
+            Telegram Group
+          </a>
+
+          {/* 📢 TELEGRAM CHANNEL */}
+          <a href="https://t.me/arsenallab_channel" target="_blank" rel="noopener noreferrer">
+            <span className="link-icon">📢</span>
+            Telegram Channel
+          </a>
+
           {/* 🔧 YOUR API REFERENCE */}
           <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/blob/main/docs/api.md" target="_blank" rel="noopener noreferrer">
             <span className="link-icon">🔧</span>
