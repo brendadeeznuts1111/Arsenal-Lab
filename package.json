@@ -50,6 +50,7 @@
     "demo:zero-touch-auth": "bun run scripts/demonstrate-zero-touch-auth.ts",
     "demo:v1.3.1-enhanced": "bun run scripts/demonstrate-v1.3.1-enhanced-auth.ts",
     "demo:v1.3.1-fixes": "bun run scripts/demonstrate-v1.3.1-web-yaml-fixes.ts",
+    "demo:v4-identity": "bun run scripts/demonstrate-v4-identity-system.ts",
     "performance:log": "bun run scripts/performance-logger.ts",
     "performance:monitor": "bun run scripts/performance-logger.ts --interval 5000",
     "bootstrap": "bash scripts/bootstrap.sh",

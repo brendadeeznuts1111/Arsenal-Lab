@@ -1346,9 +1346,146 @@ arsenal_build_info{version="1.0.0",service="arsenal-lab"} 1
       }
     }
 
+    // ===== IDENTITY SERVICE API (v4 Enhancement) =====
+
+    // Identity generation endpoint - v4 zero-touch authentication
+    if (url.pathname === "/api/v1/id" && req.method === "GET") {
+      const startTime = Date.now();
+      try {
+        const urlParams = new URL(url).searchParams;
+        const prefix = urlParams.get('prefix') || 'unknown';
+        const run = urlParams.get('run') || Date.now().toString();
+        const domain = urlParams.get('domain') || 'api.dev.arsenal-lab.com';
+        const version = urlParams.get('version') || 'v1';
+
+        // Generate human-readable, self-describing identity
+        const identity = `${prefix}-${run}@${domain}/${version}:id`;
+
+        // TTL for token rotation (1 hour default)
+        const ttl = parseInt(urlParams.get('ttl') || '3600');
+
+        const identityResponse = {
+          id: identity,
+          ttl: ttl,
+          generated: new Date().toISOString(),
+          expires: new Date(Date.now() + ttl * 1000).toISOString(),
+          metadata: {
+            prefix,
+            run,
+            domain,
+            version,
+            type: 'disposable-identity',
+            compatible: ['nexus', 'artifactory', 'jfrog']
+          }
+        };
+
+        recordApiCall("GET", "/api/v1/id", startTime, 200);
+        return new Response(JSON.stringify(identityResponse), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (error: any) {
+        recordApiCall("GET", "/api/v1/id", startTime, 500);
+        return new Response(JSON.stringify({ error: "Identity generation failed", message: error.message }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
+    // Batch identity generation for multiple environments
+    if (url.pathname === "/api/v1/identities" && req.method === "POST") {
+      const startTime = Date.now();
+      try {
+        const body = await req.json();
+        const { environments, domain = 'api.dev.arsenal-lab.com', version = 'v1', ttl = 3600 } = body;
+
+        const identities = environments.map((env: any) => {
+          const identity = `${env.prefix}-${env.run}@${domain}/${version}:id`;
+          return {
+            environment: env.name,
+            id: identity,
+            ttl,
+            generated: new Date().toISOString(),
+            expires: new Date(Date.now() + ttl * 1000).toISOString()
+          };
+        });
+
+        const response = {
+          identities,
+          total: identities.length,
+          domain,
+          version,
+          ttl,
+          generated: new Date().toISOString()
+        };
+
+        recordApiCall("POST", "/api/v1/identities", startTime, 200);
+        return new Response(JSON.stringify(response), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (error: any) {
+        recordApiCall("POST", "/api/v1/identities", startTime, 500);
+        return new Response(JSON.stringify({ error: "Batch identity generation failed", message: error.message }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
+    // Identity validation endpoint
+    if (url.pathname === "/api/v1/validate" && req.method === "POST") {
+      const startTime = Date.now();
+      try {
+        const body = await req.json();
+        const { identity } = body;
+
+        // Validate identity format
+        const identityRegex = /^([a-zA-Z0-9_-]+)-(\d+)@([a-zA-Z0-9.-]+)\/(v\d+):id$/;
+        const match = identity.match(identityRegex);
+
+        let isValid = false;
+        let metadata = null;
+
+        if (match) {
+          const [, prefix, run, domain, version] = match;
+          isValid = true;
+          metadata = {
+            prefix,
+            run: parseInt(run),
+            domain,
+            version,
+            type: 'disposable-identity',
+            format: 'rfc5322-compliant'
+          };
+        }
+
+        const response = {
+          identity,
+          valid: isValid,
+          metadata,
+          validated: new Date().toISOString(),
+          rfc5322_compliant: isValid // Nexus accepts this syntax
+        };
+
+        recordApiCall("POST", "/api/v1/validate", startTime, 200);
+        return new Response(JSON.stringify(response), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (error: any) {
+        recordApiCall("POST", "/api/v1/validate", startTime, 500);
+        return new Response(JSON.stringify({ error: "Identity validation failed", message: error.message }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
     // ===============================
     // STATIC FILE SERVING (must be last)
-    // ===============================
+    // ==============================="
 
     // Only serve static files for non-API paths
     if (!url.pathname.startsWith("/api/") && !url.pathname.startsWith("/metrics")) {

@@ -37,6 +37,32 @@ if [[ ! -f "$REPO_ROOT/.npmrc.template" ]]; then
     exit 1
 fi
 
+# ===== V4 IDENTITY SERVICE INTEGRATION =====
+# Generate self-describing email identities using local API or fallback
+
+generate_identity() {
+  local prefix="$1"
+  local run="$2"
+  local domain="${3:-api.dev.arsenal-lab.com}"
+  local version="${4:-v1}"
+  local api_url="${IDENTITY_API_URL:-http://localhost:3655}"
+
+  # Try to fetch from identity service (v4)
+  if command -v curl >/dev/null 2>&1; then
+    local response
+    response=$(curl -s --max-time 5 "${api_url}/api/v1/id?prefix=${prefix}&run=${run}&domain=${domain}&version=${version}" 2>/dev/null)
+
+    if [[ $? -eq 0 ]] && echo "$response" | jq -e '.id' >/dev/null 2>&1; then
+      echo "$response" | jq -r '.id'
+      return 0
+    fi
+  fi
+
+  # Fallback: Generate locally (air-gapped mode)
+  log_warning "Identity service unavailable, using air-gapped fallback"
+  echo "${prefix}-${run}@${domain}/${version}:id"
+}
+
 # Environment validation (support both old and new variable names)
 missing_vars=()
 [[ -z "${NPM_EMAIL_ARSENAL:-}" ]] && [[ -z "${NPM_EMAIL:-}" ]] && missing_vars+=("NPM_EMAIL_ARSENAL or NPM_EMAIL")
@@ -46,11 +72,15 @@ if [[ ${#missing_vars[@]} -gt 0 ]]; then
     log_warning "Missing required environment variables: ${missing_vars[*]}"
     log_info "Using demo values for demonstration purposes"
 
-    # Demo values for development/testing (support new variable names)
-    export NPM_EMAIL_ARSENAL="${NPM_EMAIL_ARSENAL:-${NPM_EMAIL:-demo@arsenal-lab.com}}"
+    # Demo values for development/testing (support new variable names and v4 identities)
+    # Use v4 identity generation for demo email
+    DEMO_RUN_ID="${DEMO_RUN_ID:-$(date +%s)}"
+    DEMO_EMAIL_ARSENAL="${NPM_EMAIL_ARSENAL:-$(generate_identity 'demo' "$DEMO_RUN_ID" 'api.dev.arsenal-lab.com' 'v1')}"
+
+    export NPM_EMAIL_ARSENAL="${DEMO_EMAIL_ARSENAL}"
     export NPM_TOKEN_ARSENAL="${NPM_TOKEN_ARSENAL:-${NPM_TOKEN:-demo_token_123}}"
     export NPM_TOKEN_PUBLIC="${NPM_TOKEN_PUBLIC:-${NPM_PUBLIC_TOKEN:-npm_demo_token}}"
-    export NPM_EMAIL_PUBLIC="${NPM_EMAIL_PUBLIC:-${NPM_EMAIL:-demo@arsenal-lab.com}}"
+    export NPM_EMAIL_PUBLIC="${NPM_EMAIL_PUBLIC:-demo-${DEMO_RUN_ID}@api.dev.arsenal-lab.com/v1:id}"
 fi
 
 # Detect environment
