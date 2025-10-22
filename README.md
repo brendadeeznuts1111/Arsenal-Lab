@@ -4,7 +4,7 @@
 [![Review Status](https://img.shields.io/badge/Review-Complete-October%202025-blue.svg)](COMPREHENSIVE_REVIEW.md)
 [![Production Ready](https://img.shields.io/badge/Production-Ready-success.svg)](DEPLOYMENT.md)
 
-[![Bun](https://img.shields.io/badge/Bun-1.3+-FBF0DF?style=for-the-badge&logo=bun)](https://bun.sh)
+[![Bun](https://img.shields.io/badge/Bun-1.3+-FBF0DF?style=for-the-badge&logo=bun)](https://bun.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
