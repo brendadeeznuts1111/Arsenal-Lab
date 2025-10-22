@@ -1,0 +1,14 @@
+{
+  "commandsProcessed": 0,
+  "uniqueUsers": 0,
+  "averageResponseTime": 0,
+  "errorsEncountered": 0,
+  "lastUpdated": "2025-10-22T03:38:34.780Z",
+  "uptime": 0,
+  "version": "1.4.1",
+  "runtimeInfo": {
+    "bunVersion": "1.3.0",
+    "platform": "linux",
+    "architecture": "x64"
+  }
+}
