@@ -20,8 +20,42 @@ randomize = false  # Set to true in CI with --seed flag for catching order-depen
 # Performance
 timeout = 5000  # Default timeout per test in milliseconds
 
+# Bun v1.3.1: New test features
+# Use new --pass-with-no-tests flag for CI
+passWithNoTests = true
+
+# Use new --only-failures flag to focus on issues
+onlyFailures = false
+
 # Bun v1.3: Concurrent test configuration
 # Note: concurrent tests have limitations:
 # - expect.assertions() and expect.hasAssertions() not supported
 # - toMatchSnapshot() not supported (use toMatchInlineSnapshot())
 # - beforeAll/afterAll hooks run sequentially
+
+# Bun v1.3: Static file serving configuration
+# Automatically expose PUBLIC_* environment variables to client-side code
+[serve.static]
+env = "PUBLIC_*"
+
+# Bun v1.3.1: Package hoisting configuration for better monorepo support
+[install]
+# Hoist packages for global visibility (ESLint, TypeScript, etc.)
+publicHoistPattern = [
+  "@types/*",
+  "eslint*",
+  "typescript",
+  "@typescript-eslint/*",
+  "prettier",
+  "happy-dom",
+  "@happy-dom/*"
+]
+
+# Control internal hoisting into node_modules/.bun/node_modules
+hoistPattern = [
+  "@types/*",
+  "eslint*",
+  "@typescript-eslint/*",
+  "prettier",
+  "happy-dom"
+]

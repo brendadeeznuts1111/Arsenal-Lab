@@ -62,6 +62,32 @@
 
 **👋 New here?** Start with our [Welcome Discussion](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/10), chat with [@arsenallab_bot](https://t.me/arsenallab_bot), or join our [Telegram Supergroup](https://t.me/arsenallab)! 🎉
 
+## 🛡️ **Bun System Gate - Enterprise Governance**
+
+**Invisible security that never sleeps** - Every `bun install` is automatically scanned for vulnerabilities and architectural violations.
+
+### 🚀 **30-Second DX + Governance Setup**
+```bash
+# One command gets you Bun 1.3 + FAANG-grade governance
+curl -fsSL https://raw.githubusercontent.com/brendadeeznuts1111/Arsenal-Lab/main/scripts/dx-gate.sh | bash
+
+# Now you have:
+bun add lodash                    # ✅ Safe - installs with security scan
+bun add vulnerable-package        # ❌ Blocked - explains why
+gate                              # 2-second governance check
+b run dev                         # Hot reload + governance pre-load
+```
+
+📖 **[Developer Cheat Sheet](DEVELOPER-CHEAT-SHEET.md)** - 30-second guide for staying productive under governance
+
+🎯 **[DX + Gate Cheat Sheet](DX-GATE-CHEAT-SHEET.md)** - Bun 1.3 productivity + governance in one setup
+
+📚 **[Organizational Deployment](docs/ORGANIZATIONAL_DEPLOYMENT.md)** - Complete enterprise rollout guide
+
+⚙️ **[Environment Configuration](docs/env-example.md)** - Public/private env vars with Bun 1.3
+
+💬 **[Feedback & Bug Reports](docs/FEEDBACK.md)** - Report issues and request features
+
 ## 🚀 Installation
 
 ### Prerequisites

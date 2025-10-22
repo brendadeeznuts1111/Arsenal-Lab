@@ -1,0 +1,36 @@
+# Bun v1.3.1+ Enterprise .npmrc Template - Native Email Forwarding
+# https://bun.com/blog/bun-v1.3.1#email-in-npmrc
+# Zero-touch, audit-ready, multi-registry authentication
+
+# ===== REGISTRY COORDINATES (Multi-Registry Support) ======================
+@arsenal:registry=https://pkgs.arsenal-lab.com/
+@arsenal-internal:registry=https://pkgs.arsenal-lab.com/
+@public:registry=https://registry.npmjs.org/  ; Public fallback example
+registry=https://registry.npmjs.org/
+
+# ===== AUTHENTICATION HEADERS (Environment-Injected, Native Forwarding) ===
+# Scoped by registry host for multi-setup security (Bun v1.3.1+ auto-forwards :email)
+//pkgs.arsenal-lab.com/:_authToken=${NPM_TOKEN_ARSENAL:-}
+//pkgs.arsenal-lab.com/:email=${NPM_EMAIL_ARSENAL:-}     ; ✓ Bun v1.3.1: Auto-forwards to registry
+//registry.npmjs.org/:_authToken=${NPM_TOKEN_PUBLIC:-}
+//registry.npmjs.org/:email=${NPM_EMAIL_PUBLIC:-}
+
+# ===== QUALITY-OF-LIFE & SECURITY DEFAULTS ================================
+audit-level=moderate
+fund=false  ; Skip funding prompts
+//pkgs.arsenal-lab.com/:always-auth=true
+//registry.npmjs.org/:always-auth=false
+strict-ssl=true
+save-exact=true
+progress=false
+
+# ===== CACHE ISOLATION (Environment-Overridden) ===========================
+cache=${NPM_CONFIG_CACHE:-~/.npm}
+
+# ===== BUN V1.3.1 HOIST PATTERNS (Monorepo Optimization) ==================
+# Hoist transitive deps to root node_modules for better DX
+public-hoist-pattern[]=*@types/*    ; TypeScript types
+public-hoist-pattern[]=*eslint*     ; ESLint ecosystem
+hoist-pattern[]=*@types/*
+hoist-pattern[]=*eslint*
+hoist-pattern[]=*typescript*
