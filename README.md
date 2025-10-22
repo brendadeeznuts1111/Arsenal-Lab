@@ -7,8 +7,20 @@
 [![npm version](https://img.shields.io/npm/v/@bun/performance-arsenal?style=for-the-badge)](https://www.npmjs.com/package/@bun/performance-arsenal)
 [![GitHub Actions](https://img.shields.io/github/actions/workflow/status/brendadeeznuts1111/Arsenal-Lab/ci.yml?style=for-the-badge)](https://github.com/brendadeeznuts1111/Arsenal-Lab/actions)
 [![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/brendadeeznuts1111/Arsenal-Lab?style=for-the-badge)](https://api.securityscorecards.dev/projects/github.com/brendadeeznuts1111/Arsenal-Lab)
+[![Discussions](https://img.shields.io/github/discussions/brendadeeznuts1111/Arsenal-Lab?style=for-the-badge)](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)
 
 **FAANG-grade performance testing suite for Bun runtime** - Interactive playground showcasing every v1.3 enhancement across performance, databases, testing, and infrastructure.
+
+## 💬 **Join Our Community!**
+
+🚀 **Active community hub** for Bun developers, performance enthusiasts, and contributors!
+
+- **💬 [Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - 6 organized categories for conversations
+- **📡 [RSS Feeds](https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom)** - Stay updated with releases and discussions
+- **🤝 [Contributing](.github/CONTRIBUTING.md)** - Help build the future of fast JavaScript
+- **📖 [Documentation](docs/)** - Comprehensive guides and API references
+
+**👋 New here?** Start with our [Welcome Discussion](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/10)! 🎉
 
 ## 🚀 Installation
 
