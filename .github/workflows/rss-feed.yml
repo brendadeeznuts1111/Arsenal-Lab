@@ -127,10 +127,22 @@ jobs:
           generateFeeds().catch(console.error);
           "
 
-      - name: Deploy RSS feeds
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          destination_dir: ./
-          keep_files: true
+      - name: Commit RSS feeds
+        run: |
+          # Copy RSS files to a docs/rss directory for easier access
+          mkdir -p docs/rss
+          cp public/*.xml docs/rss/ 2>/dev/null || true
+
+          # Commit the RSS files to the main branch
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/rss/ public/*.xml 2>/dev/null || true
+          git commit -m "docs: Update RSS feeds [automated]
+
+          Generated RSS 2.0 feeds for:
+          - Releases: releases.xml
+          - Discussions: discussions.xml
+          - Commits: commits.xml (placeholder)
+
+          Auto-generated on $(date -u +'%Y-%m-%d %H:%M:%S UTC')" || echo "No changes to commit"
+          git push origin main
