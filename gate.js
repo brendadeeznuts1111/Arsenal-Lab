@@ -1,4 +1,3 @@
-import { $ } from "bun";
 const INVARIANTS=[{id:"no-eval",check:t=>!t.includes("eval(")},{id:"crypto",check:t=>!["md5","sha1","rapidhash"].some(x=>t.includes(x))}];
 export async function validateAll(){
   const p=Object.keys(JSON.parse(await Bun.file("package.json").text()).patchedDependencies||{});
