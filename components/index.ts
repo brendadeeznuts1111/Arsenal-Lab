@@ -22,8 +22,8 @@ export { BuildConfigurationArsenal } from './BuildConfigurationArsenal';
 export { Banner } from './Layout/Banner';
 export { EnhancedBanner } from './Layout/EnhancedBanner';
 export { Footer } from './Layout/Footer';
-export { VersionBanner } from './Layout/VersionBanner';
 export { ProductionReadyBanner } from './Layout/ProductionReadyBanner';
+export { VersionBanner } from './Layout/VersionBanner';
 
 // Live Demo Components
 export { LiveTestingDemo } from './TestingDebuggingArsenal/ui/LiveTestingDemo';

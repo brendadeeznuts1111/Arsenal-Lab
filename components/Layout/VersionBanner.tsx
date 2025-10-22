@@ -1,4 +1,3 @@
-import React from 'react';
 import './version-banner.css';
 
 export function VersionBanner() {
