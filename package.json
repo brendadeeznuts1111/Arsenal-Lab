@@ -70,6 +70,7 @@
     "test:bun-test": "bun run scripts/test-bun-test-fixes.ts",
     "test:bun-install-pm": "bun run scripts/test-bun-install-pm-fixes.ts",
     "test:v1.3.1-all": "bun run scripts/test-v1.3.1-comprehensive-fixes.ts",
+    "test:performance-api": "bun run scripts/test-performance-api.ts",
     "test:telegram": "bun run scripts/test-telegram-integration.ts",
     "test:links": "bun run scripts/test-telegram-integration.ts --links-only",
     "test:security": "bun run scripts/test-telegram-integration.ts --security-only",
