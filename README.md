@@ -12,6 +12,7 @@
 [![GitHub Actions](https://img.shields.io/github/actions/workflow/status/brendadeeznuts1111/Arsenal-Lab/ci.yml?style=for-the-badge)](https://github.com/brendadeeznuts1111/Arsenal-Lab/actions)
 [![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/brendadeeznuts1111/Arsenal-Lab?style=for-the-badge)](https://api.securityscorecards.dev/projects/github.com/brendadeeznuts1111/Arsenal-Lab)
 [![Discussions](https://img.shields.io/github/discussions/brendadeeznuts1111/Arsenal-Lab?style=for-the-badge)](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)
+[![Bun Gate](https://img.shields.io/badge/Bun%20Gate-Enterprise%20Governance-v∞-green?style=for-the-badge)](https://brendadeeznuts1111.github.io/Arsenal-Lab/bun-gate/)
 
 ## 📊 Review Highlights
 
