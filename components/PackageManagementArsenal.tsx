@@ -7,19 +7,19 @@ import clsx from 'clsx';
 /* ------------------------------------------------------------------ */
 export function usePackageManagementArsenal() {
   const [tab, setTab] = useState<'info' | 'outdated' | 'audit' | 'analyze'>('info');
-  const [packageName, setPackageName] = useState('react');
-  const [severity, setSeverity] = useState<'low' | 'moderate' | 'high' | 'critical'>('high');
-  const [workspaceMode, setWorkspaceMode] = useState(false);
-  return { tab, setTab, packageName, setPackageName, severity, setSeverity, workspaceMode, setWorkspaceMode };
+  const [pkg, setPkg] = useState('react');
+  const [sev, setSev] = useState<'all' | 'low' | 'moderate' | 'high' | 'critical'>('high');
+  const [ws, setWs] = useState(false);
+  return { tab, setTab, pkg, setPkg, sev, setSev, ws, setWs };
 }
 
 /* ------------------------------------------------------------------ */
 /*  CODE SNIPPETS                                                     */
 /* ------------------------------------------------------------------ */
-const infoSnippet = (pkg: string) => `bun info ${pkg}`;
-const outdatedSnippet = (recursive: boolean) => `bun update -i${recursive ? ' --recursive' : ''}`;
-const auditSnippet = (sev: string, json: boolean) => `bun audit${sev !== 'all' ? ` --severity=${sev}` : ''}${json ? ' --json > report.json' : ''}`;
-const analyzeSnippet = () => `bun install --analyze`;
+const infoCmd = (p: string) => `bun info ${p}`;
+const outdatedCmd = (r: boolean) => `bun update -i${r ? ' --recursive' : ''}`;
+const auditCmd = (s: string, j: boolean) => `bun audit${s !== 'all' ? ` --severity=${s}` : ''}${j ? ' --json > audit.json' : ''}`;
+const analyzeCmd = () => `bun install --analyze`;
 
 /* ------------------------------------------------------------------ */
 /*  MOCK DATA                                                         */
@@ -71,10 +71,10 @@ const severityColors: Record<string, string> = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  COMPONENT                                                          */
+/*  MAIN COMPONENT                                                     */
 /* ------------------------------------------------------------------ */
 export function PackageManagementArsenal() {
-  const { tab, setTab, packageName, setPackageName, severity, setSeverity, workspaceMode, setWorkspaceMode } = usePackageManagementArsenal();
+  const { tab, setTab, pkg, setPkg, sev, setSev, ws, setWs } = usePackageManagementArsenal();
 
   const tabs = [
     { id: 'info', label: 'Info', color: 'blue', icon: '📦' },
@@ -83,69 +83,8 @@ export function PackageManagementArsenal() {
     { id: 'analyze', label: 'Analyze', color: 'green', icon: '🔍' },
   ];
 
-  /* -------------------------------- info ------------------------------- */
-  const InfoPanel = () => (
-    <Section title="Package Info" desc="View metadata, versions, and dist-tags">
-      <div className="flex gap-2">
-        <input
-          value={packageName}
-          onChange={e => setPackageName(e.target.value)}
-          placeholder="package name"
-          className="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
-        />
-        <CopyButton text={infoSnippet(packageName)} />
-      </div>
-      <CodeBlock code={infoSnippet(packageName)} />
-      <InfoTable data={mockInfo} />
-    </Section>
-  );
-
-  /* -------------------------------- outdated --------------------------- */
-  const OutdatedPanel = () => (
-    <Section title="Update Interactive" desc="Catalog-aware outdated + update">
-      <div className="flex items-center gap-2 mb-2">
-        <LabelCheck label="Recursive (workspaces)" checked={workspaceMode} onChange={e => setWorkspaceMode(e.target.checked)} />
-        <CopyButton text={outdatedSnippet(workspaceMode)} />
-      </div>
-      <CodeBlock code={outdatedSnippet(workspaceMode)} />
-      <OutdatedTable data={mockOutdated} />
-    </Section>
-  );
-
-  /* -------------------------------- audit ------------------------------ */
-  const AuditPanel = () => (
-    <Section title="Security Audit" desc="Scan for known vulnerabilities">
-      <div className="flex gap-2 mb-2">
-        <select
-          value={severity}
-          onChange={e => setSeverity(e.target.value as any)}
-          className="px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
-        >
-          <option value="all">All</option>
-          <option value="low">Low</option>
-          <option value="moderate">Moderate</option>
-          <option value="high">High</option>
-          <option value="critical">Critical</option>
-        </select>
-        <CopyButton text={auditSnippet(severity, false)} />
-        <CopyButton text={auditSnippet(severity, true)} label="JSON" />
-      </div>
-      <CodeBlock code={auditSnippet(severity, false)} />
-      <AuditTable data={mockAudit} filter={severity} />
-    </Section>
-  );
-
-  /* -------------------------------- analyze ---------------------------- */
-  const AnalyzePanel = () => (
-    <Section title="Install Analysis" desc="Auto-detect missing dependencies">
-      <CopyButton text={analyzeSnippet()} />
-      <CodeBlock code={analyzeSnippet()} />
-      <AnalyzeReport />
-    </Section>
-  );
-
   return (
-    <div className="fixed bottom-4 right-4 z-30 w-[500px] max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-5">
+    <div className="fixed bottom-4 right-4 z-30 w-[480px] max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
@@ -175,9 +114,9 @@ export function PackageManagementArsenal() {
       </div>
 
       {/* Panels */}
-      {tab === 'info' && <InfoPanel />}
-      {tab === 'outdated' && <OutdatedPanel />}
-      {tab === 'audit' && <AuditPanel />}
+      {tab === 'info' && <InfoPanel pkg={pkg} setPkg={setPkg} />}
+      {tab === 'outdated' && <OutdatedPanel ws={ws} setWs={setWs} />}
+      {tab === 'audit' && <AuditPanel sev={sev} setSev={setSev} />}
       {tab === 'analyze' && <AnalyzePanel />}
 
       {/* Footer */}
@@ -192,10 +131,67 @@ export function PackageManagementArsenal() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  SMALL COMPOSABLES                                                  */
+/*  PANELS                                                            */
+/* ------------------------------------------------------------------ */
+const InfoPanel = ({ pkg, setPkg }: any) => (
+  <Section title="Package Info" desc="View metadata, versions, and dist-tags">
+    <div className="flex gap-2">
+      <input
+        value={pkg}
+        onChange={e => setPkg(e.target.value)}
+        placeholder="package name"
+        className="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+      />
+      <CopyButton text={infoCmd(pkg)} />
+    </div>
+    <CodeBlock code={infoCmd(pkg)} />
+    <InfoTable data={mockInfo} />
+  </Section>
+);
+
+const OutdatedPanel = ({ ws, setWs }: any) => (
+  <Section title="Update Interactive" desc="Catalog-aware outdated + update">
+    <LabelCheck label="Recursive (workspaces)" checked={ws} onChange={e => setWs(e.target.checked)} />
+    <CopyButton text={outdatedCmd(ws)} />
+    <CodeBlock code={outdatedCmd(ws)} />
+    <OutdatedTable data={mockOutdated} />
+  </Section>
+);
+
+const AuditPanel = ({ sev, setSev }: any) => (
+  <Section title="Security Audit" desc="Scan for known vulnerabilities">
+    <div className="flex gap-2">
+      <select value={sev} onChange={e => setSev(e.target.value as any)} className="px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800">
+        <option value="all">All</option>
+        <option value="low">Low</option>
+        <option value="moderate">Moderate</option>
+        <option value="high">High</option>
+        <option value="critical">Critical</option>
+      </select>
+      <CopyButton text={auditCmd(sev, false)} />
+      <CopyButton text={auditCmd(sev, true)} label="JSON" />
+    </div>
+    <CodeBlock code={auditCmd(sev, false)} />
+    <AuditTable data={mockAudit} filter={sev} />
+  </Section>
+);
+
+const AnalyzePanel = () => (
+  <Section title="Install Analysis" desc="Auto-detect missing dependencies">
+    <CopyButton text={analyzeCmd()} />
+    <CodeBlock code={analyzeCmd()} />
+    <AnalyzeReport />
+  </Section>
+);
+
+/* ------------------------------------------------------------------ */
+/*  SMALL COMPOSABLES                                                 */
 /* ------------------------------------------------------------------ */
 const Section = ({ title, desc, children }: any) => (
-  <div className="space-y-2 mb-4">{/* title */}<div><h3 className="font-semibold text-gray-900 dark:text-white text-sm">{title}</h3><p className="text-xs text-gray-500">{desc}</p></div>{/* body */}{children}</div>
+  <div className="space-y-2 mb-4">
+    <div><h3 className="font-semibold text-gray-900 dark:text-white text-sm">{title}</h3><p className="text-xs text-gray-500">{desc}</p></div>
+    {children}
+  </div>
 );
 
 const CodeBlock = ({ code }: { code: string }) => (
@@ -211,7 +207,7 @@ const LabelCheck = ({ label, ...rest }: any) => (
 );
 
 /* ------------------------------------------------------------------ */
-/*  TABLES                                                             */
+/*  TABLES                                                            */
 /* ------------------------------------------------------------------ */
 const InfoTable = ({ data }: any) => (
   <div className="space-y-1 text-xs">
