@@ -1,20 +1,19 @@
 // components/TestingArsenal/index.tsx
-import React, { useState, useCallback, useEffect } from 'react';
-import { TabBar } from '../PerformanceArsenal/ui/TabBar';
+import { useCallback, useState } from 'react';
 import { CodeBlock } from '../PerformanceArsenal/ui/CodeBlock';
-import { Toast, useToaster } from '../PerformanceArsenal/ui/Toast';
 import { HardwareWarning } from '../PerformanceArsenal/ui/HardwareWarning';
-import { TestRunner } from './ui/TestRunner';
-import { StackTraceDemo } from './ui/StackTraceDemo';
-import { ConcurrentTestDemo } from './ui/ConcurrentTestDemo';
-import { TypeTestDemo } from './ui/TypeTestDemo';
-import { MockTestDemo } from './ui/MockTestDemo';
-import { CIDemo } from './ui/CIDemo';
-import { TestResults } from './ui/TestResults';
-import { TestMetrics } from './ui/TestMetrics';
+import { TabBar } from '../PerformanceArsenal/ui/TabBar';
+import { Toast, useToaster } from '../PerformanceArsenal/ui/Toast';
 import { useTestExecution } from './hooks/useTestExecution';
 import { useTestMetrics } from './hooks/useTestMetrics';
 import './styles.css';
+import { CIDemo } from './ui/CIDemo';
+import { ConcurrentTestDemo } from './ui/ConcurrentTestDemo';
+import { MockTestDemo } from './ui/MockTestDemo';
+import { StackTraceDemo } from './ui/StackTraceDemo';
+import { TestMetrics } from './ui/TestMetrics';
+import { TestResults } from './ui/TestResults';
+import { TypeTestDemo } from './ui/TypeTestDemo';
 
 export function TestingArsenal() {
   const [tab, setTab] = useState<'overview' | 'async' | 'concurrent' | 'types' | 'mocks' | 'snapshots' | 'ci'>('overview');
@@ -22,8 +21,8 @@ export function TestingArsenal() {
   const [isRunning, setIsRunning] = useState(false);
 
   const { toasts, showToast, dismissToast } = useToaster();
-  const { executeTest, executeTestSuite } = useTestExecution();
-  const { metrics, recordTestResult, getSummary } = useTestMetrics();
+  const { executeTest, executeTestSuite: _executeTestSuite } = useTestExecution();
+  const { metrics: _metrics, recordTestResult, getSummary } = useTestMetrics();
 
   const tabs = [
     { id: 'overview' as const, label: 'Overview', color: 'blue', icon: '📊' },
@@ -142,7 +141,7 @@ export function TestingArsenal() {
       <HardwareWarning hardwareInfo={{ cores: navigator.hardwareConcurrency || 4, isLowEnd: false, memory: 'Unknown' }} />
 
       {/* Tab Bar */}
-      <TabBar tabs={tabs} activeTab={tab} onTabChange={setTab} />
+      <TabBar tabs={tabs} activeTab={tab} onTabChange={(tabId) => setTab(tabId as 'overview' | 'async' | 'concurrent' | 'types' | 'mocks' | 'snapshots' | 'ci')} />
 
       {/* Tab Content */}
       <div className="tab-content">
@@ -201,7 +200,7 @@ export function TestingArsenal() {
 }
 
 // Overview Tab
-const OverviewTab = ({ metrics, onRunTest, testResults }: any) => {
+const OverviewTab = ({ metrics, onRunTest: _onRunTest, testResults }: any) => {
   const overviewCode = `import { test, expect } from "bun:test";
 
 // Bun 1.3 Testing Features Overview

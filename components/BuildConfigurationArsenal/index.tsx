@@ -42,6 +42,11 @@ export function BuildConfigurationArsenal() {
     buildOutput
   } = useBuildConfigurationArsenal();
 
+  // Explicitly ignore unused variables
+  void updateDefine;
+  void updateLoader;
+  void _loaderOptions;
+
   const tabs = [
     { id: 'core', label: 'Core', icon: '🎯', color: 'blue' },
     { id: 'environment', label: 'Environment', icon: '🌍', color: 'green' },
@@ -52,7 +57,7 @@ export function BuildConfigurationArsenal() {
     { id: 'cli', label: 'CLI', icon: '💻', color: 'teal' }
   ];
 
-  const loaderOptions = [
+  const _loaderOptions = [
     { value: 'js', label: 'JavaScript' },
     { value: 'jsx', label: 'JSX' },
     { value: 'ts', label: 'TypeScript' },

@@ -14,6 +14,7 @@
     "test:coverage": "bun test --coverage",
     "arsenal:lab": "bun --hot src/server.ts",
     "arsenal:ci": "bun run src/cli/arsenal-ci.ts",
+    "arsenal:security": "bun run arsenal:ci --security-audit",
     "arsenal:benchmark": "bun run arsenal:ci --baseline",
     "arsenal:compare": "bun run arsenal:ci --compare",
     "release": "./scripts/release.sh",
@@ -36,7 +37,23 @@
     "publish:dry": "bun publish --dry-run",
     "publish:ci": "bun run quality && bun run build && bun publish",
 
-    "bunx:demo": "bun run src/utils/bunx-demo.ts"
+    "bunx:demo": "bun run src/utils/bunx-demo.ts",
+
+    "env:dev": "cp .env.example .env && echo '✅ Switched to development environment'",
+    "env:staging": "cp .env.staging .env && echo '✅ Switched to staging environment'",
+    "env:production": "cp .env.production .env && echo '✅ Switched to production environment'",
+
+    "keys:generate": "./scripts/generate-keys.sh",
+    "keys:dev": "./scripts/generate-keys.sh development",
+    "keys:staging": "./scripts/generate-keys.sh staging",
+    "keys:production": "./scripts/generate-keys.sh production",
+    "keys:all": "./scripts/generate-keys.sh all",
+
+    "deploy:staging": "./scripts/deploy.sh staging",
+    "deploy:production": "./scripts/deploy.sh production",
+
+    "secrets:setup": "bun run scripts/setup-secrets.ts",
+    "secrets:manage": "bun run scripts/manage-secrets.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",

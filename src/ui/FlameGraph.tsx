@@ -1,5 +1,5 @@
 // src/ui/FlameGraph.tsx
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export interface FlameGraphProps {
   samples: number[];
@@ -10,14 +10,6 @@ export interface FlameGraphProps {
   showStats?: boolean;
 }
 
-interface FlameBar {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  value: number;
-  label?: string;
-}
 
 // Simple flame graph renderer using HTML5 Canvas
 function renderFlameGraph(
@@ -138,8 +130,10 @@ export function FlameGraph({
     if (samples.length > 0) {
       const mean = samples.reduce((a, b) => a + b, 0) / samples.length;
       const sorted = [...samples].sort((a, b) => a - b);
-      const p95 = sorted[Math.floor(sorted.length * 0.95)];
-      const p99 = sorted[Math.floor(sorted.length * 0.99)];
+      const p95Index = Math.floor(sorted.length * 0.95);
+      const p99Index = Math.floor(sorted.length * 0.99);
+      const p95 = sorted[p95Index] ?? 0;
+      const p99 = sorted[p99Index] ?? 0;
 
       setStats({
         count: samples.length,

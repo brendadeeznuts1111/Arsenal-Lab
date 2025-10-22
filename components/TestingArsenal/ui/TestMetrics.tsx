@@ -1,5 +1,4 @@
 // components/TestingArsenal/ui/TestMetrics.tsx
-import React from 'react';
 
 interface TestMetricsProps {
   metrics: {

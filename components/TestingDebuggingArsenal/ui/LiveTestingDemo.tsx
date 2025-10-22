@@ -1,6 +1,6 @@
 // components/TestingDebuggingArsenal/ui/LiveTestingDemo.tsx
-import React, { useState } from 'react';
 import clsx from 'clsx';
+import { useState } from 'react';
 
 export function LiveTestingDemo() {
   const [activeDemo, setActiveDemo] = useState<'concurrent' | 'performance' | 'mocks'>('concurrent');

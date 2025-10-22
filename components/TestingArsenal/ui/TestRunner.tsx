@@ -1,5 +1,5 @@
 // components/TestingArsenal/ui/TestRunner.tsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface TestRunnerProps {
   onRunTest: (name: string, code: string) => void;

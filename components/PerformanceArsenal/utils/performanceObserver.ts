@@ -113,7 +113,9 @@ export class PerformanceMonitor {
         const lcpObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
-          this.stats.largestContentfulPaint = lastEntry.startTime;
+          if (lastEntry) {
+            this.stats.largestContentfulPaint = lastEntry.startTime;
+          }
         });
         lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
         this.observers.push(lcpObserver);
@@ -194,8 +196,8 @@ export class PerformanceMonitor {
   }
 
   public measureCustomEvent(name: string, startMark?: string): PerformanceMetrics {
-    const startTime = startMark ? performance.getEntriesByName(startMark)[0]?.startTime : performance.now();
-    const duration = startMark ? performance.now() - startTime : undefined;
+    const startTime = startMark ? performance.getEntriesByName(startMark)[0]?.startTime ?? performance.now() : performance.now();
+    const duration = startMark && startTime !== performance.now() ? performance.now() - startTime : undefined;
 
     const metric: PerformanceMetrics = {
       timestamp: Date.now(),

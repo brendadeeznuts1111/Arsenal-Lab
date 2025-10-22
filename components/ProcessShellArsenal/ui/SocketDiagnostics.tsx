@@ -1,5 +1,4 @@
 // components/ProcessShellArsenal/ui/SocketDiagnostics.tsx
-import React from 'react';
 
 interface SocketDiagnosticsProps {
   info: {

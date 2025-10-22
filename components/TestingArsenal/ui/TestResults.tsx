@@ -1,5 +1,4 @@
 // components/TestingArsenal/ui/TestResults.tsx
-import React from 'react';
 
 interface TestResult {
   name: string;

@@ -1,5 +1,5 @@
 // components/TestingArsenal/ui/MockTestDemo.tsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CodeBlock } from '../../PerformanceArsenal/ui/CodeBlock';
 
 interface MockTestDemoProps {

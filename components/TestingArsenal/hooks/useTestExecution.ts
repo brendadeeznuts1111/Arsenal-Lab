@@ -11,11 +11,12 @@ export function useTestExecution() {
   const executeTest = useCallback(async (testName: string, testCode: string): Promise<TestResult> => {
     try {
       // Create a temporary test file content
-      const fullTestCode = `
+      const _fullTestCode = `
 import { test, expect, describe } from "bun:test";
 
 ${testCode}
 `;
+      void _fullTestCode; // Explicitly ignore unused variable
 
       // In a real implementation, this would write to a temp file and run bun test
       // For demo purposes, we'll simulate the execution
@@ -67,7 +68,7 @@ ${testCode}
   }, []);
 
   const executeTestSuite = useCallback(async (
-    suiteName: string,
+    _suiteName: string,
     tests: Array<{name: string, code: string}>
   ): Promise<TestResult[]> => {
     const results: TestResult[] = [];

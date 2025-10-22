@@ -1,5 +1,4 @@
 // components/PerformanceArsenal/ui/HardwareWarning.tsx
-import React from 'react';
 
 interface HardwareWarningProps {
   hardwareInfo: {

@@ -1,5 +1,4 @@
 // components/TestingArsenal/ui/CIDemo.tsx
-import React from 'react';
 import { CodeBlock } from '../../PerformanceArsenal/ui/CodeBlock';
 
 interface CIDemoProps {

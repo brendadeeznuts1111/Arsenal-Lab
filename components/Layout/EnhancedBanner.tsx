@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import './styles.css';
 
 export function EnhancedBanner() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, _setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const [gitHubStars, setGitHubStars] = useState('⭐');
+  const [gitHubStars, _setGitHubStars] = useState('⭐');
 
   // Fetch real GitHub stars (optional enhancement)
   useEffect(() => {

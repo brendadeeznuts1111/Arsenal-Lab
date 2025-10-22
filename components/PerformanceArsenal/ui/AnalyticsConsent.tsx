@@ -1,5 +1,4 @@
 // components/PerformanceArsenal/ui/AnalyticsConsent.tsx
-import React from 'react';
 
 interface AnalyticsConsentProps {
   onAccept: () => void;

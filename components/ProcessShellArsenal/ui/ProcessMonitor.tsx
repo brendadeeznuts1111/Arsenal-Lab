@@ -1,5 +1,4 @@
 // components/ProcessShellArsenal/ui/ProcessMonitor.tsx
-import React from 'react';
 
 interface ProcessMonitorProps {
   stats: {

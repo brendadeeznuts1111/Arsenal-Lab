@@ -39,6 +39,7 @@ export function PerformanceArsenal() {
   const performanceMetrics = usePerformanceMetrics();
   const { consent, trackBenchmark: _trackBenchmark, enableAnalytics: enableEnhancedAnalytics, disableAnalytics: disableEnhancedAnalytics, getStats } = useAnalytics();
   const _workerManager = WorkerManager.getInstance();
+  void _workerManager; // Explicitly ignore unused variable
 
   const { toasts, showToast, dismissToast } = useToaster();
 

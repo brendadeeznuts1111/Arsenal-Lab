@@ -1,5 +1,5 @@
 // components/TestingArsenal/ui/ConcurrentTestDemo.tsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CodeBlock } from '../../PerformanceArsenal/ui/CodeBlock';
 
 interface ConcurrentTestDemoProps {
@@ -7,7 +7,7 @@ interface ConcurrentTestDemoProps {
   onRunSuite: (suiteName: string, tests: Array<{name: string, code: string}>) => void;
 }
 
-export function ConcurrentTestDemo({ onRunTest, onRunSuite }: ConcurrentTestDemoProps) {
+export function ConcurrentTestDemo({ onRunTest: _onRunTest, onRunSuite }: ConcurrentTestDemoProps) {
   const [concurrentResults, setConcurrentResults] = useState<any[]>([]);
   const [isRunningConcurrent, setIsRunningConcurrent] = useState(false);
 
@@ -94,7 +94,8 @@ describe.concurrent("concurrent tests", () => {
 
     const startTime = performance.now();
     await onRunSuite('Concurrent Suite', tests);
-    const totalTime = performance.now() - startTime;
+    const _totalTime = performance.now() - startTime;
+    void _totalTime; // Explicitly ignore unused variable
 
     // Simulate concurrent execution timing
     const results = tests.map((test, index) => ({

@@ -3,208 +3,515 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Arsenal Lab - FAANG-grade performance testing suite for Bun runtime">
-  <meta name="theme-color" content="#3b82f6">
 
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="/manifest.json">
+  <!-- Primary Meta Tags -->
+  <title>Arsenal Lab – Interactive Bun Performance Testing Suite | FAANG-Grade Benchmarking</title>
+  <meta name="title" content="Arsenal Lab – Interactive Bun Performance Testing Suite | FAANG-Grade Benchmarking">
+  <meta name="description" content="Experience Bun v1.3's 20× faster semver, 500× zero-copy postMessage, 28% memory reduction. Interactive demos, live benchmarks, production-ready code generation. Join 1000+ developers.">
+  <meta name="keywords" content="bun runtime performance, javascript benchmarking, bun vs node.js, zero-copy operations, interactive performance testing, bun semver, bun sqlite, bun websocket, faang grade testing, production ready components">
+  <meta name="author" content="brendadeeznuts1111">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  <meta name="revisit-after" content="7 days">
 
-  <!-- Favicon -->
-  <link rel="icon" href="/icon-192.svg" sizes="any">
-  <link rel="apple-touch-icon" href="/icon-192.svg">
+  <!-- Performance & Security -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="theme-color" content="#238636">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Arsenal Lab">
 
-  <title>Arsenal Lab - Performance Testing Suite</title>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://brendadeeznuts1111.github.io/Arsenal-Lab/">
+  <meta property="og:title" content="Arsenal Lab – Interactive Bun Performance Testing Suite">
+  <meta property="og:site_name" content="Arsenal Lab">
+  <meta property="og:description" content="Experience Bun v1.3's 20× faster semver, 500× zero-copy postMessage, 28% memory reduction. Interactive demos with live benchmarks and production-ready code generation.">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="https://brendadeeznuts1111.github.io/Arsenal-Lab/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Arsenal Lab - Interactive Bun Performance Testing Suite">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://brendadeeznuts1111.github.io/Arsenal-Lab/">
+  <meta property="twitter:title" content="Arsenal Lab – Interactive Bun Performance Testing Suite">
+  <meta property="twitter:description" content="Experience Bun v1.3's 20× faster semver, 500× zero-copy postMessage, 28% memory reduction. Interactive demos with live benchmarks.">
+  <meta property="twitter:image" content="https://brendadeeznuts1111.github.io/Arsenal-Lab/twitter-image.png">
+  <meta property="twitter:site" content="@brendadeeznuts1111">
+  <meta property="twitter:creator" content="@brendadeeznuts1111">
+
+  <!-- RSS Feeds -->
+  <link rel="alternate" type="application/rss+xml" title="Arsenal Lab Releases" href="https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom">
+  <link rel="alternate" type="application/rss+xml" title="Arsenal Lab Discussions" href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions.atom">
+  <link rel="alternate" type="application/rss+xml" title="Arsenal Lab Commits" href="https://github.com/brendadeeznuts1111/Arsenal-Lab/commits/main.atom">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://brendadeeznuts1111.github.io/Arsenal-Lab/">
+
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="/main.js" as="script">
+  <link rel="preload" href="/styles.css" as="style">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Arsenal Lab",
+    "description": "Interactive Bun performance testing suite with live benchmarks and production-ready code generation",
+    "url": "https://brendadeeznuts1111.github.io/Arsenal-Lab/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "brendadeeznuts1111",
+      "url": "https://github.com/brendadeeznuts1111"
+    },
+    "featureList": [
+      "Interactive Bun performance demos",
+      "Live benchmarking tools",
+      "Production code generation",
+      "20x faster semver testing",
+      "Zero-copy postMessage visualization",
+      "Memory optimization tracking"
+    ],
+    "screenshot": "https://brendadeeznuts1111.github.io/Arsenal-Lab/screenshot.png"
+  }
+  </script>
+
+  <!-- Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
 
   <style>
-    /* Basic reset and layout */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* Critical CSS - Above the fold */
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:#0d1117;
+      color:#e6edf3;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      line-height:1.6;
+    }
+    a{color:#58a6ff;text-decoration:none;transition:color 0.2s ease;}
+    a:hover{color:#79c0ff;text-decoration:underline;}
+
+    /* Performance indicators */
+    .perf-indicator{position:fixed;top:1rem;right:1rem;background:rgba(35,134,54,0.9);color:white;padding:0.5rem 1rem;border-radius:0.25rem;font-size:0.75rem;z-index:9999;}
+
+    /* Header */
+    .lab-header{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      padding:1rem 1.5rem;
+      background:#161b22;
+      border-bottom:1px solid #30363d;
+      position:relative;
+    }
+    .lab-title h1{
+      font-size:1.5rem;
+      font-weight:700;
+      background:linear-gradient(135deg, #58a6ff, #79c0ff);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .lab-title p{font-size:0.875rem;color:#8b949e;}
+    .lab-controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.5rem;
+    }
+    .lab-controls button{
+      background:#21262d;
+      border:1px solid #30363d;
+      color:#c9d1d9;
+      padding:0.5rem 0.75rem;
+      border-radius:0.375rem;
+      font-size:0.875rem;
+      cursor:pointer;
+      transition:all 0.2s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .lab-controls button::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:-100%;
+      width:100%;
+      height:100%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition:left 0.5s;
+    }
+    .lab-controls button:hover::before{left:100%;}
+    .lab-controls button:hover{background:#30363d;border-color:#58a6ff;transform:translateY(-1px);}
+    .lab-controls button.active{background:#238636;border-color:#238636;color:#fff;box-shadow:0 0 0 3px rgba(35,134,54,0.3);}
+
+    /* Main content */
+    .lab-content{
+      flex:1;
+      padding:1.5rem;
+      max-width:1200px;
+      width:100%;
+      margin:0 auto;
     }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f8fafc;
-      color: #1f2937;
-      line-height: 1.6;
+    /* Footer */
+    .arsenal-footer{
+      background:#161b22;
+      border-top:1px solid #30363d;
+      padding:1.5rem;
+      font-size:0.875rem;
+      color:#8b949e;
+      position:relative;
     }
-
-    .arsenal-lab {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+    .footer-section{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:1.5rem;
+      margin-bottom:1.5rem;
     }
-
-    .lab-header {
-      background: white;
-      border-bottom: 1px solid #e5e7eb;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    .footer-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
     }
-
-    .lab-title h1 {
-      font-size: 1.875rem;
-      font-weight: bold;
-      color: #1f2937;
+    .footer-links a{
+      display:flex;
+      align-items:center;
+      gap:0.25rem;
+      padding:0.25rem 0.5rem;
+      border-radius:0.25rem;
+      transition:all 0.2s ease;
     }
-
-    .lab-title p {
-      color: #6b7280;
-      font-size: 0.875rem;
+    .footer-links a:hover{background:rgba(88,166,255,0.1);color:#58a6ff;}
+    .footer-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.75rem;
+      align-items:center;
     }
+    .shortcuts .shortcut-group span{display:block;margin-bottom:0.25rem;font-weight:600;}
+    .shortcuts a{display:block;margin-bottom:0.25rem;}
 
-    .lab-controls {
-      display: flex;
-      gap: 0.5rem;
+    /* Loading animation */
+    @keyframes shimmer{
+      0%{background-position:-200% 0;}
+      100%{background-position:200% 0;}
     }
-
-    .lab-controls button {
-      padding: 0.5rem 1rem;
-      border: 1px solid #d1d5db;
-      background: white;
-      border-radius: 0.375rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .lab-controls button:hover {
-      background: #f9fafb;
-    }
-
-    .lab-controls button.active {
-      background: #3b82f6;
-      color: white;
-      border-color: #3b82f6;
-    }
-
-    .lab-content {
-      flex: 1;
-      padding: 2rem;
-    }
-
-    .lab-footer {
-      background: white;
-      border-top: 1px solid #e5e7eb;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .lab-stats {
-      display: flex;
-      gap: 1rem;
-      font-size: 0.875rem;
-      color: #6b7280;
-    }
-
-    .lab-links {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .lab-links a {
-      color: #3b82f6;
-      text-decoration: none;
-    }
-
-    .lab-links a:hover {
-      text-decoration: underline;
-    }
-
-    .update-notification {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      background: #10b981;
-      color: white;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
-
-    .update-content {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .update-content button {
-      background: white;
-      color: #10b981;
-      border: none;
-      padding: 0.25rem 0.75rem;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    /* Loading state */
-    .loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 50vh;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .spinner {
-      width: 2rem;
-      height: 2rem;
-      border: 3px solid #e5e7eb;
-      border-top-color: #3b82f6;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .loading{
+      background:linear-gradient(90deg, #161b22 0%, #21262d 50%, #161b22 100%);
+      background-size:200% 100%;
+      animation:shimmer 1.5s infinite;
     }
 
     /* Responsive */
-    @media (max-width: 768px) {
-      .lab-header {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-
-      .lab-controls {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .lab-footer {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-
-      .lab-stats {
-        justify-content: center;
-      }
-
-      .lab-links {
-        justify-content: center;
-      }
+    @media(max-width:768px){
+      .lab-header{flex-direction:column;align-items:flex-start;}
+      .lab-controls{width:100%;justify-content:flex-start;}
+      .footer-section{flex-direction:column;text-align:center;}
+      .footer-links{justify-content:center;}
     }
+
+    /* Performance optimization */
+    .arsenal-component{will-change:transform;contain:layout style paint;}
   </style>
 </head>
 <body>
   <div id="app">
-    <div class="loading">
-      <div class="spinner"></div>
-      <p>Loading Arsenal Lab...</p>
+    <div class="arsenal-lab">
+      <header class="lab-header">
+        <div class="lab-title">
+          <h1>🚀 Arsenal Lab</h1>
+          <p>FAANG-grade performance testing suite</p>
+          <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions" target="_blank" style="background:#21262d;border:1px solid #30363d;color:#58a6ff;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.75rem;text-decoration:none;">💬 Community</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom" target="_blank" style="background:#21262d;border:1px solid #30363d;color:#238636;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.75rem;text-decoration:none;">📡 RSS</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#contributing" target="_blank" style="background:#21262d;border:1px solid #30363d;color:#bb9af7;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.75rem;text-decoration:none;">🤝 Contribute</a>
+          </div>
+        </div>
+        <div class="lab-controls">
+          <button class="active" onclick="switchTab('performance')">⚡ Performance</button>
+          <button onclick="switchTab('process')">🔧 Process & Shell</button>
+          <button onclick="switchTab('testing')">🧪 Testing</button>
+          <button onclick="switchTab('debugging')">🔍 Testing & Debugging</button>
+          <button onclick="switchTab('database')">🗄️ Database & Infra</button>
+          <button onclick="switchTab('build')">🔧 Build Config</button>
+          <button onclick="switchTab('bunx')">🚀 bunx Demo</button>
+          <button onclick="switchTab('community')">💬 Community</button>
+          <button onclick="exportMetrics()">📊 Export Metrics</button>
+        </div>
+      </header>
+
+      <main class="lab-content">
+        <div id="tab-content">
+          <!-- Welcome content -->
+          <div style="text-align:center;padding:3rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">Welcome to Arsenal Lab</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;max-width:600px;margin-left:auto;margin-right:auto;">
+              Explore Bun's cutting-edge performance features through interactive demonstrations.
+              Click on any tab above to dive into the arsenals showcasing FAANG-grade optimizations.
+            </p>
+            <div style="background:#161b22;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;max-width:500px;margin:0 auto 2rem auto;">
+              <h3 style="color:#f85149;margin-bottom:1rem;">💬 Join Our Community!</h3>
+              <p style="color:#8b949e;font-size:.875rem;margin-bottom:1rem;">
+                Connect with fellow developers, share your Bun performance achievements, and contribute to the ecosystem.
+              </p>
+              <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions" target="_blank" style="background:#238636;color:#fff;padding:0.5rem 1rem;border-radius:0.375rem;text-decoration:none;font-size:0.875rem;">💬 Join Discussions</a>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom" target="_blank" style="background:#21262d;border:1px solid #30363d;color:#79c0ff;padding:0.5rem 1rem;border-radius:0.375rem;text-decoration:none;font-size:0.875rem;">📡 RSS Feed</a>
+              </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin-bottom:2rem;">
+              <div style="background:#161b22;padding:1rem;border-radius:.5rem;border:1px solid #30363d;min-width:200px;">
+                <div style="font-size:2rem;margin-bottom:.5rem;">⚡</div>
+                <div style="font-weight:600;margin-bottom:.25rem;">Performance</div>
+                <div style="font-size:.875rem;color:#8b949e;">500× faster operations</div>
+              </div>
+              <div style="background:#161b22;padding:1rem;border-radius:.5rem;border:1px solid #30363d;min-width:200px;">
+                <div style="font-size:2rem;margin-bottom:.5rem;">🧪</div>
+                <div style="font-weight:600;margin-bottom:.25rem;">Testing</div>
+                <div style="font-size:.875rem;color:#8b949e;">Concurrent execution</div>
+              </div>
+              <div style="background:#161b22;padding:1rem;border-radius:.5rem;border:1px solid #30363d;min-width:200px;">
+                <div style="font-size:2rem;margin-bottom:.5rem;">🗄️</div>
+                <div style="font-weight:600;margin-bottom:.25rem;">Database</div>
+                <div style="font-size:.875rem;color:#8b949e;">7.9× faster queries</div>
+              </div>
+            </div>
+            <p style="color:#8b949e;font-size:.875rem;">
+              <strong>💡 Tip:</strong> For the full interactive experience, run the Bun development server with live performance monitoring.
+            </p>
+          </div>
+        </div>
+      </main>
+
+      <footer class="arsenal-footer">
+        <div class="footer-section">
+          <div class="footer-links">
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab" target="_blank" rel="noopener noreferrer"><span>🏠</span>Repository</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions" target="_blank" rel="noopener noreferrer"><span>💬</span>Discussions</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/issues" target="_blank" rel="noopener noreferrer"><span>🐛</span>Issues</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/releases" target="_blank" rel="noopener noreferrer"><span>📦</span>Releases</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/blob/main/docs/api.md" target="_blank" rel="noopener noreferrer"><span>🔧</span>API Docs</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/blob/main/docs/performance.md" target="_blank" rel="noopener noreferrer"><span>⚡</span>Performance</a>
+            <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/blob/main/.github/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer"><span>🤝</span>Contributing</a>
+          </div>
+          <div class="footer-meta">
+            <span class="version">Arsenal Lab v1.3.0</span>
+            <span class="separator">•</span>
+            <span class="copyright">© 2025 brendadeeznuts1111</span>
+          </div>
+        </div>
+        <div class="footer-section">
+          <div class="shortcuts">
+            <div class="shortcut-group" style="margin-bottom:1rem;">
+              <span class="shortcut-label">Community</span>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/announcements" target="_blank">📣 Announcements</a>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/q-a" target="_blank">🙏 Q&A</a>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/show-and-tell" target="_blank">🙌 Show & Tell</a>
+            </div>
+            <div class="shortcut-group">
+              <span class="shortcut-label">Stay Updated</span>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom" target="_blank">📡 Releases RSS</a>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions.atom" target="_blank">💬 Discussions RSS</a>
+              <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab#installation" target="_blank">📚 Documentation</a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   </div>
 
-  <!-- Load the lab script -->
-  <script type="module" src="/src/lab.ts"></script>
+  <script>
+    // Tab switching functionality
+    function switchTab(tab) {
+      const tabContent = document.getElementById('tab-content');
+      const buttons = document.querySelectorAll('.lab-controls button');
+
+      // Update active button
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Update content based on tab
+      const content = {
+        performance: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">⚡ Performance Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">500× faster operations with zero-copy communication, optimized crypto, and memory management.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#f85149;margin-bottom:1rem;">🚀 Live Demo Required</h3>
+              <p style="color:#8b949e;margin-bottom:1.5rem;">This interactive demo requires the Bun runtime for real-time performance monitoring.</p>
+              <div style="background:#0d1117;padding:1rem;border-radius:.375rem;border:1px solid #30363d;">
+                <code style="color:#79c0ff;">bun run dev</code>
+                <p style="color:#8b949e;font-size:.875rem;margin-top:.5rem;">Start the development server to access full interactive features</p>
+              </div>
+            </div>
+          </div>
+        `,
+        process: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🔧 Process & Shell Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Advanced process management with streams, buffers, sockets, and timers.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#d29922;margin-bottom:1rem;">⚠️ Interactive Features</h3>
+              <p style="color:#8b949e;">Real-time process monitoring and socket diagnostics require the full Bun environment.</p>
+            </div>
+          </div>
+        `,
+        testing: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🧪 Testing Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Concurrent execution, advanced matchers, and type testing capabilities.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#79c0ff;margin-bottom:1rem;">📊 Test Results</h3>
+              <p style="color:#8b949e;">Live test execution and concurrent performance metrics available in the full application.</p>
+            </div>
+          </div>
+        `,
+        debugging: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🔍 Testing & Debugging Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Complete testing ecosystem with async traces and CI/CD integration.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#f85149;margin-bottom:1rem;">🐛 Debug Features</h3>
+              <p style="color:#8b949e;">Stack trace analysis and debugging tools require the interactive Bun environment.</p>
+            </div>
+          </div>
+        `,
+        database: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🗄️ Database & Infrastructure Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">SQLite, Redis, WebSocket, and S3 with 7.9× performance gains.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#238636;margin-bottom:1rem;">💾 Database Demo</h3>
+              <p style="color:#8b949e;">Interactive database queries and infrastructure monitoring available in the full application.</p>
+            </div>
+          </div>
+        `,
+        build: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🔧 Build Configuration Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Complete Bun bundler playground with JS API and CLI command generation.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#bb9af7;margin-bottom:1rem;">📦 Build Config</h3>
+              <p style="color:#8b949e;">Interactive bundler configuration with live code generation requires the full Bun environment.</p>
+            </div>
+          </div>
+        `,
+        bunx: `
+          <div style="text-align:center;padding:2rem 1rem;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;">🚀 bunx Demo Arsenal</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;">Execute npm packages without installation using Bun's package runner.</p>
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;max-width:600px;margin:0 auto;">
+              <h3 style="color:#ff9e64;margin-bottom:1rem;">⚡ bunx Commands</h3>
+              <p style="color:#8b949e;">Live package execution and command demonstrations available in the interactive environment.</p>
+            </div>
+          </div>
+        `,
+        community: `
+          <div style="padding:2rem 1rem;max-width:800px;margin:0 auto;">
+            <h2 style="color:#58a6ff;margin-bottom:1rem;text-align:center;">💬 Community Hub</h2>
+            <p style="color:#8b949e;margin-bottom:2rem;text-align:center;">
+              Join our active community of Bun developers, share your achievements, and help build the future of fast JavaScript.
+            </p>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-bottom:2rem;">
+              <div style="background:#161b22;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;">
+                <h3 style="color:#238636;margin-bottom:1rem;">📣 Announcements</h3>
+                <p style="color:#8b949e;margin-bottom:1rem;">Stay updated with official news and releases.</p>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/announcements" target="_blank" style="color:#58a6ff;text-decoration:none;">View Announcements →</a>
+              </div>
+
+              <div style="background:#161b22;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;">
+                <h3 style="color:#79c0ff;margin-bottom:1rem;">💬 General Discussion</h3>
+                <p style="color:#8b949e;margin-bottom:1rem;">Talk about Bun, performance, and the ecosystem.</p>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/general" target="_blank" style="color:#58a6ff;text-decoration:none;">Join Conversation →</a>
+              </div>
+
+              <div style="background:#161b22;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;">
+                <h3 style="color:#bb9af7;margin-bottom:1rem;">💡 Feature Ideas</h3>
+                <p style="color:#8b949e;margin-bottom:1rem;">Propose new features and enhancements.</p>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/ideas" target="_blank" style="color:#58a6ff;text-decoration:none;">Share Ideas →</a>
+              </div>
+
+              <div style="background:#161b22;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;">
+                <h3 style="color:#f85149;margin-bottom:1rem;">🙏 Q&A</h3>
+                <p style="color:#8b949e;margin-bottom:1rem;">Get help with setup and troubleshooting.</p>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/q-a" target="_blank" style="color:#58a6ff;text-decoration:none;">Ask Questions →</a>
+              </div>
+
+              <div style="background:#161b22;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;">
+                <h3 style="color:#ff9e64;margin-bottom:1rem;">🙌 Show and Tell</h3>
+                <p style="color:#8b949e;margin-bottom:1rem;">Share your Bun performance achievements.</p>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/show-and-tell" target="_blank" style="color:#58a6ff;text-decoration:none;">Show Your Work →</a>
+              </div>
+
+              <div style="background:#161b22;padding:1.5rem;border-radius:.5rem;border:1px solid #30363d;">
+                <h3 style="color:#d29922;margin-bottom:1rem;">🗳️ Community Polls</h3>
+                <p style="color:#8b949e;margin-bottom:1rem;">Vote on important decisions and features.</p>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/polls" target="_blank" style="color:#58a6ff;text-decoration:none;">Vote Now →</a>
+              </div>
+            </div>
+
+            <div style="background:#161b22;padding:2rem;border-radius:.5rem;border:1px solid #30363d;margin-bottom:2rem;">
+              <h3 style="color:#f85149;margin-bottom:1rem;">📡 Stay Connected</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom" target="_blank" style="background:#21262d;border:1px solid #30363d;color:#79c0ff;padding:0.5rem 1rem;border-radius:0.375rem;text-decoration:none;">📦 Releases (Atom)</a>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions.atom" target="_blank" style="background:#21262d;border:1px solid #30363d;color:#bb9af7;padding:0.5rem 1rem;border-radius:0.375rem;text-decoration:none;">💬 Discussions (Atom)</a>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/commits/main.atom" target="_blank" style="background:#21262d;border:1px solid #30363d;color:#f85149;padding:0.5rem 1rem;border-radius:0.375rem;text-decoration:none;">🔄 Commits (Atom)</a>
+              </div>
+              <p style="color:#8b949e;font-size:.875rem;">Subscribe to Atom feeds (compatible with most RSS readers) to never miss important updates, releases, or community discussions.</p>
+            </div>
+
+            <div style="text-align:center;">
+              <h3 style="color:#58a6ff;margin-bottom:1rem;">🤝 How to Contribute</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;">
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/blob/main/.github/CONTRIBUTING.md" target="_blank" style="background:#238636;color:#fff;padding:0.75rem 1.5rem;border-radius:0.375rem;text-decoration:none;">📖 Contributing Guide</a>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/issues" target="_blank" style="background:#21262d;border:1px solid #30363d;color:#79c0ff;padding:0.75rem 1.5rem;border-radius:0.375rem;text-decoration:none;">🐛 Report Issues</a>
+                <a href="https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/new?category=show-and-tell" target="_blank" style="background:#21262d;border:1px solid #30363d;color:#bb9af7;padding:0.75rem 1.5rem;border-radius:0.375rem;text-decoration:none;">🙌 Share Your Work</a>
+              </div>
+            </div>
+          </div>
+        `
+      };
+
+      tabContent.innerHTML = content[tab] || '<p>Tab content coming soon...</p>';
+    }
+
+    function exportMetrics() {
+      alert('📊 Export Metrics\n\nThis feature requires the full Bun runtime with live performance monitoring.\n\nRun: bun run dev');
+    }
+
+    // Initialize with welcome content
+    switchTab('performance');
+  </script>
 </body>
 </html>

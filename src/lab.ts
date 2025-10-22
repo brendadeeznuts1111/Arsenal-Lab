@@ -7,7 +7,8 @@ import { getPerformanceMonitor } from '../components/PerformanceArsenal/utils/pe
 import { getPrometheusMetrics } from './metrics/arsenal';
 
 // Lab state
-let currentTab = 'performance';
+type TabType = 'performance' | 'process' | 'testing' | 'debugging' | 'database' | 'build' | 'bunx' | 'security';
+let currentTab: TabType = 'performance';
 let performanceMonitor = getPerformanceMonitor();
 
 // Register service worker for PWA
@@ -78,6 +79,9 @@ function renderLab() {
           </button>
           <button onclick="switchTab('build')" class="${currentTab === 'build' ? 'active' : ''}">
             🔧 Build Config
+          </button>
+          <button onclick="switchTab('security')" class="${currentTab === 'security' ? 'active' : ''}">
+            🔒 Security
           </button>
           <button onclick="switchTab('bunx')" class="${currentTab === 'bunx' ? 'active' : ''}">
             🚀 bunx Demo
@@ -271,6 +275,12 @@ function renderTabContent() {
     import('../components/BuildConfigurationArsenal').then(({ BuildConfigurationArsenal }) => {
       const root = ReactDOM.createRoot(content);
       root.render(React.createElement(BuildConfigurationArsenal));
+    });
+  } else if (currentTab === 'security') {
+    // Mount React Security Arsenal
+    import('../components/SecurityArsenal').then(({ SecurityArsenal }) => {
+      const root = ReactDOM.createRoot(content);
+      root.render(React.createElement(SecurityArsenal));
     });
   } else if (currentTab === 'bunx') {
     // Mount React Bunx Demo

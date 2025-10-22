@@ -1,5 +1,5 @@
 // components/TestingDebuggingArsenal/hooks/useTestingDebuggingArsenal.ts
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 
 /* ----------  TESTING STATE  ---------- */
 export function useTestingDebuggingArsenal() {

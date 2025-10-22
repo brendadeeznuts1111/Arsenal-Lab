@@ -1,14 +1,14 @@
 // components/ProcessShellArsenal/index.tsx
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useProcessShellArsenal } from './hooks/useProcessShellArsenal';
-import { TabBar } from '../PerformanceArsenal/ui/TabBar';
+import React, { useCallback } from 'react';
 import { BenchmarkCard } from '../PerformanceArsenal/ui/BenchmarkCard';
 import { CodeBlock } from '../PerformanceArsenal/ui/CodeBlock';
-import { Toast, useToaster } from '../PerformanceArsenal/ui/Toast';
 import { HardwareWarning } from '../PerformanceArsenal/ui/HardwareWarning';
+import { TabBar } from '../PerformanceArsenal/ui/TabBar';
+import { Toast, useToaster } from '../PerformanceArsenal/ui/Toast';
+import { useProcessShellArsenal } from './hooks/useProcessShellArsenal';
+import './styles.css';
 import { ProcessMonitor } from './ui/ProcessMonitor';
 import { SocketDiagnostics } from './ui/SocketDiagnostics';
-import './styles.css';
 
 export function ProcessShellArsenal() {
   const {
@@ -64,7 +64,7 @@ export function ProcessShellArsenal() {
       <HardwareWarning hardwareInfo={hardwareInfo} />
 
       {/* Tab Bar */}
-      <TabBar tabs={tabs} activeTab={tab} onTabChange={setTab} />
+      <TabBar tabs={tabs} activeTab={tab} onTabChange={(tabId) => setTab(tabId as 'timeout' | 'buffer' | 'socket' | 'streams' | 'memory')} />
 
       {/* Tab Content */}
       <div className="tab-content">
@@ -472,7 +472,7 @@ const result = await new Response(proc.stdout).text();`;
 
 // Memory Tab
 const MemoryTab = React.memo(({
-  processStats,
+  processStats: _processStats,
   isRunning,
   benchmarkResults,
   runBenchmark

@@ -882,8 +882,336 @@ This is now a **production-grade component** that could be published as `@bun/pe
 
 ---
 
+## 🔧 Environment Variables & Configuration
+
+### Environment Variable Management in Bun
+
+> Read and configure environment variables in Bun, including automatic .env file support
+
+Bun reads your `.env` files automatically and provides idiomatic ways to read and write your environment variables programmatically. Plus, some aspects of Bun's runtime behavior can be configured with Bun-specific environment variables.
+
+#### Setting Environment Variables
+
+Bun reads the following files automatically (listed in order of increasing precedence):
+
+* `.env`
+* `.env.production`, `.env.development`, `.env.test` (depending on value of `NODE_ENV`)
+* `.env.local`
+
+```bash
+# .env
+FOO=hello
+BAR=world
+```
+
+Variables can also be set via the command line:
+
+```bash
+# Linux/macOS
+FOO=helloworld bun run dev
+
+# Windows CMD
+set FOO=helloworld && bun run dev
+
+# Windows PowerShell
+$env:FOO="helloworld"; bun run dev
+```
+
+**Cross-platform solution:** Use Bun shell for consistent behavior across platforms:
+
+```bash
+bun exec 'FOO=helloworld bun run dev'
+```
+
+Or programmatically by assigning to `process.env`:
+
+```typescript
+process.env.FOO = 'hello';
+```
+
+#### Manually Specifying .env Files
+
+Bun supports `--env-file` to override which specific `.env` file to load:
+
+```bash
+bun --env-file=.env.1 src/index.ts
+bun --env-file=.env.abc --env-file=.env.def run build
+```
+
+#### Quotation Marks & Expansion
+
+Bun supports double quotes, single quotes, and template literal backticks:
+
+```bash
+FOO='hello'
+FOO="hello"
+FOO=`hello`
+```
+
+**Variable Expansion:** Environment variables are automatically expanded, allowing you to reference previously-defined variables:
+
+```bash
+# .env
+FOO=world
+BAR=hello$FOO
+```
+
+```typescript
+process.env.BAR; // => "helloworld"
+```
+
+This is perfect for constructing connection strings:
+
+```bash
+DB_USER=postgres
+DB_PASSWORD=secret
+DB_HOST=localhost
+DB_PORT=5432
+DB_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME
+```
+
+Escape with backslash to disable expansion:
+
+```bash
+FOO=world
+BAR=hello\$FOO
+```
+
+```typescript
+process.env.BAR; // => "hello$FOO"
+```
+
+#### Reading Environment Variables
+
+Access environment variables via `process.env`, `Bun.env`, or `import.meta.env`:
+
+```typescript
+process.env.API_TOKEN; // => "secret"
+Bun.env.API_TOKEN;     // => "secret"
+import.meta.env.API_TOKEN; // => "secret"
+```
+
+**Debug environment variables:**
+
+```bash
+bun --print process.env
+```
+
+#### TypeScript Support
+
+In TypeScript, all properties are typed as `string | undefined`. For autocompletion and non-optional typing:
+
+```typescript
+declare module 'bun' {
+  interface Env {
+    AWESOME: string;
+  }
+}
+
+// Now TypeScript knows this is a string, not undefined
+process.env.AWESOME; // => string
+```
+
+#### Arsenal Lab Environment Commands
+
+The Performance Arsenal provides several environment management commands:
+
+```bash
+# Switch environments
+bun run env:dev        # Load .env
+bun run env:staging    # Load .env.staging
+bun run env:production # Load .env.production
+
+# Generate environment-specific keys
+bun run keys:generate  # Create new keys
+bun run keys:dev       # Development keys
+bun run keys:staging   # Staging keys
+bun run keys:production # Production keys
+
+# Secrets management
+bun run secrets:setup   # Initialize secrets
+bun run secrets:manage  # Manage existing secrets
+```
+
+#### Bun-Specific Configuration
+
+These environment variables configure Bun's behavior:
+
+| Variable | Description |
+|----------|-------------|
+| `NODE_TLS_REJECT_UNAUTHORIZED` | `=0` disables SSL validation (use cautiously) |
+| `BUN_CONFIG_VERBOSE_FETCH` | `=curl` logs fetch requests with curl-style output |
+| `BUN_RUNTIME_TRANSPILER_CACHE_PATH` | Custom cache directory for transpiled files |
+| `TMPDIR` | Temporary directory for intermediate assets |
+| `NO_COLOR` | `=1` disables ANSI color output |
+| `FORCE_COLOR` | `=1` forces color output even with NO_COLOR |
+| `BUN_CONFIG_MAX_HTTP_REQUESTS` | Max concurrent HTTP requests (default: 256) |
+| `BUN_CONFIG_NO_CLEAR_TERMINAL_ON_RELOAD` | `=true` prevents console clearing on reload |
+| `DO_NOT_TRACK` | `=1` disables telemetry and crash reports |
+| `BUN_OPTIONS` | Prepends command-line arguments to Bun execution |
+
+#### Runtime Transpiler Caching
+
+For files >50KB, Bun caches transpiled output to improve CLI performance. Configure with:
+
+```bash
+# Disable cache
+BUN_RUNTIME_TRANSPILER_CACHE_PATH=0 bun run dev
+
+# Custom cache directory
+BUN_RUNTIME_TRANSPILER_CACHE_PATH=/tmp/bun-cache bun run dev
+```
+
+The cache uses `.pile` files and is safe to delete at any time.
+
+---
+
+## 🔒 Security Arsenal: Dependency Auditing
+
+### Overview
+
+The Security Arsenal provides automated dependency vulnerability scanning using `bun audit`, helping you identify and remediate security issues in your project dependencies.
+
+### Using `bun audit`
+
+Run the command in a project with a `bun.lock` file:
+
+```bash
+bun audit
+```
+
+Bun sends the list of installed packages and versions to NPM, and prints a report of any vulnerabilities that were found. Packages installed from registries other than the default registry are skipped.
+
+#### Success Output
+
+If no vulnerabilities are found, the command prints:
+
+```
+No vulnerabilities found
+```
+
+#### Vulnerability Report
+
+When vulnerabilities are detected, each affected package is listed along with the severity, a short description and a link to the advisory. At the end of the report Bun prints a summary and hints for updating:
+
+```
+3 vulnerabilities (1 high, 2 moderate)
+To update all dependencies to the latest compatible versions:
+  bun update
+To update all dependencies to the latest versions (including breaking changes):
+  bun update --latest
+```
+
+### Filtering Options
+
+**`--audit-level=<low|moderate|high|critical>`** - Only show vulnerabilities at this severity level or higher:
+
+```bash
+bun audit --audit-level=high
+```
+
+**`--prod`** - Audit only production dependencies (excludes devDependencies):
+
+```bash
+bun audit --prod
+```
+
+**`--ignore <CVE>`** - Ignore specific CVEs (can be used multiple times):
+
+```bash
+bun audit --ignore CVE-2022-25883 --ignore CVE-2023-26136
+```
+
+### JSON Output
+
+Use the `--json` flag to print the raw JSON response from the registry instead of the formatted report:
+
+```bash
+bun audit --json
+```
+
+### Exit Codes
+
+`bun audit` will exit with code `0` if no vulnerabilities are found and `1` if the report lists any vulnerabilities. This will still happen even if `--json` is passed.
+
+### Integration with Arsenal Lab
+
+#### CI/CD Integration
+
+Add security auditing to your CI/CD pipeline:
+
+```yaml
+# .github/workflows/security.yml
+name: Security Audit
+on: [push, pull_request]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - run: bun install
+      - run: bun audit --audit-level=moderate
+```
+
+#### Arsenal CLI Integration
+
+Run security audits as part of your performance benchmarking workflow:
+
+```bash
+# Run full security and performance checks
+bun run arsenal:ci --security-audit
+
+# Export security metrics with performance data
+bun run arsenal:ci --output-dir ./results --security
+```
+
+#### Security Dashboard
+
+The interactive Security Arsenal component provides:
+
+- Real-time vulnerability scanning
+- Severity-based filtering and sorting
+- Dependency graph visualization
+- Automated fix suggestions
+- Export to Prometheus metrics format
+- Historical trend tracking
+
+Access via the Security Arsenal tab in the web interface at `http://localhost:3655`.
+
+### Best Practices
+
+1. **Regular Scanning**: Run `bun audit` regularly, not just in CI/CD
+2. **Set Baselines**: Establish acceptable vulnerability thresholds
+3. **Prioritize Fixes**: Address high/critical vulnerabilities first
+4. **Track Progress**: Export metrics to monitor security improvements
+5. **Automate Updates**: Use `bun update` with caution, test thoroughly
+
+### Security Commands Reference
+
+```bash
+# Basic audit
+bun audit
+
+# Production dependencies only
+bun audit --prod
+
+# High severity and above
+bun audit --audit-level=high
+
+# Export JSON for processing
+bun audit --json > security-report.json
+
+# Integrated with Arsenal Lab
+bun run arsenal:security
+bun run arsenal:ci --security-audit
+```
+
+---
+
 **🎯 Ready to begin? Choose your path above and start your Arsenal Lab journey today!**
 
 **Questions?** Join our [GitHub Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions) or check the [Troubleshooting Guide](../wiki-repo/Troubleshooting.md).
 
-**Built with ❤️ for the Bun ecosystem** • **Last updated:** October 21, 2025
+**Built with ❤️ for the Bun ecosystem** • **Last updated:** October 22, 2025

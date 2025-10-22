@@ -1,5 +1,4 @@
 // components/PerformanceArsenal/ui/CodeBlock.tsx
-import React from 'react';
 
 interface CodeBlockProps {
   code: string;

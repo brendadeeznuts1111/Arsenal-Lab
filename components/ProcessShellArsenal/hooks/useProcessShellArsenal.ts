@@ -1,11 +1,11 @@
 // components/ProcessShellArsenal/hooks/useProcessShellArsenal.ts
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { runTimeoutBenchmark } from '../benchmarks/timeout';
-import { runBufferBenchmark } from '../benchmarks/buffer';
-import { runStreamBenchmark } from '../benchmarks/streams';
-import { runMemoryBenchmark } from '../benchmarks/memory';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { copyToClipboard } from '../../PerformanceArsenal/utils/copyToClipboard';
 import { getHardwareInfo } from '../../PerformanceArsenal/utils/hardware';
+import { runBufferBenchmark } from '../benchmarks/buffer';
+import { runMemoryBenchmark } from '../benchmarks/memory';
+import { runStreamBenchmark } from '../benchmarks/streams';
+import { runTimeoutBenchmark } from '../benchmarks/timeout';
 import { simulateSocketInfo } from '../utils/socketSimulator';
 
 export function useProcessShellArsenal() {
@@ -15,6 +15,8 @@ export function useProcessShellArsenal() {
   const [isRunning, setIsRunning] = useState(false);
   const [benchmarkResults, setBenchmarkResults] = useState<any>(null);
   const [hardwareInfo, setHardwareInfo] = useState(getHardwareInfo());
+  void setHardwareInfo; // Explicitly ignore unused variable
+
   const [processStats, setProcessStats] = useState({
     memoryUsage: 0,
     cpuUsage: 0,

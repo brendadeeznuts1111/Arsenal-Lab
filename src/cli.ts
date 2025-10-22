@@ -60,8 +60,8 @@ if (command === '--ci' || command === '--benchmark') {
 
   // Import and run the CI benchmarks
   import('./cli/arsenal-ci.ts').then(async (module) => {
-    if (module.runBenchmarks) {
-      await module.runBenchmarks(category);
+    if (module.runArsenalCI) {
+      await module.runArsenalCI({ verbose: true });
     } else {
       console.log('❌ Benchmark module not found. Make sure arsenal-ci.ts exists.');
     }
@@ -108,7 +108,7 @@ serve({
 
           if (result.outputs.length > 0) {
             const output = result.outputs[0];
-            return new Response(await output.text(), {
+            return new Response(await output?.text() || '', {
               headers: { "Content-Type": "application/javascript" },
             });
           }

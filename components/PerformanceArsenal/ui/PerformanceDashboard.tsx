@@ -1,5 +1,4 @@
 // components/PerformanceArsenal/ui/PerformanceDashboard.tsx
-import React from 'react';
 
 interface PerformanceDashboardProps {
   metrics: {

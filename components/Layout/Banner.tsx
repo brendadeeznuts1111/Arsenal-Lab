@@ -51,7 +51,7 @@ export function Banner() {
     return () => clearInterval(timer);
   }, []);
 
-  const current = bannerMessages[currentIndex];
+  const current = bannerMessages[currentIndex]!;
 
   const handleBannerClick = () => {
     if (current.href.startsWith('http')) {

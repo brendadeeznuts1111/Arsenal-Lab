@@ -102,7 +102,7 @@ export function DatabaseInfrastructureArsenal() {
       <TabNavigation
         tabs={tabs}
         activeTab={tab}
-        onTabChange={setTab}
+        onTabChange={(tabId) => setTab(tabId as 'sqlite' | 'redis' | 'websocket' | 's3')}
       />
 
       {/* Tab Content */}

@@ -1,5 +1,4 @@
 // components/PerformanceArsenal/ui/BenchmarkCard.tsx
-import React from 'react';
 
 interface BenchmarkCardProps {
   title: string;

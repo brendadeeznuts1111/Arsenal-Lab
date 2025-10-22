@@ -1,5 +1,4 @@
 // components/PerformanceArsenal/ui/TabBar.tsx
-import React from 'react';
 
 interface Tab {
   id: string;

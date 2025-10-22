@@ -1,5 +1,4 @@
 // src/bench/micro.ts
-import { $ } from "bun";
 
 // Statistical functions (jStat-like implementation)
 export function mean(values: number[]): number {
@@ -17,7 +16,7 @@ export function standardDeviation(values: number[], isSample = true): number {
   return Math.sqrt(variance(values, isSample));
 }
 
-export function confidenceInterval(values: number[], confidence = 0.95): [number, number] {
+export function confidenceInterval(values: number[], _confidence = 0.95): [number, number] {
   const n = values.length;
   const avg = mean(values);
   const std = standardDeviation(values);
@@ -40,8 +39,9 @@ export function quantile(values: number[], p: number): number {
   const upper = Math.ceil(index);
   const weight = index % 1;
 
-  if (upper >= sorted.length) return sorted[sorted.length - 1];
-  return sorted[lower] * (1 - weight) + sorted[upper] * weight;
+  if (upper >= sorted.length) return sorted[sorted.length - 1]!;
+  if (lower < 0 || upper >= sorted.length) return 0;
+  return sorted[lower]! * (1 - weight) + sorted[upper]! * weight;
 }
 
 export type MicroResult = {

@@ -1,16 +1,16 @@
 // components/TestingDebuggingArsenal/index.tsx
-import React, { useCallback } from 'react';
-import { useTestingDebuggingArsenal, generateAsyncStackCode, generateConcurrentCode, generateMatcherCode, generateTypeTestCode, generateMockCode, generateCoverageCode, generateRandomizeCode } from './hooks/useTestingDebuggingArsenal';
-import { LiveTestingDemo } from './ui/LiveTestingDemo';
 import clsx from 'clsx';
+import { useCallback } from 'react';
+import { generateAsyncStackCode, generateConcurrentCode, generateCoverageCode, generateMatcherCode, generateMockCode, generateRandomizeCode, generateTypeTestCode, useTestingDebuggingArsenal } from './hooks/useTestingDebuggingArsenal';
 import './styles.css';
+import { LiveTestingDemo } from './ui/LiveTestingDemo';
 
 export function TestingDebuggingArsenal() {
   const {
     tab,
     setTab,
-    asyncExample,
-    setAsyncExample,
+    asyncExample: _asyncExample,
+    setAsyncExample: _setAsyncExample,
     concurrentConfig,
     setConcurrentConfig,
     mockConfig,

@@ -155,36 +155,36 @@ export class Histogram extends PrometheusMetric {
 const registry = new PrometheusRegistry();
 
 // Arsenal-specific metrics
-export const benchDuration = new Histogram({
-  name: "arsenal_benchmark_duration_ms",
-  help: "Benchmark execution time in milliseconds",
-  labelNames: ["test", "runtime"],
-  buckets: [0.1, 0.5, 1, 5, 10, 50, 100, 500, 1000, 5000],
-});
+export const benchDuration = new Histogram(
+  "arsenal_benchmark_duration_ms",
+  "Benchmark execution time in milliseconds",
+  ["test", "runtime"],
+  [0.1, 0.5, 1, 5, 10, 50, 100, 500, 1000, 5000]
+);
 
-export const benchThroughput = new Gauge({
-  name: "arsenal_benchmark_throughput_ops",
-  help: "Benchmark throughput in operations per second",
-  labelNames: ["test", "runtime"],
-});
+export const benchThroughput = new Gauge(
+  "arsenal_benchmark_throughput_ops",
+  "Benchmark throughput in operations per second",
+  ["test", "runtime"]
+);
 
-export const benchMemoryUsage = new Gauge({
-  name: "arsenal_benchmark_memory_mb",
-  help: "Memory usage during benchmark execution",
-  labelNames: ["test", "runtime"],
-});
+export const benchMemoryUsage = new Gauge(
+  "arsenal_benchmark_memory_mb",
+  "Memory usage during benchmark execution",
+  ["test", "runtime"]
+);
 
-export const benchSuccessRate = new Gauge({
-  name: "arsenal_benchmark_success_rate",
-  help: "Benchmark success rate (0.0 to 1.0)",
-  labelNames: ["test"],
-});
+export const benchSuccessRate = new Gauge(
+  "arsenal_benchmark_success_rate",
+  "Benchmark success rate (0.0 to 1.0)",
+  ["test"]
+);
 
-export const systemInfo = new Gauge({
-  name: "arsenal_system_info",
-  help: "System information",
-  labelNames: ["cpu_cores", "memory_gb", "platform"],
-});
+export const systemInfo = new Gauge(
+  "arsenal_system_info",
+  "System information",
+  ["cpu_cores", "memory_gb", "platform"]
+);
 
 // Register all metrics
 registry.register(benchDuration);

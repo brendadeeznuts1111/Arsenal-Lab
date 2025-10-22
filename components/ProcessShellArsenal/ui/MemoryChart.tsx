@@ -1,5 +1,4 @@
 // components/ProcessShellArsenal/ui/MemoryChart.tsx
-import React from 'react';
 
 interface MemoryChartProps {
   stats: {
