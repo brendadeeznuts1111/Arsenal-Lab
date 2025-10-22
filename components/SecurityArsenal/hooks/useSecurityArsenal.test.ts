@@ -287,78 +287,113 @@ describe('useSecurityArsenal', () => {
   });
 
   test('should export results as JSON', async () => {
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    // Store original methods
+    const originalCreateElement = document.createElement.bind(document);
+    const originalAppendChild = document.body.appendChild.bind(document.body);
+    const originalRemoveChild = document.body.removeChild.bind(document.body);
 
-    // Mock document methods
+    const { result } = renderHook(() => useSecurityArsenal());
+
+    // Run audit first
+    await act(async () => {
+      result.current.toggleDemoMode();
+    });
+
+    await act(async () => {
+      await result.current.runAudit();
+    });
+
+    await waitFor(() => !result.current.isScanning);
+
+    // Now mock document methods AFTER rendering is done
     const mockLink = {
       click: mock(),
       href: '',
-      download: ''
+      download: '',
+      parentNode: null
     };
-    const createElementSpy = spyOn(document, 'createElement').mockReturnValue(mockLink as any);
-    const appendChildSpy = spyOn(document.body, 'appendChild').mockImplementation(() => mockLink as any);
-    const removeChildSpy = spyOn(document.body, 'removeChild').mockImplementation(() => mockLink as any);
-
-    // Run audit
-    result.current.toggleDemoMode();
-    rerender();
-
-    const auditPromise = result.current.runAudit();
-    await auditPromise;
-    rerender();
-
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    const createElementSpy = mock((tag: string) => {
+      if (tag === 'a') return mockLink;
+      return originalCreateElement(tag);
     });
+    const appendChildSpy = mock(() => mockLink);
+    const removeChildSpy = mock(() => mockLink);
+
+    document.createElement = createElementSpy as any;
+    document.body.appendChild = appendChildSpy as any;
+    document.body.removeChild = removeChildSpy as any;
 
     // Export results
-    result.current.exportResults();
+    act(() => {
+      result.current.exportResults();
+    });
 
     expect(createElementSpy).toHaveBeenCalledWith('a');
     expect(appendChildSpy).toHaveBeenCalled();
     expect(removeChildSpy).toHaveBeenCalled();
 
-    unmount();
+    // Restore original methods
+    document.createElement = originalCreateElement as any;
+    document.body.appendChild = originalAppendChild;
+    document.body.removeChild = originalRemoveChild;
   });
 
   test('should export Prometheus metrics', async () => {
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    // Store original methods
+    const originalCreateElement = document.createElement.bind(document);
+    const originalAppendChild = document.body.appendChild.bind(document.body);
+    const originalRemoveChild = document.body.removeChild.bind(document.body);
 
-    // Mock document methods
+    const { result } = renderHook(() => useSecurityArsenal());
+
+    // Run audit first
+    await act(async () => {
+      result.current.toggleDemoMode();
+    });
+
+    await act(async () => {
+      await result.current.runAudit();
+    });
+
+    await waitFor(() => !result.current.isScanning);
+
+    // Now mock document methods AFTER rendering is done
     const mockLink = {
       click: mock(),
       href: '',
-      download: ''
+      download: '',
+      parentNode: null
     };
-    const createElementSpy = spyOn(document, 'createElement').mockReturnValue(mockLink as any);
-    const appendChildSpy = spyOn(document.body, 'appendChild').mockImplementation(() => mockLink as any);
-    const removeChildSpy = spyOn(document.body, 'removeChild').mockImplementation(() => mockLink as any);
-
-    // Run audit
-    result.current.toggleDemoMode();
-    rerender();
-
-    const auditPromise = result.current.runAudit();
-    await auditPromise;
-    rerender();
-
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    const createElementSpy = mock((tag: string) => {
+      if (tag === 'a') return mockLink;
+      return originalCreateElement(tag);
     });
+    const appendChildSpy = mock(() => mockLink);
+    const removeChildSpy = mock(() => mockLink);
+
+    document.createElement = createElementSpy as any;
+    document.body.appendChild = appendChildSpy as any;
+    document.body.removeChild = removeChildSpy as any;
 
     // Export Prometheus metrics
-    result.current.exportPrometheus();
+    act(() => {
+      result.current.exportPrometheus();
+    });
 
     expect(createElementSpy).toHaveBeenCalledWith('a');
     expect(appendChildSpy).toHaveBeenCalled();
     expect(removeChildSpy).toHaveBeenCalled();
 
-    unmount();
+    // Restore original methods
+    document.createElement = originalCreateElement as any;
+    document.body.appendChild = originalAppendChild;
+    document.body.removeChild = originalRemoveChild;
   });
 
   test('should respect prodOnly flag in API call', async () => {
+    // Store original methods
+    const originalCreateElement = document.createElement.bind(document);
+
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({
@@ -367,19 +402,17 @@ describe('useSecurityArsenal', () => {
       })
     } as any);
 
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    const { result } = renderHook(() => useSecurityArsenal());
 
-    result.current.setProdOnly(true);
-    rerender();
-
-    const auditPromise = result.current.runAudit();
-    await auditPromise;
-    rerender();
-
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    await act(async () => {
+      result.current.setProdOnly(true);
     });
+
+    await act(async () => {
+      await result.current.runAudit();
+    });
+
+    await waitFor(() => !result.current.isScanning);
 
     expect(mockFetch).toHaveBeenCalledWith('/api/security/audit', {
       method: 'POST',
@@ -390,10 +423,14 @@ describe('useSecurityArsenal', () => {
       })
     });
 
-    unmount();
+    // Restore original methods
+    document.createElement = originalCreateElement as any;
   });
 
   test('should respect audit level filter in API call', async () => {
+    // Store original methods
+    const originalCreateElement = document.createElement.bind(document);
+
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({
@@ -402,19 +439,17 @@ describe('useSecurityArsenal', () => {
       })
     } as any);
 
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    const { result } = renderHook(() => useSecurityArsenal());
 
-    result.current.setFilterSeverity('high');
-    rerender();
-
-    const auditPromise = result.current.runAudit();
-    await auditPromise;
-    rerender();
-
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    await act(async () => {
+      result.current.setFilterSeverity('high');
     });
+
+    await act(async () => {
+      await result.current.runAudit();
+    });
+
+    await waitFor(() => !result.current.isScanning);
 
     expect(mockFetch).toHaveBeenCalledWith('/api/security/audit', {
       method: 'POST',
@@ -425,6 +460,7 @@ describe('useSecurityArsenal', () => {
       })
     });
 
-    unmount();
+    // Restore original methods
+    document.createElement = originalCreateElement as any;
   });
 });
