@@ -13,7 +13,6 @@
  * - Better error messages and progress indicators
  */
 
-import { $ } from "bun"; // Kept for potential future use, e.g., shell commands
 
 interface Identity {
   id: string;
@@ -369,6 +368,9 @@ const customBaseUrl = args.find(arg => arg.startsWith("--base-url="))?.split("="
 if (customBaseUrl) {
   process.env.API_BASE_URL = customBaseUrl;
 }
+
+// Export for use by other scripts
+export { demonstrateV4IdentitySystem };
 
 // Run if called directly
 if (import.meta.main) {

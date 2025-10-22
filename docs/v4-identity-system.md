@@ -250,6 +250,23 @@ export NPM_EMAIL_SANDBOX=ci-123456789@api.dev.arsenal-lab.com/v1:id
 ## 🧪 Testing & Validation
 
 ### Run the Enhanced Demonstration
+
+#### Quick Start (Recommended)
+```bash
+# Offline demo (no server required)
+./demo.ts --dry-run
+
+# Machine-readable JSON output
+./demo.ts --json --dry-run
+
+# Production API testing
+API_BASE_URL=https://id.corp.com ./demo.ts
+
+# All flags work together
+API_BASE_URL=https://prod-api.company.com ./demo.ts --json --dry-run
+```
+
+#### Package Scripts
 ```bash
 # Interactive demo with live API calls
 bun run demo:v4-identity
@@ -260,16 +277,38 @@ bun run demo:v4-identity:dry
 # Structured JSON output for automation
 bun run demo:v4-identity:json
 
+# Quick aliases
+bun run demo          # Same as demo:v4-identity
+bun run demo:dry      # Same as demo:v4-identity:dry
+bun run demo:json     # JSON + dry-run mode
+```
+
+#### Advanced Usage
+```bash
 # Custom API endpoint testing
 bun run scripts/demonstrate-v4-identity-system.ts --base-url=https://your-api.com --dry-run
 
-# Test individual endpoints
+# Environment variable configuration
+API_BASE_URL=https://staging.identity.company.com bun run demo
+
+# Direct script execution with all options
+./scripts/demonstrate-v4-identity-system.ts --dry-run --json --base-url=https://prod-api.com
+```
+
+#### Test Individual Endpoints
+```bash
+# Generate single identity
 curl "http://localhost:3655/api/v1/id?prefix=test&run=123"
 
 # Validate identity format
 curl -X POST "http://localhost:3655/api/v1/validate" \
   -H "Content-Type: application/json" \
   -d '{"identity": "ci-123@test.com/v1:id"}'
+
+# Batch identity generation
+curl -X POST "http://localhost:3655/api/v1/identities" \
+  -H "Content-Type: application/json" \
+  -d '{"environments": [{"name": "ci", "prefix": "ci", "run": "123"}], "domain": "api.dev.arsenal-lab.com"}'
 ```
 
 #### CLI Flags
