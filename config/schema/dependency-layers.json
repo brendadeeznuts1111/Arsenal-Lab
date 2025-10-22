@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dependency Layer Matrix",
+  "description": "Schema for defining allowed dependency layers and boundaries",
+  "type": "object",
+  "properties": {
+    "layers": {
+      "type": "object",
+      "description": "Definition of architectural layers",
+      "patternProperties": {
+        "^[a-z][a-z0-9_-]*$": {
+          "type": "object",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "Description of this layer"
+            },
+            "packages": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Package patterns that belong to this layer"
+            },
+            "allowed_imports": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Layers this layer is allowed to import from"
+            }
+          },
+          "required": ["packages", "allowed_imports"]
+        }
+      }
+    },
+    "global_rules": {
+      "type": "object",
+      "properties": {
+        "allow_circular_dependencies": {
+          "type": "boolean",
+          "description": "Whether circular dependencies are allowed",
+          "default": false
+        },
+        "allow_cross_layer_imports": {
+          "type": "boolean",
+          "description": "Whether cross-layer imports are allowed by default",
+          "default": true
+        },
+        "enforce_layer_boundaries": {
+          "type": "boolean",
+          "description": "Whether to enforce layer boundary rules",
+          "default": true
+        }
+      }
+    }
+  },
+  "required": ["layers"]
+}

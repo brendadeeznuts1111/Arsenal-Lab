@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
-import { readFileSync, existsSync } from "node:fs";
 import { $ } from "bun";
+import { existsSync, readFileSync } from "node:fs";
 
 interface PatchValidationResult {
   package: string;

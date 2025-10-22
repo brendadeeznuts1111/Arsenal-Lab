@@ -1,51 +1,21 @@
 #!/usr/bin/env bun
-import { $ } from "bun";
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { parse } from "yaml";
+import { rules } from "../rules/index.ts";
 
 type Severity = "low" | "high" | "critical";
 interface InvariantViolation { invariant: string; description: string; severity: Severity }
 interface ValidationResult { package: string; isValid: boolean; violations: InvariantViolation[] }
 
-const invariants = [
-  {
-    name: "no-direct-process-env",
-    description: "Patches cannot introduce new process.env access",
-    severity: "high" as Severity,
-    validate: (patch: string, orig: string) =>
-      (orig.match(/\bprocess\.env\.[A-Z_]/g) || []).length >=
-      (patch.match(/\bprocess\.env\.[A-Z_]/g) || []).length,
-  },
-  {
-    name: "cryptographic-integrity",
-    description: "Security pkgs cannot use insecure hashing",
-    severity: "critical" as Severity,
-    validate: (patch: string, pkg: string) =>
-      !["rapidhash", "md5", "sha1"].some((x) => patch.includes(x)) || !isSecurity(pkg),
-  },
-  {
-    name: "dependency-boundary",
-    description: "Patches cannot introduce cross-layer deps",
-    severity: "high" as Severity,
-    validate: (patch: string, meta: any) => true, // TODO: layer check
-  },
-  {
-    name: "no-eval-usage",
-    description: "Patches cannot introduce eval() or Function() constructors",
-    severity: "critical" as Severity,
-    validate: (patch: string) => !patch.includes("eval(") && !patch.includes("new Function("),
-  },
-  {
-    name: "no-global-mutation",
-    description: "Patches cannot modify global objects",
-    severity: "high" as Severity,
-    validate: (patch: string) =>
-      !patch.includes("global.") && !patch.includes("window.") && !patch.includes("globalThis."),
-  },
-];
-
-function isSecurity(pkg: string) {
-  return ["crypto", "auth", "jwt", "hash", "security", "tls", "ssl"].some((k) => pkg.toLowerCase().includes(k));
+// Load enabled invariants from configuration
+async function loadEnabledInvariants() {
+  try {
+    const config = parse(readFileSync("config/invariant-definitions.yml", "utf-8"));
+    return config.invariants.filter((inv: any) => inv.enabled !== false);
+  } catch (error) {
+    console.warn("Could not load invariant configuration, using all rules");
+    return Array.from(rules.values());
+  }
 }
 
 async function validatePatch(pkg: string, patchFile: string): Promise<ValidationResult> {
@@ -63,10 +33,19 @@ async function validatePatch(pkg: string, patchFile: string): Promise<Validation
 
   const patch = await Bun.file(patchFile).text();
   const violations: InvariantViolation[] = [];
+  const enabledInvariants = await loadEnabledInvariants();
 
-  for (const inv of invariants) {
+  for (const inv of enabledInvariants) {
     try {
-      if (!inv.validate(patch, pkg)) {
+      // Check if rule exists in pluggable system
+      const ruleImpl = rules.get(inv.rule);
+      if (!ruleImpl) {
+        console.warn(`Rule ${inv.rule} not found in rules/ directory`);
+        continue;
+      }
+
+      const isValid = await ruleImpl.validate(patch, pkg);
+      if (!isValid) {
         violations.push({
           invariant: inv.name,
           description: inv.description,

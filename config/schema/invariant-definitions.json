@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Patch Governance Invariant Definitions",
+  "description": "Schema for defining patch validation invariants",
+  "type": "object",
+  "properties": {
+    "invariants": {
+      "type": "array",
+      "description": "List of patch validation invariants",
+      "items": {
+        "type": "object",
+        "required": ["name", "description", "severity", "rule"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Unique identifier for the invariant",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of what this invariant checks"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "moderate", "high", "critical"],
+            "description": "Severity level of violations"
+          },
+          "rule": {
+            "type": "string",
+            "description": "Path to the rule implementation file (relative to rules/ directory)"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether this invariant is enabled",
+            "default": true
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Tags for categorizing invariants"
+          }
+        }
+      }
+    }
+  },
+  "required": ["invariants"]
+}

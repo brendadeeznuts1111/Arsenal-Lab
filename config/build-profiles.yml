@@ -1,0 +1,33 @@
+# Build profiles for different deployment environments
+# Each profile defines how patches should be applied
+
+profiles:
+  development:
+    apply_patches: true
+    validate_invariants: false  # Speed up dev builds
+    monitor_tension: false
+    canary_enabled: false
+    cache_strategy: aggressive
+
+  staging:
+    apply_patches: true
+    validate_invariants: true
+    monitor_tension: true
+    canary_enabled: false
+    cache_strategy: conservative
+
+  production:
+    apply_patches: true
+    validate_invariants: true
+    monitor_tension: true
+    canary_enabled: true
+    cache_strategy: conservative
+    security_hardening: true
+
+  air-gapped:
+    apply_patches: true
+    validate_invariants: true
+    monitor_tension: true
+    canary_enabled: false
+    cache_strategy: none  # No network access
+    offline_mode: true

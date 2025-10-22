@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Patch Governance Tension Rules",
+  "description": "Schema for defining tension monitoring rules",
+  "type": "object",
+  "properties": {
+    "patch_monitoring": {
+      "type": "object",
+      "properties": {
+        "rules": {
+          "type": "array",
+          "description": "List of tension monitoring rules",
+          "items": {
+            "type": "object",
+            "required": ["name", "condition", "severity", "actions"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Unique identifier for the rule",
+                "pattern": "^[a-z][a-z0-9_-]*$"
+              },
+              "condition": {
+                "type": "string",
+                "description": "JavaScript expression that evaluates to true when tension is detected"
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["BLOCK", "AMBER", "YELLOW"],
+                "description": "Severity level of the tension"
+              },
+              "actions": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Actions to take when tension is detected",
+                "examples": [
+                  "create_github_issue",
+                  "notify_security_channel",
+                  "block_ci_pipeline",
+                  "create_monitor_ticket",
+                  "schedule_code_review"
+                ]
+              },
+              "enabled": {
+                "type": "boolean",
+                "description": "Whether this rule is enabled",
+                "default": true
+              },
+              "slack_channel": {
+                "type": "string",
+                "description": "Slack channel to notify (overrides default)"
+              }
+            }
+          }
+        }
+      },
+      "required": ["rules"]
+    }
+  },
+  "required": ["patch_monitoring"]
+}

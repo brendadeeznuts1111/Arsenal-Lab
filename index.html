@@ -18,7 +18,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="theme-color" content="#238636">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Arsenal Lab">
 
@@ -57,10 +57,6 @@
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://brendadeeznuts1111.github.io/Arsenal-Lab/">
-
-  <!-- Preload Critical Resources -->
-  <link rel="preload" href="/main.js" as="script">
-  <link rel="preload" href="/styles.css" as="style">
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -258,14 +254,14 @@
           </div>
         </div>
         <div class="lab-controls">
-          <button class="active" onclick="switchTab('performance')">⚡ Performance</button>
-          <button onclick="switchTab('process')">🔧 Process & Shell</button>
-          <button onclick="switchTab('testing')">🧪 Testing</button>
-          <button onclick="switchTab('debugging')">🔍 Testing & Debugging</button>
-          <button onclick="switchTab('database')">🗄️ Database & Infra</button>
-          <button onclick="switchTab('build')">🔧 Build Config</button>
-          <button onclick="switchTab('bunx')">🚀 bunx Demo</button>
-          <button onclick="switchTab('community')">💬 Community</button>
+          <button class="active" onclick="switchTab('performance', this)">⚡ Performance</button>
+          <button onclick="switchTab('process', this)">🔧 Process & Shell</button>
+          <button onclick="switchTab('testing', this)">🧪 Testing</button>
+          <button onclick="switchTab('debugging', this)">🔍 Testing & Debugging</button>
+          <button onclick="switchTab('database', this)">🗄️ Database & Infra</button>
+          <button onclick="switchTab('build', this)">🔧 Build Config</button>
+          <button onclick="switchTab('bunx', this)">🚀 bunx Demo</button>
+          <button onclick="switchTab('community', this)">💬 Community</button>
           <button onclick="exportMetrics()">📊 Export Metrics</button>
         </div>
       </header>
@@ -352,13 +348,15 @@
 
   <script>
     // Tab switching functionality
-    function switchTab(tab) {
+    function switchTab(tab, clickedButton) {
       const tabContent = document.getElementById('tab-content');
       const buttons = document.querySelectorAll('.lab-controls button');
 
       // Update active button
       buttons.forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+      if (clickedButton) {
+        clickedButton.classList.add('active');
+      }
 
       // Update content based on tab
       const content = {

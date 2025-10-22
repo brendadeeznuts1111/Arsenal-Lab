@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
-import { join } from "path";
 import { $ } from "bun";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "path";
 
 interface PatchCreationOptions {
   package: string;

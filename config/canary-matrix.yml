@@ -1,0 +1,31 @@
+# Canary rollout configuration for patches
+# Patches marked as 'canary' are rolled out to a percentage of pods
+# for gradual deployment and monitoring
+
+patches:
+  react@18.2.0:
+    stage: canary
+    rollout: 5  # 5% of pods
+    rollout_strategy: random
+    monitoring_window: 24h
+    rollback_on_errors: true
+    rollback_threshold: 5  # errors per minute
+  typescript@5.3.0:
+    stage: canary
+    rollout: 10  # 10% of pods
+    rollout_strategy: random
+    monitoring_window: 48h
+    rollback_on_errors: true
+    rollback_threshold: 3
+
+# Global canary settings
+global:
+  default_rollout_percentage: 5
+  monitoring_enabled: true
+  prometheus_metrics_enabled: true
+  slack_notifications_enabled: true
+  auto_promotion_enabled: true
+  auto_promotion_criteria:
+    - no_errors_for: 24h
+    - success_rate_above: 99.9
+    - latency_regression_below: 5

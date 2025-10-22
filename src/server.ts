@@ -1,5 +1,6 @@
 // src/server.ts - HTTP Server for Arsenal Lab
 import { serve } from "bun";
+import { getPatchAnalytics } from "./debug/patch-analytics.js";
 
 const PORT = parseInt(Bun.env.PORT || "3655");
 
@@ -199,6 +200,24 @@ serve({
         } catch (error) {
           return new Response("Asset Not Found", { status: 404 });
         }
+      }
+    }
+
+    // Patch analytics endpoint
+    if (url.pathname === "/__debug/patches") {
+      try {
+        const analytics = await getPatchAnalytics();
+        return new Response(JSON.stringify(analytics, null, 2), {
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (error) {
+        return new Response(JSON.stringify({
+          error: "Failed to generate patch analytics",
+          message: error.message
+        }), {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        });
       }
     }
 

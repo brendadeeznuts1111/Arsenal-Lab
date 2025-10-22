@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=./schema/invariant-definitions.json
+invariants:
+  - name: no-direct-process-env
+    description: "Patches cannot introduce new process.env access"
+    severity: high
+    rule: "no-process-env"
+    enabled: true
+    tags: ["security", "environment"]
+  - name: cryptographic-integrity
+    description: "Security packages cannot use insecure hashing"
+    severity: critical
+    rule: "crypto-integrity"
+    enabled: true
+    tags: ["security", "crypto"]
+  - name: dependency-boundary
+    description: "Patches cannot introduce cross-layer dependencies"
+    severity: high
+    rule: "layer-boundary"
+    enabled: true
+    tags: ["architecture", "dependencies"]
+  - name: no-eval-usage
+    description: "Patches cannot introduce eval() or Function() constructors"
+    severity: critical
+    rule: "no-eval-usage"
+    enabled: true
+    tags: ["security", "code-execution"]
+  - name: no-global-mutation
+    description: "Patches cannot modify global objects"
+    severity: high
+    rule: "no-global-mutation"
+    enabled: true
+    tags: ["security", "globals"]
+  - name: logging-consistency
+    description: "Patches must use consistent logging patterns"
+    severity: moderate
+    rule: "logging-consistency"
+    enabled: true
+    tags: ["logging", "consistency"]

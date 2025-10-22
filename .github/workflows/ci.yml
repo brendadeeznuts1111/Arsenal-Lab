@@ -24,8 +24,9 @@ jobs:
             ~/.bun/install/cache
             node_modules
             patches/
-          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb', 'package.json') }}
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb', 'package.json', 'patches/**/*.patch') }}
           restore-keys: |
+            ${{ runner.os }}-bun-${{ hashFiles('bun.lockb', 'patches/**/*.patch') }}
             ${{ runner.os }}-bun-${{ hashFiles('bun.lockb') }}
             ${{ runner.os }}-bun-
 

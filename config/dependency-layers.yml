@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=./schema/dependency-layers.json
+layers:
+  ui:
+    description: "User Interface Layer"
+    packages: ["react", "react-dom", "@types/react", "clsx", "tailwindcss"]
+    allowed_imports: ["ui", "utils", "types"]
+  api:
+    description: "API and Service Layer"
+    packages: ["axios", "fetch", "@types/node", "hono", "express"]
+    allowed_imports: ["api", "utils", "types", "data"]
+  data:
+    description: "Data Access Layer"
+    packages: ["@libsql/client", "drizzle-orm", "prisma", "sqlite3"]
+    allowed_imports: ["data", "utils", "types"]
+  utils:
+    description: "Utility and Helper Functions"
+    packages: ["lodash", "date-fns", "uuid", "crypto-js"]
+    allowed_imports: ["utils", "types"]
+  types:
+    description: "Type Definitions and Interfaces"
+    packages: ["@types/*", "typescript"]
+    allowed_imports: ["types"]
+  security:
+    description: "Security and Authentication"
+    packages: ["jsonwebtoken", "bcrypt", "crypto", "@types/bcrypt"]
+    allowed_imports: ["security", "utils", "types"]
+
+global_rules:
+  allow_circular_dependencies: false
+  allow_cross_layer_imports: true
+  enforce_layer_boundaries: true

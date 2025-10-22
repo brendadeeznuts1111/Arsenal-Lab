@@ -1,7 +1,18 @@
 #!/usr/bin/env bun
-import { parse } from "yaml";
-import { $ } from "bun";
 import { existsSync } from "node:fs";
+import { parse } from "yaml";
+
+// Slack integration (optional - requires @slack/web-api)
+let slackClient: any = null;
+try {
+  // Only load if SLACK_TOKEN is available
+  if (process.env.SLACK_TOKEN) {
+    const { WebClient } = await import("@slack/web-api");
+    slackClient = new WebClient(process.env.SLACK_TOKEN);
+  }
+} catch (error) {
+  // Slack not available, continue without it
+}
 
 interface TensionRule {
   name: string;
@@ -100,7 +111,80 @@ export async function analyzePatch(patchFile: string, pkg: string): Promise<{
 
   const recommendations = triggeredRules.flatMap(rule => rule.actions);
 
+  // Send Slack notifications for BLOCK or AMBER tensions
+  if (slackClient && (maxSeverity === "BLOCK" || maxSeverity === "AMBER")) {
+    await sendSlackNotification(triggeredRules, pkg, maxSeverity);
+  }
+
   return { violations, maxSeverity, recommendations };
+}
+
+async function sendSlackNotification(triggeredRules: TensionRule[], pkg: string, maxSeverity: string) {
+  if (!slackClient) return;
+
+  const channel = process.env.SLACK_SECURITY_CHANNEL || "#security-alerts";
+  const emoji = maxSeverity === "BLOCK" ? "🚨" : "⚠️";
+
+  const blocks = [
+    {
+      type: "header",
+      text: {
+        type: "plain_text",
+        text: `${emoji} Patch Tension Alert: ${pkg}`
+      }
+    },
+    {
+      type: "section",
+      fields: triggeredRules.map(rule => ({
+        type: "mrkdwn",
+        text: `*${rule.name}*\n${getSeverityColor(rule.severity)} ${rule.severity}`
+      }))
+    },
+    {
+      type: "actions",
+      elements: [
+        {
+          type: "button",
+          text: {
+            type: "plain_text",
+            text: "Ack & Continue"
+          },
+          style: "primary",
+          action_id: "ack_tension",
+          value: JSON.stringify({ package: pkg, rules: triggeredRules.map(r => r.name) })
+        },
+        {
+          type: "button",
+          text: {
+            type: "plain_text",
+            text: "View Details"
+          },
+          action_id: "view_tension_details",
+          url: `${process.env.GITHUB_REPO_URL}/actions`
+        }
+      ]
+    }
+  ];
+
+  try {
+    const result = await slackClient.chat.postMessage({
+      channel,
+      text: `${emoji} Patch tension detected in ${pkg}`,
+      blocks
+    });
+
+    console.log(`📢 Slack notification sent to ${channel} (ts: ${result.ts})`);
+
+    // Add warning emoji to the message
+    await slackClient.reactions.add({
+      channel,
+      timestamp: result.ts,
+      name: maxSeverity === "BLOCK" ? "warning" : "large_yellow_circle"
+    });
+
+  } catch (error) {
+    console.error("Failed to send Slack notification:", error);
+  }
 }
 
 async function runAnalysis() {
