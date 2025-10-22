@@ -4,5 +4,5 @@ set -euo pipefail
 echo "🛡️  Bun Gate pre-commit check…"
 bun run invariant:validate
 bun run gate:sign           # signs any *new* patches
-git add *.sig               # stage signatures
+git add *.sig 2>/dev/null || true  # stage signatures (ignore if none exist)
 echo "✅ Gate passed – proceeding with commit"
