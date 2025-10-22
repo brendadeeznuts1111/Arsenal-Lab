@@ -133,7 +133,7 @@ This provides an overview of all arsenals with links to the full interactive exp
 Bootstrap enterprise-grade patch governance in 30 seconds:
 
 ```bash
-curl -sSL https://bun.sh/gate | bash
+curl -sSL https://raw.githubusercontent.com/brendadeeznuts1111/Arsenal-Lab/main/scripts/remote-gate.sh | bash
 ```
 
 Then commit the two new files and push – CI will pick up SARIF & cosign automatically.

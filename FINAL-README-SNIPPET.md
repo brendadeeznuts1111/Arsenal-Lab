@@ -18,7 +18,7 @@ Then commit the two new files and push – CI will pick up SARIF & cosign automa
 
 ### 1. Run the one-liner
 ```bash
-curl -sSL https://bun.sh/gate | bash
+curl -sSL https://raw.githubusercontent.com/brendadeeznuts1111/Arsenal-Lab/main/scripts/remote-gate.sh | bash
 ```
 
 ### 2. Commit the generated files

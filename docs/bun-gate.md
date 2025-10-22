@@ -13,8 +13,10 @@ tags: [governance, security, bun, patches, enterprise]
 
 ```bash
 # Bootstrap governance in any Bun repo
-curl -sSL https://bun.sh/gate | bash
+curl -sSL https://raw.githubusercontent.com/brendadeeznuts1111/Arsenal-Lab/main/scripts/remote-gate.sh | bash
 ```
+
+**Alternative:** If you prefer local control, download and run `scripts/remote-gate.sh` directly.
 
 Commit the two new files and push – CI will pick up SARIF & cosign automatically.
 
