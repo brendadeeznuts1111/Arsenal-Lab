@@ -451,6 +451,39 @@ This repository is tagged with the following topics for discoverability:
 
 `bun` `performance` `benchmarking` `typescript` `react` `runtime` `database` `sqlite` `redis` `websocket` `s3` `testing` `concurrent` `async` `web-performance` `pwa` `infrastructure` `crypto` `memory-optimization` `developer-tools` `interactive`
 
+## 💬 Community & Discussions
+
+### 📣 Announcements
+Stay updated with the latest news and releases through our [GitHub Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/announcements).
+
+### 💡 Ideas & Feature Requests
+Have a great idea? Start a discussion in our [Ideas category](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/ideas)!
+
+### 🙏 Questions & Support
+Need help? Ask in our [Q&A category](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/q-a).
+
+### 🙌 Show and Tell
+Share your Bun performance achievements in our [Show and Tell category](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/show-and-tell).
+
+### 🗳️ Community Polls
+Vote on important decisions in our [Polls category](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions/categories/polls).
+
+### 🔔 Stay Connected
+
+#### RSS Feeds (Version 2.0)
+- 📡 **[Releases RSS](https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom)** - Get notified about new releases
+- 💬 **[Discussions RSS](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions.atom)** - Follow community conversations
+- 🔄 **[Commits RSS](https://github.com/brendadeeznuts1111/Arsenal-Lab/commits/main.atom)** - Track development updates
+
+#### Community Links
+- 📖 **[Documentation](docs/)** - Comprehensive guides and API reference
+- 🐛 **[Issue Tracker](https://github.com/brendadeeznuts1111/Arsenal-Lab/issues)** - Bug reports and feature requests
+- 💬 **[GitHub Discussions](https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions)** - Community conversations
+- 🏠 **[Project Homepage](https://brendadeeznuts1111.github.io/Arsenal-Lab/)** - Live demos and examples
+
+### 🤝 Contributing
+We welcome contributions! See our [Contributing Guide](.github/CONTRIBUTING.md) for details.
+
 ## 🤝 Sponsors & Support
 
 ### 💖 Sponsors

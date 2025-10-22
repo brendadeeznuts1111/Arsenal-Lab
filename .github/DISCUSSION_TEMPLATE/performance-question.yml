@@ -1,0 +1,25 @@
+title: "[Performance] "
+labels: ["question", "performance"]
+body: |
+  ## Performance Question
+
+  Ask questions about Bun runtime performance, benchmarking, or optimization techniques.
+
+  ### What are you trying to optimize?
+  Describe the performance issue or use case you're working with.
+
+  ### Current Setup
+  - Bun version: `bun --version`
+  - Hardware: [CPU, RAM, etc.]
+  - Operating System: [macOS/Windows/Linux]
+
+  ### Code Example
+  ```javascript
+  // Add your code here
+  ```
+
+  ### Expected vs Actual Performance
+  What performance metrics are you seeing vs. what you expect?
+
+  ### Additional Context
+  Any other relevant information about your performance testing setup.

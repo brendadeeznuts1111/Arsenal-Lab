@@ -1,0 +1,132 @@
+name: Generate RSS Feeds
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+  discussion:
+    types: [created, answered, labeled]
+  release:
+    types: [published]
+  push:
+    branches: [main]
+    paths:
+      - '.github/repository-metadata.json'
+
+jobs:
+  generate-rss:
+    name: Generate RSS Feeds
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install -g @octokit/rest rss-generator
+
+      - name: Generate RSS feeds
+        run: |
+          node -e "
+          const { Octokit } = require('@octokit/rest');
+          const RSS = require('rss-generator');
+          const fs = require('fs');
+
+          const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
+          async function generateFeeds() {
+            const owner = 'brendadeeznuts1111';
+            const repo = 'Arsenal-Lab';
+
+            // Generate releases RSS
+            try {
+              const releases = await octokit.repos.listReleases({ owner, repo, per_page: 10 });
+              const releaseFeed = new RSS({
+                title: 'Bun Performance Arsenal - Releases',
+                description: 'Latest releases and updates',
+                feed_url: 'https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom',
+                site_url: 'https://github.com/brendadeeznuts1111/Arsenal-Lab',
+                language: 'en'
+              });
+
+              releases.data.forEach(release => {
+                releaseFeed.item({
+                  title: release.tag_name,
+                  description: release.body || 'New release',
+                  url: release.html_url,
+                  date: release.published_at,
+                  guid: release.id
+                });
+              });
+
+              fs.writeFileSync('public/releases.xml', releaseFeed.xml());
+              console.log('✅ Releases RSS generated');
+            } catch (error) {
+              console.log('⚠️ Could not generate releases RSS:', error.message);
+            }
+
+            // Generate discussions RSS
+            try {
+              const discussions = await octokit.graphql(\`
+                query(\$owner: String!, \$repo: String!) {
+                  repository(owner: \$owner, name: \$repo) {
+                    discussions(first: 10, orderBy: {field: UPDATED_AT, direction: DESC}) {
+                      nodes {
+                        title
+                        url
+                        updatedAt
+                        category {
+                          name
+                        }
+                        author {
+                          login
+                        }
+                      }
+                    }
+                  }
+                }
+              \`, { owner, repo });
+
+              const discussionFeed = new RSS({
+                title: 'Bun Performance Arsenal - Discussions',
+                description: 'Community discussions and conversations',
+                feed_url: 'https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions.atom',
+                site_url: 'https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions',
+                language: 'en'
+              });
+
+              discussions.repository.discussions.nodes.forEach(discussion => {
+                discussionFeed.item({
+                  title: \`[\${discussion.category.name}] \${discussion.title}\`,
+                  description: \`Discussion by @\${discussion.author.login}\`,
+                  url: discussion.url,
+                  date: discussion.updatedAt,
+                  guid: discussion.url
+                });
+              });
+
+              fs.writeFileSync('public/discussions.xml', discussionFeed.xml());
+              console.log('✅ Discussions RSS generated');
+            } catch (error) {
+              console.log('⚠️ Could not generate discussions RSS:', error.message);
+            }
+          }
+
+          generateFeeds().catch(console.error);
+          "
+
+      - name: Deploy RSS feeds
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          destination_dir: ./
+          keep_files: true

@@ -22,7 +22,11 @@
     "playground",
     "web-development",
     "nodejs-alternative",
-    "fast-javascript-runtime"
+    "fast-javascript-runtime",
+    "community",
+    "open-source",
+    "developer-tools",
+    "performance-tools"
   ],
   "language": "TypeScript",
   "license": "MIT",
@@ -31,11 +35,57 @@
   "has_projects": true,
   "has_wiki": true,
   "has_downloads": true,
+  "has_discussions": true,
   "default_branch": "main",
   "allow_squash_merge": true,
   "allow_merge_commit": true,
   "allow_rebase_merge": true,
   "delete_branch_on_merge": true,
   "enable_automated_security_fixes": true,
-  "enable_vulnerability_alerts": true
+  "enable_vulnerability_alerts": true,
+  "discussions": {
+    "categories": [
+      {
+        "name": "Announcements",
+        "description": "Official announcements and updates from the Bun Performance Arsenal team",
+        "emoji": "📣",
+        "slug": "announcements"
+      },
+      {
+        "name": "General",
+        "description": "General discussions about Bun, performance, and the ecosystem",
+        "emoji": "💬",
+        "slug": "general"
+      },
+      {
+        "name": "Ideas",
+        "description": "Feature requests and enhancement proposals",
+        "emoji": "💡",
+        "slug": "ideas"
+      },
+      {
+        "name": "Q&A",
+        "description": "Questions about usage, setup, and troubleshooting",
+        "emoji": "🙏",
+        "slug": "q-a"
+      },
+      {
+        "name": "Show and Tell",
+        "description": "Share your projects, benchmarks, and achievements",
+        "emoji": "🙌",
+        "slug": "show-and-tell"
+      },
+      {
+        "name": "Polls",
+        "description": "Community surveys and voting",
+        "emoji": "🗳️",
+        "slug": "polls"
+      }
+    ]
+  },
+  "rss_feeds": {
+    "releases": "https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom",
+    "discussions": "https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions.atom",
+    "commits": "https://github.com/brendadeeznuts1111/Arsenal-Lab/commits/main.atom"
+  }
 }

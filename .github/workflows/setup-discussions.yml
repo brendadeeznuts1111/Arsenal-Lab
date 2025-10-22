@@ -1,0 +1,61 @@
+name: Setup GitHub Discussions
+
+on:
+  workflow_dispatch:
+    inputs:
+      enable_discussions:
+        description: 'Enable GitHub Discussions for this repository'
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  setup-discussions:
+    name: Setup Discussions
+    runs-on: ubuntu-latest
+    if: inputs.enable_discussions == true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install GitHub CLI
+        run: |
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh
+
+      - name: Enable Discussions
+        run: |
+          gh repo edit --enable-discussions
+          echo "✅ GitHub Discussions enabled for repository"
+
+      - name: Setup Discussion Categories
+        run: |
+          # This would require the GitHub GraphQL API to create categories
+          # For now, we'll document the categories that should be created manually
+          echo "📝 Discussion categories should be created manually in GitHub:"
+          echo "- 📣 Announcements: Official announcements and updates"
+          echo "- 💬 General: General discussions about Bun and performance"
+          echo "- 💡 Ideas: Feature requests and enhancement proposals"
+          echo "- 🙏 Q&A: Questions about usage and troubleshooting"
+          echo "- 🙌 Show and Tell: Share projects and achievements"
+          echo "- 🗳️ Polls: Community surveys and voting"
+
+      - name: Pin Welcome Discussion
+        run: |
+          echo "📌 Remember to pin the 'Welcome to Arsenal-Lab Discussions!' discussion"
+          echo "🔗 Link: https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions"
+
+      - name: Setup RSS Feed Generation
+        run: |
+          echo "🔔 RSS feeds are configured to generate automatically:"
+          echo "- Releases: https://github.com/brendadeeznuts1111/Arsenal-Lab/releases.atom"
+          echo "- Discussions: https://github.com/brendadeeznuts1111/Arsenal-Lab/discussions.atom"
+          echo "- Commits: https://github.com/brendadeeznuts1111/Arsenal-Lab/commits/main.atom"

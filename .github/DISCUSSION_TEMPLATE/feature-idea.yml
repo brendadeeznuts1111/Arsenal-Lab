@@ -1,0 +1,26 @@
+title: "[Feature Idea] "
+labels: ["enhancement", "feature-request"]
+body: |
+  ## Feature Idea 💡
+
+  Propose new features or enhancements for the Bun Performance Arsenal.
+
+  ### Problem Statement
+  What problem would this feature solve? What pain point are you experiencing?
+
+  ### Proposed Solution
+  Describe your proposed solution in detail.
+
+  ### Alternative Solutions
+  Have you considered any alternative approaches?
+
+  ### Additional Context
+  - Screenshots/mockups if applicable
+  - Related issues or discussions
+  - Any research or benchmarks you've done
+
+  ### Implementation Ideas
+  If you have thoughts on how this could be implemented, share them here.
+
+  ---
+  **Note:** This is a feature request discussion. For immediate bugs, please use [Issues](../../issues) instead.

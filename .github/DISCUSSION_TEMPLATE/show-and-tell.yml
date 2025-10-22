@@ -1,0 +1,39 @@
+title: "[Show & Tell] "
+labels: ["show-and-tell", "community"]
+body: |
+  ## Show & Tell 🎉
+
+  Share your Bun performance achievements, projects, or benchmarks with the community!
+
+  ### What did you build?
+  Tell us about your project, benchmark, or performance optimization.
+
+  ### Performance Metrics
+  Share your key performance metrics:
+
+  - **Before**: [baseline metrics]
+  - **After**: [improved metrics]
+  - **Improvement**: [percentage or absolute gains]
+
+  ### Technologies Used
+  - Bun version:
+  - Other tools/frameworks:
+  - Target platform:
+
+  ### Code Highlights
+  Share the most interesting or performance-critical parts of your code:
+
+  ```javascript
+  // Your performance-optimized code here
+  ```
+
+  ### Challenges & Solutions
+  What challenges did you face and how did you solve them?
+
+  ### Links & Resources
+  - Repository: [link]
+  - Demo: [link]
+  - Benchmarks: [link]
+
+  ---
+  **Celebrate your wins! 🚀** Share what you've accomplished with Bun's performance capabilities.
