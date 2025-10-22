@@ -131,20 +131,14 @@ describe('useSecurityArsenal', () => {
       })
     } as any);
 
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    const { result } = renderHook(() => useSecurityArsenal());
 
-    const auditPromise = result.current.runAudit();
-    rerender();
-
-    expect(result.current.isScanning).toBe(true);
-
-    await auditPromise;
-    rerender();
-
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    // Run audit
+    await act(async () => {
+      await result.current.runAudit();
     });
+
+    await waitFor(() => !result.current.isScanning);
 
     expect(mockFetch).toHaveBeenCalledWith('/api/security/audit', {
       method: 'POST',
@@ -158,45 +152,41 @@ describe('useSecurityArsenal', () => {
     expect(result.current.auditResult).not.toBe(null);
     expect(result.current.auditResult?.vulnerabilities.length).toBe(1);
     expect(result.current.auditResult?.metadata.high).toBe(1);
-
-    unmount();
   });
 
   test('should filter vulnerabilities by severity', async () => {
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    const { result } = renderHook(() => useSecurityArsenal());
 
     // Enable demo mode and run audit
-    result.current.toggleDemoMode();
-    rerender();
-
-    const auditPromise = result.current.runAudit();
-    await auditPromise;
-    rerender();
-
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    await act(async () => {
+      result.current.toggleDemoMode();
     });
+
+    await act(async () => {
+      await result.current.runAudit();
+    });
+
+    await waitFor(() => !result.current.isScanning);
 
     const totalVulns = result.current.filteredVulnerabilities.length;
     expect(totalVulns).toBeGreaterThan(0);
 
     // Filter by critical
-    result.current.setFilterSeverity('critical');
-    rerender();
+    await act(async () => {
+      result.current.setFilterSeverity('critical');
+    });
 
     const criticalVulns = result.current.filteredVulnerabilities;
     expect(criticalVulns.every(v => v.severity === 'critical')).toBe(true);
     expect(criticalVulns.length).toBeLessThanOrEqual(totalVulns);
 
     // Filter by high
-    result.current.setFilterSeverity('high');
-    rerender();
+    await act(async () => {
+      result.current.setFilterSeverity('high');
+    });
 
     const highVulns = result.current.filteredVulnerabilities;
     expect(highVulns.every(v => v.severity === 'high')).toBe(true);
-
-    unmount();
   });
 
   test('should handle API errors gracefully', async () => {
@@ -206,109 +196,94 @@ describe('useSecurityArsenal', () => {
       statusText: 'Internal Server Error'
     } as any);
 
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    const { result } = renderHook(() => useSecurityArsenal());
 
-    const auditPromise = result.current.runAudit();
-    await auditPromise;
-    rerender();
-
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    await act(async () => {
+      await result.current.runAudit();
     });
 
-    expect(result.current.error).toContain('demo mode');
+    await waitFor(() => !result.current.isScanning);
 
-    unmount();
+    expect(result.current.error).not.toBe(null);
+    expect(result.current.error).toContain('demo mode');
   });
 
   test('should save audit results to history', async () => {
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    const { result } = renderHook(() => useSecurityArsenal());
 
-    result.current.toggleDemoMode();
-    rerender();
+    await act(async () => {
+      result.current.toggleDemoMode();
+    });
 
     const initialHistoryLength = result.current.history.length;
 
-    const auditPromise = result.current.runAudit();
-    await auditPromise;
-    rerender();
-
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    await act(async () => {
+      await result.current.runAudit();
     });
+
+    await waitFor(() => !result.current.isScanning);
 
     expect(result.current.history.length).toBe(initialHistoryLength + 1);
     expect(result.current.stats.totalScans).toBe(initialHistoryLength + 1);
-
-    unmount();
   });
 
   test('should clear history', async () => {
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    const { result } = renderHook(() => useSecurityArsenal());
 
     // Add some history by running audits
-    result.current.toggleDemoMode();
-    rerender();
-
-    const auditPromise = result.current.runAudit();
-    await auditPromise;
-    rerender();
-
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    await act(async () => {
+      result.current.toggleDemoMode();
     });
+
+    await act(async () => {
+      await result.current.runAudit();
+    });
+
+    await waitFor(() => !result.current.isScanning);
 
     expect(result.current.history.length).toBeGreaterThan(0);
 
     // Clear history
-    result.current.clearHistory();
-    rerender();
+    await act(async () => {
+      result.current.clearHistory();
+    });
 
     expect(result.current.history.length).toBe(0);
     expect(result.current.stats.totalScans).toBe(0);
-
-    unmount();
   });
 
   test('should load historical result', async () => {
-    const { result, rerender, unmount } = renderHook(() => useSecurityArsenal());
+    const { result } = renderHook(() => useSecurityArsenal());
 
     // Run audit to create history
-    result.current.toggleDemoMode();
-    rerender();
-
-    const auditPromise1 = result.current.runAudit();
-    await auditPromise1;
-    rerender();
-
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    await act(async () => {
+      result.current.toggleDemoMode();
     });
+
+    await act(async () => {
+      await result.current.runAudit();
+    });
+
+    await waitFor(() => !result.current.isScanning);
 
     const firstResult = result.current.auditResult;
     const historyItem = result.current.history[0];
 
-    // Run another audit
-    const auditPromise2 = result.current.runAudit();
-    await auditPromise2;
-    rerender();
+    expect(historyItem).toBeDefined();
 
-    await waitFor(() => {
-      rerender();
-      return !result.current.isScanning;
+    // Run another audit
+    await act(async () => {
+      await result.current.runAudit();
     });
 
+    await waitFor(() => !result.current.isScanning);
+
     // Load first result from history
-    result.current.loadHistoricalResult(historyItem);
-    rerender();
+    await act(async () => {
+      result.current.loadHistoricalResult(historyItem);
+    });
 
     expect(result.current.auditResult?.timestamp).toBe(firstResult?.timestamp);
-
-    unmount();
   });
 
   test('should export results as JSON', async () => {

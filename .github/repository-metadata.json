@@ -1,7 +1,7 @@
 {
   "name": "Arsenal-Lab",
   "version": "1.4.0",
-  "description": "🏆 A+ Grade Production-Ready Enterprise Solution - FAANG-grade performance testing suite for Bun runtime v1.3+ - Interactive playground showcasing every enhancement across performance, databases, testing, and infrastructure. Complete Bun.build() API coverage with live code generation. Join our active community for discussions, benchmarks, and contributions!",
+  "description": "🏆 A+ Grade Production-Ready Enterprise Solution - FAANG-grade performance testing suite for Bun runtime v1.3+ - Interactive playground showcasing every enhancement across performance, databases, testing, and infrastructure. Complete Bun.build() API coverage with live code generation. Full Bun PM command suite implementation. Join our active community for discussions, benchmarks, and contributions!",
   "homepage": "https://github.com/brendadeeznuts1111/Arsenal-Lab",
   "topics": [
     "bun",
@@ -52,7 +52,17 @@
     "cloud-native",
     "enterprise-grade",
     "production-ready",
-    "ci-cd"
+    "ci-cd",
+    "bun-pm",
+    "package-manager",
+    "dependency-management",
+    "version-management",
+    "lockfile",
+    "npm-alternative",
+    "package-publishing",
+    "dependency-audit",
+    "trusted-dependencies",
+    "workspace-management"
   ],
   "language": "TypeScript",
   "license": "MIT",

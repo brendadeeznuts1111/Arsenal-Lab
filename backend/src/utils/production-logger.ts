@@ -219,4 +219,5 @@ export const logPatterns = {
 };
 
 // Export logger instance for direct use
+export { logPatterns };
 export default logger;
