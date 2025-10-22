@@ -3,14 +3,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Footer } from '../components/Layout/Footer';
-import { getAnalyticsTracker } from '../components/PerformanceArsenal/utils/analytics';
 import { getPerformanceMonitor } from '../components/PerformanceArsenal/utils/performanceObserver';
 import { getPrometheusMetrics } from './metrics/arsenal';
 
 // Lab state
 let currentTab = 'performance';
 let performanceMonitor = getPerformanceMonitor();
-let analyticsTracker = getAnalyticsTracker();
 
 // Register service worker for PWA
 if ('serviceWorker' in navigator) {

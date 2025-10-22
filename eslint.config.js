@@ -1,9 +1,11 @@
 import js from '@eslint/js';
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsparser from '@typescript-eslint/parser';
 
 export default [
   js.configs.recommended,
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -58,6 +60,58 @@ export default [
       'brace-style': ['error', '1tbs', { allowSingleLine: true }],
       'comma-spacing': ['error', { before: false, after: true }],
       'eol-last': ['error', 'always']
+    }
+  },
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tsparser,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        window: 'readonly',
+        document: 'readonly',
+        navigator: 'readonly',
+        console: 'readonly',
+        process: 'readonly',
+        global: 'readonly',
+        Buffer: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        Bun: 'readonly',
+        // Browser APIs
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        Blob: 'readonly',
+        URL: 'readonly',
+        fetch: 'readonly',
+        Request: 'readonly',
+        Response: 'readonly',
+        FormData: 'readonly',
+        Headers: 'readonly'
+      }
+    },
+    plugins: {
+      '@typescript-eslint': tseslint
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+
+      // TypeScript specific rules
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+
+      // General code quality rules (applied to TypeScript)
+      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
+      'no-debugger': 'error',
+
+      // Security rules
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
+      'no-new-func': 'error'
     }
   },
   {
