@@ -182,7 +182,7 @@
     "@opentelemetry/sdk-metrics": "^1.19.0",
     "@opentelemetry/sdk-trace-base": "^1.19.0",
     "@opentelemetry/sdk-trace-node": "^1.19.0",
-    "@slack/web-api": "^6.9.0",
+    "@slack/web-api": "^7.12.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/react-hooks": "^8.0.1",
