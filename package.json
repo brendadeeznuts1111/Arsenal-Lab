@@ -168,7 +168,7 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "grammy": "1.38.3",
-    "ioredis": "5.8.2",
+    "ioredis": "6.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "upgrade": "^1.1.0"
